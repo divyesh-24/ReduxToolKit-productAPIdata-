@@ -1,0 +1,89 @@
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { RootState } from '../../app/Store'
+import {
+  Product,
+  createProduct,
+  getAllProducts,
+  updateProduct,
+} from './productApi'
+
+// Define a type for the slice state
+
+interface CounterState {
+  status: 'idle' | 'loading' | 'succeeded' | 'failed'
+  products: Product[]
+}
+
+// Define the initial state using that type
+const initialState: CounterState = {
+  status: 'loading',
+  products: [],
+}
+
+export const createProductAsync = createAsyncThunk(
+  'product/createProduct',
+  async (productData: Product) => {
+    const response = await createProduct(productData)
+    console.log(response)
+    return response.data
+  },
+)
+
+export const updateProductAsync = createAsyncThunk(
+  'product/updateProduct',
+  async (productData: Product) => {
+    const response = await updateProduct(productData)
+    console.log(response)
+    return response.data
+  },
+)
+export const getAllProductsAsync = createAsyncThunk(
+  'product/getAllProducts',
+  async () => {
+    const response = await getAllProducts()
+    if (response) return response.data
+  },
+)
+
+export const productSlice = createSlice({
+  name: 'product',
+  // `createSlice` will infer the state type from the `initialState` argument
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(createProductAsync.pending, (state) => {
+        state.status = 'loading'
+      })
+      .addCase(createProductAsync.fulfilled, (state, action) => {
+        state.status = 'idle'
+        state.products.push(action.payload)
+      })
+      .addCase(updateProductAsync.pending, (state) => {
+        state.status = 'loading'
+      })
+      .addCase(updateProductAsync.fulfilled, (state, action) => {
+        state.status = 'idle'
+        const index = state.products.findIndex(
+          (product) => product.id == action.payload.id,
+        )
+        state.products[index] = action.payload
+      })
+      .addCase(getAllProductsAsync.pending, (state) => {
+        state.status = 'loading'
+      })
+      .addCase(getAllProductsAsync.fulfilled, (state, action) => {
+        state.status = 'idle'
+        state.products = action.payload
+      })
+  },
+})
+
+// export const {} = productSlice.actions
+
+// Other code such as selectors can use the imported `RootState` type
+export const selectProduct = (state: RootState) => {
+  state.products.products
+}
+
+export default productSlice.reducer
