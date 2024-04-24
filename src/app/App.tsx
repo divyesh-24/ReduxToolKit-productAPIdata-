@@ -4,6 +4,9 @@ import { Provider } from 'react-redux'
 import { store } from './Store'
 import ProductsList from '../features/product/components/ProductsList'
 import AddProduct from '../features/product/components/AddProduct'
+import CartList from '../features/cart/components/CartList'
+import Error from '../components/Error'
+import AuthForm from '../features/auth/components/AuthForm'
 
 const router = createBrowserRouter([
   {
@@ -21,6 +24,22 @@ const router = createBrowserRouter([
       {
         path: '/edit/:id',
         element: <AddProduct />,
+      },
+      {
+        path: '/cart',
+        element: <CartList />,
+      },
+      {
+        path: '/login',
+        element: <AuthForm />,
+      },
+      {
+        path: '/register',
+        element: <AuthForm />,
+      },
+      {
+        path: '*',
+        element: <Error />,
       },
     ],
   },

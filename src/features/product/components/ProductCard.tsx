@@ -6,6 +6,7 @@ import Modal from '../../../components/Modal'
 import { useState } from 'react'
 import { deleteProductAsync } from '../productSlice'
 import { useAppDispatch } from '../../../app/hooks'
+import { addToCartProductAsync } from '../../cart/cartSlice'
 
 type Props = {
   product: Product
@@ -17,6 +18,13 @@ const ProductCard = ({ product, indexNumber }: Props) => {
   const [openShowModal, setOpenShowModal] = useState(-1)
   const handleDelete = (product1: string | undefined) => {
     dispatch(deleteProductAsync(product1 as string))
+  }
+  const handleAddToCart = () => {
+    const cartProduct = {
+      product: { ...product },
+      quantity: 1,
+    }
+    dispatch(addToCartProductAsync(cartProduct))
   }
   return (
     <div className="size-1/4 rounded-lg p-4  relative shadow-md shadow-indigo-100 bg-green-100">
@@ -47,6 +55,16 @@ const ProductCard = ({ product, indexNumber }: Props) => {
           <div className="mt-6 flex gap-4 flex-col ">
             <h1>{product?.name}</h1>
             <div className="min-h-[3rem] ">{product?.desc}</div>
+          </div>
+          <div className="flex justify-center items-center py-2">
+            {product.inStock && (
+              <h1
+                className="px-3 py-2 border bg-blue-400 rounded-lg hover:shadow-md cursor-pointer"
+                onClick={handleAddToCart}
+              >
+                ADD TO CART
+              </h1>
+            )}
           </div>
         </div>
       </div>

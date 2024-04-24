@@ -1,33 +1,54 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { RootState } from '../../app/Store'
-import { Product, createProduct, getAllProducts } from './cartApi'
+import {
+  CartProduct,
+  addToCartProduct,
+  deleteCartProduct,
+  getAllCartProducts,
+  updateCartProduct,
+} from './cartApi'
 
 // Define a type for the slice state
 
 interface CounterState {
-  status: 'idle' | 'loading' | 'succeeded' | 'failed'
-  products: Product[]
+  status: 'loading' | 'succeeded' | 'failed'
+  cartProducts: CartProduct[]
 }
 
 // Define the initial state using that type
 const initialState: CounterState = {
   status: 'loading',
-  products: [],
+  cartProducts: [],
 }
 
-export const createProductAsync = createAsyncThunk(
-  'product/createProduct',
-  async (productData: Product) => {
-    const response = await createProduct(productData)
+export const addToCartProductAsync = createAsyncThunk(
+  'product/addToCartProduct',
+  async (productData: CartProduct) => {
+    const response = await addToCartProduct(productData)
     console.log(response)
     return response.data
   },
 )
-export const getAllProductsAsync = createAsyncThunk(
-  'product/getAllProducts',
+
+export const updateCartProductAsync = createAsyncThunk(
+  'product/updateCartProduct',
+  async (productData: CartProduct) => {
+    const response = await updateCartProduct(productData)
+    return response.data
+  },
+)
+export const getAllCartProductsAsync = createAsyncThunk(
+  'product/getAllCartProducts',
   async () => {
-    const response = await getAllProducts()
+    const response = await getAllCartProducts()
     if (response) return response.data
+  },
+)
+export const deleteCartProductAsync = createAsyncThunk(
+  'product/deleteCartProduct',
+  async (id: string) => {
+    const response = await deleteCartProduct(id)
+    if (response) return response.message
   },
 )
 
@@ -38,28 +59,49 @@ export const cartSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(createProductAsync.pending, (state) => {
+      .addCase(addToCartProductAsync.pending, (state) => {
         state.status = 'loading'
       })
-      .addCase(createProductAsync.fulfilled, (state, action) => {
-        state.status = 'idle'
-        state.products.push(action.payload)
+      .addCase(addToCartProductAsync.fulfilled, (state, action) => {
+        state.status = 'succeeded'
+        state.cartProducts.push(action.payload)
       })
-      .addCase(getAllProductsAsync.pending, (state) => {
+      .addCase(updateCartProductAsync.pending, (state) => {
         state.status = 'loading'
       })
-      .addCase(getAllProductsAsync.fulfilled, (state, action) => {
-        state.status = 'idle'
-        state.products = action.payload
+      .addCase(updateCartProductAsync.fulfilled, (state, action) => {
+        state.status = 'succeeded'
+        const index = state.cartProducts.findIndex(
+          (product) => product.id == action.payload.id,
+        )
+        state.cartProducts[index] = action.payload
+      })
+      .addCase(getAllCartProductsAsync.pending, (state) => {
+        state.status = 'loading'
+      })
+      .addCase(getAllCartProductsAsync.fulfilled, (state, action) => {
+        state.status = 'succeeded'
+        state.cartProducts = action.payload
+      })
+      .addCase(deleteCartProductAsync.pending, (state) => {
+        state.status = 'loading'
+      })
+      .addCase(deleteCartProductAsync.fulfilled, (state, action) => {
+        state.status = 'succeeded'
+        const index = state.cartProducts.findIndex(
+          (item) => item.id === action.payload,
+        )
+        state.cartProducts.splice(index, 1)
       })
   },
 })
 
-// export const {} = productSlice.actions
+// export const {} = cartSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
-export const selectProduct = (state: RootState) => {
-  state.products.products
+export const selectCart = (state: RootState) => {
+  state.carts.cartProducts
 }
+
 
 export default cartSlice.reducer
