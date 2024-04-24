@@ -3,21 +3,25 @@ import { RootState } from '../../app/Store'
 import {
   Product,
   createProduct,
+  deleteProduct,
   getAllProducts,
+  getProductsById,
   updateProduct,
 } from './productApi'
 
 // Define a type for the slice state
 
 interface CounterState {
-  status: 'idle' | 'loading' | 'succeeded' | 'failed'
+  status: 'loading' | 'succeeded' | 'failed'
   products: Product[]
+  selectedProduct: Product
 }
 
 // Define the initial state using that type
 const initialState: CounterState = {
   status: 'loading',
   products: [],
+  selectedProduct: {} as Product,
 }
 
 export const createProductAsync = createAsyncThunk(
@@ -44,6 +48,20 @@ export const getAllProductsAsync = createAsyncThunk(
     if (response) return response.data
   },
 )
+export const getProductsByIdAsync = createAsyncThunk(
+  'product/getProductsById',
+  async (id: string) => {
+    const response = await getProductsById(id)
+    if (response) return response.data
+  },
+)
+export const deleteProductAsync = createAsyncThunk(
+  'product/deleteProduct',
+  async (id: string) => {
+    const response = await deleteProduct(id)
+    if (response) return response.message
+  },
+)
 
 export const productSlice = createSlice({
   name: 'product',
@@ -56,14 +74,14 @@ export const productSlice = createSlice({
         state.status = 'loading'
       })
       .addCase(createProductAsync.fulfilled, (state, action) => {
-        state.status = 'idle'
+        state.status = 'succeeded'
         state.products.push(action.payload)
       })
       .addCase(updateProductAsync.pending, (state) => {
         state.status = 'loading'
       })
       .addCase(updateProductAsync.fulfilled, (state, action) => {
-        state.status = 'idle'
+        state.status = 'succeeded'
         const index = state.products.findIndex(
           (product) => product.id == action.payload.id,
         )
@@ -73,8 +91,25 @@ export const productSlice = createSlice({
         state.status = 'loading'
       })
       .addCase(getAllProductsAsync.fulfilled, (state, action) => {
-        state.status = 'idle'
+        state.status = 'succeeded'
         state.products = action.payload
+      })
+      .addCase(getProductsByIdAsync.pending, (state) => {
+        state.status = 'loading'
+      })
+      .addCase(getProductsByIdAsync.fulfilled, (state, action) => {
+        state.status = 'succeeded'
+        state.selectedProduct = action.payload
+      })
+      .addCase(deleteProductAsync.pending, (state) => {
+        state.status = 'loading'
+      })
+      .addCase(deleteProductAsync.fulfilled, (state, action) => {
+        state.status = 'succeeded'
+        const index = state.products.findIndex(
+          (item) => item.id === action.payload,
+        )
+        state.products.splice(index, 1)
       })
   },
 })

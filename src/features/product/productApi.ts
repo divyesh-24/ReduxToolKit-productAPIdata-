@@ -26,17 +26,36 @@ export async function getAllProducts() {
   const data = await response.json()
   return { data }
 }
+export async function getProductsById(id: string) {
+  const response = await fetch(`http://localhost:3000/products/${id}`)
+  const data = await response.json()
+  return { data }
+}
 
 export async function updateProduct(product: Product) {
   const { id, ...updatedFields } = product
+
   const response = await fetch(`http://localhost:3000/products/${id}`, {
     method: 'PATCH',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify(updatedFields),
   })
+
   if (!response.ok) {
     throw new Error('Failed to update product')
   }
   const data = await response.json()
   return { data }
+}
+
+export async function deleteProduct(productId: string) {
+  const response = await fetch(`http://localhost:3000/products/${productId}`, {
+    method: 'DELETE',
+  })
+
+  if (!response.ok) {
+    throw new Error('Failed to delete product')
+  }
+
+  return { message: 'Product deleted successfully' }
 }

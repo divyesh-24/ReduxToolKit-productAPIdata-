@@ -1,8 +1,12 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks'
-import { createProductAsync, updateProductAsync } from '../productSlice'
-import ImageUploader from './ImageUploader'
-import { useParams } from 'react-router-dom'
+import {
+  createProductAsync,
+  getProductsByIdAsync,
+  updateProductAsync,
+} from '../productSlice'
+import { useNavigate, useParams } from 'react-router-dom'
+import ImageUploader from '../../../components/ImageUploader'
 
 interface ProductType {
   name: string
@@ -15,58 +19,59 @@ interface ProductType {
 }
 const AddProduct: React.FC = () => {
   const { id } = useParams()
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+  const productData = useAppSelector((state) => state.products.selectedProduct)
   const [stock, setStock] = useState(true)
   const [imageFile, setImageFile] = useState<string>('')
-  const nameref = useRef<HTMLInputElement>(null)
-  const descref = useRef<HTMLInputElement>(null)
-  const priceref = useRef<HTMLInputElement>(null)
-  // const imgref = useRef<HTMLInputElement>(null)
-  const bgcolorref = useRef<HTMLInputElement>(null)
-  // const categoryref = useRef<HTMLInputElement>(null)
-  const dispatch = useAppDispatch()
-  const productData = useAppSelector((state) =>
-    state.products.products.filter((e) => e.id == id),
-  )
-  console.log(productData)
+  const [name, setName] = useState<string>('')
+  const [desc, setDesc] = useState<string>('')
+  const [price, setPrice] = useState<number>(0)
+  const [bgcolor, setBgcolor] = useState<string>('')
+  const productDataLoder = useAppSelector((state) => state.products.status)
 
   useEffect(() => {
-    if (
-      id &&
-      nameref.current &&
-      descref.current &&
-      bgcolorref.current &&
-      priceref.current
-    ) {
-      nameref.current.value = productData[0].name
-
-      descref.current.value = productData[0].desc
-
-      bgcolorref.current.value = productData[0].bgColor
-
-      priceref.current.value = productData[0].price.toString()
-
-      setStock(productData[0].inStock)
-      setImageFile(productData[0].image)
+    if (id) {
+      dispatch(getProductsByIdAsync(id))
     }
-  }, [])
+  }, [id, dispatch])
+
+  useEffect(() => {
+    if (productDataLoder === 'succeeded') {
+      setName(productData.name)
+      setDesc(productData.desc)
+      setBgcolor(productData.bgColor)
+      setPrice(productData.price)
+      setStock(productData.inStock)
+      setImageFile(productData.image)
+    }
+  }, [
+    productDataLoder,
+    productData.name,
+    productData.desc,
+    productData.bgColor,
+    productData.image,
+    productData.inStock,
+    productData.price,
+  ])
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault()
 
     const product: ProductType = {
-      name: nameref.current?.value || '',
-      desc: descref.current?.value || '',
+      name: name,
+      desc: desc,
       image: imageFile,
-      bgColor: bgcolorref.current?.value || '',
-      price: Number(priceref.current?.value) || 0,
+      bgColor: bgcolor,
+      price: price,
       inStock: stock,
     }
-    console.log(product, id)
     if (!id) {
       dispatch(createProductAsync(product))
     } else {
-      dispatch(updateProductAsync(product))
+      dispatch(updateProductAsync({ id, ...product }))
     }
+    navigate('/')
   }
 
   return (
@@ -91,7 +96,8 @@ const AddProduct: React.FC = () => {
             <div className="relative">
               <input
                 type="text"
-                ref={nameref}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 required
                 className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
                 placeholder="Product Name"
@@ -107,7 +113,8 @@ const AddProduct: React.FC = () => {
             <div className="relative">
               <input
                 type="text"
-                ref={descref}
+                value={desc}
+                onChange={(e) => setDesc(e.target.value)}
                 required
                 className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
                 placeholder="Description"
@@ -123,7 +130,8 @@ const AddProduct: React.FC = () => {
             <div className="relative">
               <input
                 type="number"
-                ref={priceref}
+                value={price}
+                onChange={(e) => setPrice(e.target.valueAsNumber)}
                 required
                 className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
                 placeholder="Price"
@@ -141,14 +149,14 @@ const AddProduct: React.FC = () => {
             </label>
 
             <div className="relative flex items-center">
-              <label htmlFor="bgcolor">BG Color</label>
+              <label htmlFor="bgcolor">BG Color: Select here</label>
 
               <input
                 type="color"
                 name="bgcolor"
-                ref={bgcolorref}
-                required
-                className="border border-black h-4"
+                value={bgcolor}
+                onChange={(e) => setBgcolor(e.target.value)}
+                className="border border-black h-6 w-6 mx-2 rounded-lg"
                 placeholder="bgcolor"
               />
             </div>
@@ -160,17 +168,8 @@ const AddProduct: React.FC = () => {
             </label>
 
             <div className="relative">
-              {/* <input
-                type="radio"
-                ref={stockref}
-                name="inStock"
-                value="true"
-                required
-                className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
-                placeholder="Price"
-              />
-              <label htmlFor="">yes</label> */}
               <div>
+                <h1>Available in Stock ?</h1>
                 <label htmlFor="yes">
                   <input
                     type="radio"
@@ -178,7 +177,8 @@ const AddProduct: React.FC = () => {
                     name="stock"
                     value="true"
                     checked={stock}
-                    onChange={() => setStock(true)}
+                    onClick={() => setStock(true)}
+                    className="m-4 mr-1"
                   />
                   Yes
                 </label>
@@ -189,8 +189,9 @@ const AddProduct: React.FC = () => {
                     name="stock"
                     value="false"
                     id="no"
-                    checked={stock}
-                    onChange={() => setStock(false)}
+                    checked={!stock}
+                    onClick={() => setStock(false)}
+                    className="m-4 mr-1"
                   />
                   No
                 </label>
@@ -198,26 +199,20 @@ const AddProduct: React.FC = () => {
             </div>
           </div>
           {/* category  */}
-          <div>
+          {/* <div>
             <label htmlFor="category" className="sr-only">
               category
             </label>
 
             <div className="relative">
-              {/* <input
-                type="search"
-                ref={categoryref}
-                required
-                className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
-                placeholder="Price"
-              /> */}
+              
               <select name="category" id="category">
                 <option>1</option>
                 <option>2</option>
                 <option>3</option>
               </select>
             </div>
-          </div>
+          </div> */}
 
           <div className="flex items-center justify-between">
             <button

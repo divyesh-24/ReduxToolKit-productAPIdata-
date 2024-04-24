@@ -28,13 +28,18 @@ const ImageUploader = ({ setImageFile, imageFile }: ImageUploaderProps) => {
 
   return (
     <div>
-      <input type="file" onChange={handleImageChange} />
+      {!imageFile && <input type="file" onChange={handleImageChange} />}
       {imageFile && (
-        <img
-          src={`data:image/png;base64,${imageFile}`}
-          alt="Preview"
-          width={300}
-        />
+        <div className="relative border w-fit rounded-md">
+          <img
+            src={`data:image/png;base64,${imageFile}`}
+            alt="Preview"
+            className='object-cover h-36 border border-black rounded-md' 
+          />
+          <button className="absolute top-3 right-3" onClick={() => setImageFile('')}>
+            X
+          </button>
+        </div>
       )}
     </div>
   )

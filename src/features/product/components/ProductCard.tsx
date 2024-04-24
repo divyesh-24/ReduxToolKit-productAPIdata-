@@ -2,17 +2,27 @@ import { RiDeleteBin5Line } from 'react-icons/ri'
 import { Product } from '../productApi'
 import { FaRegEdit } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
+import Modal from '../../../components/Modal'
+import { useState } from 'react'
+import { deleteProductAsync } from '../productSlice'
+import { useAppDispatch } from '../../../app/hooks'
 
 type Props = {
   product: Product
+  indexNumber: number
 }
 
-const ProductCard = ({ product }: Props) => {
+const ProductCard = ({ product, indexNumber }: Props) => {
+  const dispatch = useAppDispatch()
+  const [openShowModal, setOpenShowModal] = useState(-1)
+  const handleDelete = (product1: string | undefined) => {
+    dispatch(deleteProductAsync(product1 as string))
+  }
   return (
-    <div className="size-1/4">
+    <div className="size-1/4 rounded-lg p-4  relative shadow-md shadow-indigo-100 bg-green-100">
       <div
         // href="#"
-        className="block rounded-lg p-4 shadow-md shadow-indigo-100 bg-green-100 "
+        className={`block   ${product.inStock ? '' : 'opacity-50'}`}
       >
         {product?.image && (
           <img
@@ -39,14 +49,30 @@ const ProductCard = ({ product }: Props) => {
             <div className="min-h-[3rem] ">{product?.desc}</div>
           </div>
         </div>
-        <div className="m-4">
-          <div className="flex justify-between">
-            <Link to={`/edit/${product.id}`}>
-              <FaRegEdit className="h-5 w-5 text-black" />
-            </Link>
-            <RiDeleteBin5Line className="h-5 w-5 text-black" />
-          </div>
+      </div>
+      {!product.inStock && (
+        <div className="absolute top-28 flex items-center justify-center w-full h-8 border border-red-400 -ml-4 bg-red-400/65 ">
+          OUT OF STOCK
         </div>
+      )}
+      <div className="m-4">
+        <div className="flex justify-between">
+          <Link to={`/edit/${product.id}`}>
+            <FaRegEdit className="h-5 w-5 text-black" />
+          </Link>
+          <RiDeleteBin5Line
+            className="h-5 w-5 text-black cursor-pointer"
+            onClick={() => setOpenShowModal(indexNumber)}
+          />
+        </div>
+        <Modal
+          title={'Remove'}
+          massage={`Are you sure Remove ${product?.name} ?`}
+          dangerAction={() => handleDelete(product.id)}
+          dangerOption={'Remove'}
+          showModal={openShowModal === indexNumber}
+          cancelAction={() => setOpenShowModal(-1)}
+        />
       </div>
     </div>
   )

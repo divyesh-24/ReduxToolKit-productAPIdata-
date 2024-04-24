@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import Cart from '../components/cart/Cart'
+import CartList from '../features/cart/components/CartList'
 
 const Header = () => {
   return (
@@ -7,7 +7,7 @@ const Header = () => {
       <Link to="/">Header</Link>
       <div className='flex gap-5'>
         <Link to="/new">New</Link>
-        <Cart />
+        <CartList />
       </div>
     </div>
   )

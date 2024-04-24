@@ -19,7 +19,8 @@ const ProductsList: React.FC = () => {
       <div className='flex gap-5 '>
         {products?.length > 0 ? (
           products?.map((e, i) => (
-            <ProductCard product={e} key={i} />
+            <ProductCard product={e} key={i} indexNumber={i} />
+            
             // <div
             //   key={i}
             //   className={`border size-2/12 min-h-32 p-3 `}
