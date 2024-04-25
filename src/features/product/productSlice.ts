@@ -28,7 +28,6 @@ export const createProductAsync = createAsyncThunk(
   'product/createProduct',
   async (productData: Product) => {
     const response = await createProduct(productData)
-    console.log(response)
     return response.data
   },
 )
@@ -37,7 +36,6 @@ export const updateProductAsync = createAsyncThunk(
   'product/updateProduct',
   async (productData: Product) => {
     const response = await updateProduct(productData)
-    console.log(response)
     return response.data
   },
 )

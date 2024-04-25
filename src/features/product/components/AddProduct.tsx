@@ -140,60 +140,56 @@ const AddProduct: React.FC = () => {
           </div>
           {/* Image */}
           <div>
-            <ImageUploader imageFile={imageFile} setImageFile={setImageFile} />
+            <div>
+              <ImageUploader
+                imageFile={imageFile}
+                setImageFile={setImageFile}
+              />
+            </div>
           </div>
           {/* BGcolor */}
           <div>
-            <label htmlFor="bgcolor" className="sr-only">
-              BGcolor
-            </label>
+            <div>
+              <label htmlFor="coverColor" className="sr-only">
+                Cover color
+              </label>
 
-            <div className="relative flex items-center">
-              <label htmlFor="bgcolor">BG Color: Select here</label>
-
-              <input
-                type="color"
-                name="bgcolor"
-                value={bgcolor}
-                onChange={(e) => setBgcolor(e.target.value)}
-                className="border border-black h-6 w-6 mx-2 rounded-lg"
-                placeholder="bgcolor"
-              />
+              <div className="relative px-4 text-gray-500 text-base">
+                Select color
+                <input
+                  value={bgcolor}
+                  onChange={(e) => setBgcolor(e.target.value)}
+                  type="color"
+                  className="w-1/6 h-10 mx-4 rounded-lg cursor-pointer border-gray-200 p-2 text-sm shadow-sm"
+                />
+              </div>
             </div>
           </div>
           {/* stock */}
           <div>
-            <label htmlFor="stock" className="sr-only">
-              Stock
-            </label>
+            <div className=" p-4 w-full mx-auto max-w-2xl">
+              <h4 className="text-xl lg:text-lg ">Available in Stock ?</h4>
 
-            <div className="relative">
               <div>
-                <h1>Available in Stock ?</h1>
-                <label htmlFor="yes">
+                <label className="flex bg-gray-100 text-gray-700 rounded-md px-3 py-2 my-3 hover:bg-indigo-300 cursor-pointer">
                   <input
                     type="radio"
-                    id="yes"
                     name="stock"
-                    value="true"
                     checked={stock}
                     onClick={() => setStock(true)}
-                    className="m-4 mr-1"
+                    defaultChecked
                   />
-                  Yes
+                  <i className="pl-2 text-sm">Yes</i>
                 </label>
 
-                <label htmlFor="no">
+                <label className="flex bg-gray-100 text-gray-700 rounded-md px-3 py-2 my-3 hover:bg-indigo-300 cursor-pointer">
                   <input
                     type="radio"
                     name="stock"
-                    value="false"
-                    id="no"
                     checked={!stock}
                     onClick={() => setStock(false)}
-                    className="m-4 mr-1"
                   />
-                  No
+                  <i className="pl-2 text-sm">No</i>
                 </label>
               </div>
             </div>

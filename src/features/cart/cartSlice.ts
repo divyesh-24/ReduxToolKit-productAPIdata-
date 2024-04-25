@@ -25,7 +25,6 @@ export const addToCartProductAsync = createAsyncThunk(
   'product/addToCartProduct',
   async (productData: CartProduct) => {
     const response = await addToCartProduct(productData)
-    console.log(response)
     return response.data
   },
 )

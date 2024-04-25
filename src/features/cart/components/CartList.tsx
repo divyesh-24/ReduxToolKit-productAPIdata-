@@ -12,7 +12,6 @@ import { CartProduct } from '../cartApi'
 
 const CartList: React.FC = () => {
   const cartProducts = useAppSelector((state) => state.carts.cartProducts)
-  // console.log(cartProducts)
   const dispatch = useAppDispatch()
   const [openShowModal, setOpenShowModal] = useState(-1)
 
