@@ -1,6 +1,6 @@
 // type Props = {}
 
-import { Link, useLocation } from 'react-router-dom'
+import { Link, Navigate, useLocation } from 'react-router-dom'
 import ImageUploader from '../../../components/ImageUploader'
 import { FormEventHandler, useEffect, useState } from 'react'
 import { MdOutlineVisibility, MdOutlineVisibilityOff } from 'react-icons/md'
@@ -31,8 +31,9 @@ const AuthForm: React.FC = () => {
   const [bgcolor, setBgcolor] = useState<string>('#555')
   const [isAdmin, setIsAdmin] = useState<boolean>(false)
   const dispatch = useAppDispatch()
-  // const users = useAppSelector((s) => s.auth.user)
+  const user = useAppSelector((s) => s.auth.user)
   const errorData = useAppSelector((s) => s.auth.error)
+  // const navigate = useNavigate()
   const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault()
     if (path.pathname == '/register') {
@@ -52,9 +53,13 @@ const AuthForm: React.FC = () => {
         password,
       }
       dispatch(getUserByEmailAsync(newUserData))
+      // navigate('/')
     }
   }
   useEffect(() => {}, [errorData, path])
+  if (Object.keys(user).length != 0) {
+    return <Navigate to="/" replace={true} />
+  }
 
   // const handlePassword = () => {}
 
@@ -62,13 +67,13 @@ const AuthForm: React.FC = () => {
     <div>
       <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-lg">
-          <h1 className="text-center text-2xl font-bold  sm:text-3xl">
+          <h1 className="text-center text-2xl font-bold text-white sm:text-3xl">
             Get started today
           </h1>
 
           <form
             onSubmit={handleSubmit}
-            className="mb-0 mt-6 space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8"
+            className="mb-0 mt-6 space-y-4 bg-white rounded-lg p-4 shadow-lg sm:p-6 lg:p-8"
           >
             <p className="text-center text-lg font-medium">
               {path.pathname == '/login' ? 'Log in' : 'Register'} to your
@@ -85,6 +90,7 @@ const AuthForm: React.FC = () => {
                   <input
                     type="text"
                     value={name}
+                    required
                     onChange={(e) => setName(e.target.value)}
                     className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
                     placeholder="Enter Name"
@@ -118,6 +124,7 @@ const AuthForm: React.FC = () => {
                 <input
                   type="email"
                   value={mail}
+                  required
                   onChange={(e) => setMail(e.target.value)}
                   className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
                   placeholder="Enter email"
@@ -151,6 +158,7 @@ const AuthForm: React.FC = () => {
                 <input
                   type={showPass ? 'text' : 'password'}
                   value={password}
+                  required
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
                   placeholder="Enter password"

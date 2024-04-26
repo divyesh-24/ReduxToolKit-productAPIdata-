@@ -4,7 +4,14 @@ import {
   createSlice,
 } from '@reduxjs/toolkit'
 // import { RootState } from '../../app/Store'
-import { UserType, createUser, getAllUsers, getUserByEmail } from './authApi'
+import {
+  UserType,
+  checkUser,
+  createUser,
+  getAllUsers,
+  getUserByEmail,
+  logoutUser,
+} from './authApi'
 import { LogInData } from './components/AuthForm'
 
 // Define a type for the slice state
@@ -14,6 +21,7 @@ interface AuthState {
   users: UserType[]
   user: UserType
   error: SerializedError | string | null
+  userChecked: boolean
 }
 
 // Define the initial state using that type
@@ -22,6 +30,7 @@ const initialState: AuthState = {
   users: [],
   user: {} as UserType,
   error: null,
+  userChecked: false,
 }
 
 export const createUserAsync = createAsyncThunk(
@@ -39,6 +48,10 @@ export const getAllUsersAsync = createAsyncThunk(
     if (response) return response.data
   },
 )
+export const checkUserAsync = createAsyncThunk('auth/checkUsers', async () => {
+  const response = await checkUser()
+  if (response) return response.data
+})
 export const getUserByEmailAsync = createAsyncThunk(
   'auth/getUserByEmail',
   async (loginData: LogInData) => {
@@ -49,6 +62,10 @@ export const getUserByEmailAsync = createAsyncThunk(
     if (response) return response.data
   },
 )
+export const logoutUserAsync = createAsyncThunk('auth/logoutUser', async () => {
+  const response = await logoutUser()
+  if (response) return response.data
+})
 // export const updateCartProductAsync = createAsyncThunk(
 //     'product/updateCartProduct',
 //     async (productData: CartProduct) => {
@@ -86,6 +103,18 @@ export const authSlice = createSlice({
         state.status = 'succeeded'
         state.users = action.payload
       })
+      .addCase(checkUserAsync.pending, (state) => {
+        state.status = 'loading'
+      })
+      .addCase(checkUserAsync.fulfilled, (state, action) => {
+        state.status = 'succeeded'
+        state.userChecked = true
+        state.user = action.payload
+      })
+      .addCase(checkUserAsync.rejected, (state) => {
+        state.status = 'succeeded'
+        state.userChecked = true
+      })
       .addCase(getUserByEmailAsync.pending, (state) => {
         state.status = 'loading'
       })
@@ -96,6 +125,14 @@ export const authSlice = createSlice({
       .addCase(getUserByEmailAsync.rejected, (state, action) => {
         state.status = 'failed'
         state.error = action.error.message as string
+      })
+      .addCase(logoutUserAsync.pending, (state) => {
+        state.status = 'loading'
+      })
+      .addCase(logoutUserAsync.fulfilled, (state) => {
+        state.status = 'succeeded'
+        state.userChecked = false
+        state.user = {} as UserType
       })
 
     //   .addCase(deleteCartProductAsync.pending, (state) => {

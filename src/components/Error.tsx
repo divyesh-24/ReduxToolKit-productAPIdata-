@@ -2,15 +2,15 @@ import { Link } from "react-router-dom"
 
 const Error = () => {
   return (
-    <div className="grid h-[80vh] place-content-center bg-white px-4">
+    <div className="grid h-[100vh] place-content-center bg-gradient-to-br from-indigo-400 to-indigo-100 px-4">
       <div className="text-center">
-        <h1 className="text-9xl font-black text-gray-200">404</h1>
+        <h1 className="text-9xl font-black text-white">404</h1>
 
         <p className="text-2xl font-bold tracking-tight text-gray-900 sm:text-4xl">
           Uh-oh!
         </p>
 
-        <p className="mt-4 text-gray-500">We can't find that page.</p>
+        <p className="mt-4 text-white">We can't find that page.</p>
 
         <Link
           to="/"

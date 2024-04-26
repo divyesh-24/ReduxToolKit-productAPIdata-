@@ -3,10 +3,11 @@ import Layout from '../layout/Layout'
 import { Provider } from 'react-redux'
 import { store } from './Store'
 import ProductsList from '../features/product/components/ProductsList'
-import AddProduct from '../features/product/components/AddProduct'
 import CartList from '../features/cart/components/CartList'
 import Error from '../components/Error'
 import AuthForm from '../features/auth/components/AuthForm'
+import AddProductPage from '../pages/AddProductPage'
+import AllProductsPage from '../pages/AllProductsPage'
 
 const router = createBrowserRouter([
   {
@@ -19,15 +20,19 @@ const router = createBrowserRouter([
       },
       {
         path: '/new',
-        element: <AddProduct />,
+        element: <AddProductPage />,
       },
       {
         path: '/edit/:id',
-        element: <AddProduct />,
+        element: <AddProductPage />,
       },
       {
         path: '/cart',
         element: <CartList />,
+      },
+      {
+        path: '/admin/products',
+        element: <AllProductsPage />,
       },
       {
         path: '/login',
@@ -50,7 +55,6 @@ function App() {
     <>
       <Provider store={store}>
         <RouterProvider router={router} />
-        {/* mongodb+srv://divyeshS24:JrReactData@clusters.abyimsh.mongodb.net/?retryWrites=true&w=majority&appName=ClusterS */}
       </Provider>
     </>
   )

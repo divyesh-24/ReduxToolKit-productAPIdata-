@@ -1,6 +1,8 @@
 import { LogInData } from './components/AuthForm'
 //@ts-expect-error hash password from backend
 import bcrypt from 'bcryptjs'
+//@ts-expect-error hash password from backend
+import * as jwt from 'jsonwebtoken'
 
 export type UserType = {
   id?: string
@@ -18,10 +20,16 @@ export async function createUser(userData: UserType) {
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify(userData),
   })
+
   if (!response.ok) {
     throw new Error('Failed to create User')
   }
   const data = await response.json()
+  const token = jwt.sign({ userId: data[0].id }, 'your-secret-key', {
+    expiresIn: '1h',
+  })
+  localStorage.setItem('JwtToken', token)
+
   return { data }
 }
 
@@ -30,6 +38,20 @@ export async function getAllUsers() {
   const data = await response.json()
   return { data }
 }
+export async function checkUser() {
+  const token = localStorage.getItem('JwtToken')
+
+  const decoded = jwt.verify(token, 'My-DeMo')
+  if (decoded.userId) {
+    const response = await fetch(
+      `http://localhost:3000/users?id=${decoded.userId}`,
+    )
+    const data = await response.json()
+
+    return { data: data[0] }
+  }
+}
+
 export async function getUserByEmail(userData: LogInData) {
   if (!userData.email) {
     throw new Error('Failed to get User')
@@ -41,7 +63,13 @@ export async function getUserByEmail(userData: LogInData) {
   if (!response.ok) {
     throw new Error('Failed to get User')
   }
+
   const data = await response.json()
+
+  const token = jwt.sign({ userId: data[0].id }, 'My-DeMo', {
+    expiresIn: '1h',
+  })
+
   if (data.length == 0) {
     throw new Error('Failed to Find User')
   }
@@ -51,12 +79,16 @@ export async function getUserByEmail(userData: LogInData) {
   )
 
   if (checkPassword) {
-    return { data }
+    localStorage.setItem('JwtToken', token)
+    return { data: data[0] }
   } else {
     throw new Error('Failed to Login User')
   }
 }
-
+export async function logoutUser() {
+  localStorage.removeItem('JwtToken')
+  return { data: 'Logout Successfully' }
+}
 // export async function updateCartProduct(product: UserType) {
 //   const { id, ...updatedFields } = product
 

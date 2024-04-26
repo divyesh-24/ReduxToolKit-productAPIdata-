@@ -85,7 +85,7 @@ const AddProduct: React.FC = () => {
 
         <form
           onSubmit={handleSubmit}
-          className="mx-auto mb-0 mt-8 max-w-md space-y-4"
+          className="mx-auto mb-0 mt-8 max-w-md space-y-4 bg-white  rounded-lg p-4 shadow-lg sm:p-6 lg:p-8"
         >
           {/* name */}
           <div>
@@ -213,9 +213,9 @@ const AddProduct: React.FC = () => {
           <div className="flex items-center justify-between">
             <button
               type="submit"
-              className="inline-block rounded-lg bg-blue-500 px-5 py-3 text-sm font-medium text-white"
+              className="inline-block w-full  rounded-lg bg-indigo-700 hover:bg-indigo-400 px-5 py-3 text-sm font-medium text-white uppercase"
             >
-              {!id ? 'ADD' : 'SAVE'}
+              {!id ? 'ADD Product' : 'SAVE changes'}
             </button>
           </div>
         </form>
