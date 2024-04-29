@@ -1,13 +1,18 @@
 // type Props = {}
 
-import { Link, Navigate, useLocation } from 'react-router-dom'
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import ImageUploader from '../../../components/ImageUploader'
 import { FormEventHandler, useEffect, useState } from 'react'
-import { MdOutlineVisibility, MdOutlineVisibilityOff } from 'react-icons/md'
+import {
+  MdOutlineVisibility,
+  MdOutlineVisibilityOff,
+  MdOutlineWorkOutline,
+} from 'react-icons/md'
 //@ts-expect-error hash password from backend
 import bcrypt from 'bcryptjs'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks'
 import { createUserAsync, getUserByEmailAsync } from '../authSlice'
+import { HiMiniDevicePhoneMobile } from 'react-icons/hi2'
 interface newUserType {
   name: string
   email: string
@@ -15,6 +20,8 @@ interface newUserType {
   coverColor: string
   isAdmin: boolean
   profile: string
+  mobileNo: string
+  profession: string
 }
 export interface LogInData {
   email: string
@@ -26,14 +33,28 @@ const AuthForm: React.FC = () => {
   const [imageFile, setImageFile] = useState<string>('')
   const [showPass, setShowPass] = useState<boolean>(false)
   const [name, setName] = useState<string>('')
+  const [mobileNo, setMobileNo] = useState<string>('')
   const [mail, setMail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [bgcolor, setBgcolor] = useState<string>('#555')
+  const [profession, setProfession] = useState<string>('')
   const [isAdmin, setIsAdmin] = useState<boolean>(false)
   const dispatch = useAppDispatch()
   const user = useAppSelector((s) => s.auth.user)
   const errorData = useAppSelector((s) => s.auth.error)
-  // const navigate = useNavigate()
+  const navigate = useNavigate()
+  const professions = [
+    { profession: 'Software Engineer' },
+    { profession: 'Doctor' },
+    { profession: 'Teacher' },
+    { profession: 'Lawyer' },
+    { profession: 'Accountant' },
+    { profession: 'Marketing Manager' },
+    { profession: 'Graphic Designer' },
+    { profession: 'Data Scientist' },
+    { profession: 'Writer' },
+    { profession: 'Actor' },
+  ]
   const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault()
     if (path.pathname == '/register') {
@@ -44,6 +65,8 @@ const AuthForm: React.FC = () => {
         coverColor: bgcolor,
         isAdmin,
         profile: imageFile,
+        mobileNo,
+        profession,
       }
       dispatch(createUserAsync(newUser))
     }
@@ -53,7 +76,15 @@ const AuthForm: React.FC = () => {
         password,
       }
       dispatch(getUserByEmailAsync(newUserData))
-      // navigate('/')
+      navigate('/')
+    }
+  }
+  const handleChangeMobile = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = event.target.value
+    const cleanedValue = inputValue.replace(/\D/g, '') // remove non-numeric characters
+    const maxLength = 10
+    if (cleanedValue.length <= maxLength) {
+      setMobileNo(cleanedValue)
     }
   }
   useEffect(() => {}, [errorData, path])
@@ -177,6 +208,56 @@ const AuthForm: React.FC = () => {
             </div>
             {path.pathname != '/login' && (
               <>
+                <div>
+                  <label htmlFor="name" className="sr-only">
+                    Mobile Number
+                  </label>
+
+                  <div className="relative">
+                    <input
+                      type="tel"
+                      value={mobileNo}
+                      required
+                      onChange={handleChangeMobile}
+                      maxLength={10}
+                      // onChange={(e) => setMobileNo(e.target.valueAsNumber)}
+                      className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
+                      placeholder="Enter Mobile Number"
+                    />
+                    <span className="absolute inset-y-0 end-0 grid place-content-center px-4">
+                      <HiMiniDevicePhoneMobile className="size-4 text-gray-400" />
+                    </span>
+                  </div>
+                </div>
+                <div>
+                  <label htmlFor="category" className="sr-only">
+                    category
+                  </label>
+
+                  <div className="relative">
+                    <h1 className="px-3 text-gray-700 mt-6">
+                      Select Your Profession
+                    </h1>
+                    <select
+                      onChange={(e) => setProfession(e.target.value)}
+                      value={profession}
+                      className="w-full appearance-none mt-1 cursor-pointer rounded-lg border-gray-400 p-4 pe-12 text-sm shadow-sm  "
+                    >
+                      {professions.map((item, index) => (
+                        <option
+                          value={item.profession.toLocaleLowerCase()}
+                          key={index}
+                          className="capitalize text-base"
+                        >
+                          {item.profession}
+                        </option>
+                      ))}
+                    </select>
+                    <span className="absolute inset-y-0 end-0 grid place-content-center px-4 top-7">
+                      <MdOutlineWorkOutline className="size-4 text-gray-400" />
+                    </span>
+                  </div>
+                </div>
                 <ImageUploader
                   imageFile={imageFile}
                   setImageFile={setImageFile}

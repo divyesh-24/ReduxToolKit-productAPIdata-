@@ -15,7 +15,7 @@ interface ProductType {
   image: string
   bgColor: string
   inStock: boolean
-  // category: string
+  category: string
 }
 const AddProduct: React.FC = () => {
   const { id } = useParams()
@@ -28,8 +28,21 @@ const AddProduct: React.FC = () => {
   const [desc, setDesc] = useState<string>('')
   const [price, setPrice] = useState<number>(0)
   const [bgcolor, setBgcolor] = useState<string>('')
+  const [category, setCategory] = useState<string>('')
   const productDataLoder = useAppSelector((state) => state.products.status)
 
+  const categories = [
+    { category: 'Electronics' },
+    { category: 'Fashion' },
+    { category: 'Books' },
+    { category: 'Sports' },
+    { category: 'Furniture' },
+    { category: 'Food' },
+    { category: 'Toys' },
+    { category: 'Cars' },
+    { category: 'Travel' },
+    { category: 'Real Estate' },
+  ]
   useEffect(() => {
     if (id) {
       dispatch(getProductsByIdAsync(id))
@@ -65,6 +78,7 @@ const AddProduct: React.FC = () => {
       bgColor: bgcolor,
       price: price,
       inStock: stock,
+      category,
     }
     if (!id) {
       dispatch(createProductAsync(product))
@@ -138,6 +152,32 @@ const AddProduct: React.FC = () => {
               />
             </div>
           </div>
+          {/* category  */}
+          <div>
+            <label htmlFor="category" className="sr-only">
+              category
+            </label>
+
+            <div className="relative">
+              <h1 className="px-3 text-gray-700">Select Category</h1>
+              <select
+                onChange={(e) => setCategory(e.target.value)}
+                value={category}
+                className="w-full appearance-none mt-1 rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm  "
+              >
+                {categories.map((item, index) => (
+                  <option
+                    value={item.category.toLocaleLowerCase()}
+                    key={index}
+                    className="capitalize text-base"
+                  >
+                    {item.category}
+                  </option>
+                ))}
+                
+              </select>
+            </div>
+          </div>
           {/* Image */}
           <div>
             <div>
@@ -194,21 +234,6 @@ const AddProduct: React.FC = () => {
               </div>
             </div>
           </div>
-          {/* category  */}
-          {/* <div>
-            <label htmlFor="category" className="sr-only">
-              category
-            </label>
-
-            <div className="relative">
-              
-              <select name="category" id="category">
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-              </select>
-            </div>
-          </div> */}
 
           <div className="flex items-center justify-between">
             <button

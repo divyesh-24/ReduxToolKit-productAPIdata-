@@ -8,6 +8,7 @@ import Error from '../components/Error'
 import AuthForm from '../features/auth/components/AuthForm'
 import AddProductPage from '../pages/AddProductPage'
 import AllProductsPage from '../pages/AllProductsPage'
+import UserProfile from '../features/user/components/UserProfile'
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
       {
         path: '/admin/products',
         element: <AllProductsPage />,
+      },
+      {
+        path: '/profile',
+        element: <UserProfile />,
       },
       {
         path: '/login',

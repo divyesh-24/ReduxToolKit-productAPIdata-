@@ -12,6 +12,8 @@ export type UserType = {
   coverColor: string
   isAdmin: boolean
   profile: string
+  mobileNo: string
+  profession: string
 }
 
 export async function createUser(userData: UserType) {

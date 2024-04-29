@@ -6,6 +6,7 @@ export type Product = {
   image: string
   bgColor: string
   inStock: boolean
+  category: string
 }
 
 export async function createProduct(product: Product) {

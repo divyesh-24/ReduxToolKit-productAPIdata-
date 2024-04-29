@@ -83,8 +83,8 @@ const products: Product[] = [
 
 const TableComponent = () => {
   return (
-    <div className="relative overflow-x-auto shadow-md sm:rounded-lg max-w-[90%] mx-auto pt-10">
-      <table className="w-full text-sm text-left rtl:text-right text-gray-500 ">
+    <div className=" overflow-x-auto  sm:rounded-lg max-w-[90%] mx-auto p-10 pt-20 my-10 ">
+      <table className="w-full text-sm text-left text-gray-500 ">
         <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
           <tr>
             <th scope="col" className="p-4">
@@ -92,7 +92,7 @@ const TableComponent = () => {
                 <input
                   id="checkbox-all-search"
                   type="checkbox"
-                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500  focus:ring-2 "
                 />
                 <label htmlFor="checkbox-all-search" className="sr-only">
                   checkbox
@@ -127,7 +127,7 @@ const TableComponent = () => {
                   <input
                     id={`checkbox-table-search-${product.id}`}
                     type="checkbox"
-                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500  focus:ring-2 "
                   />
                   <label
                     htmlFor={`checkbox-table-search-${product.id}`}
@@ -139,7 +139,7 @@ const TableComponent = () => {
               </td>
               <th
                 scope="row"
-                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
               >
                 {product.name}
               </th>
@@ -149,7 +149,7 @@ const TableComponent = () => {
               <td className="px-6 py-4">
                 <a
                   href="#"
-                  className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                  className="font-medium text-blue-600  hover:underline"
                 >
                   Edit
                 </a>
@@ -163,14 +163,8 @@ const TableComponent = () => {
         aria-label="Table navigation"
       >
         <span className="text-sm font-normal text-gray-500  mb-4 md:mb-0 block w-full md:inline md:w-auto">
-          Showing{' '}
-          <span className="font-semibold text-gray-900 ">
-            1-10
-          </span>{' '}
-          of{' '}
-          <span className="font-semibold text-gray-900 ">
-            1000
-          </span>
+          Showing <span className="font-semibold text-gray-900 ">1-10</span> of{' '}
+          <span className="font-semibold text-gray-900 ">1000</span>
         </span>
         <ul className="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
           <li>
@@ -184,7 +178,7 @@ const TableComponent = () => {
           <li>
             <a
               href="#"
-              className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+              className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 "
             >
               1
             </a>
@@ -192,7 +186,7 @@ const TableComponent = () => {
           <li>
             <a
               href="#"
-              className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+              className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
             >
               2
             </a>
@@ -201,7 +195,7 @@ const TableComponent = () => {
             <a
               href="#"
               aria-current="page"
-              className="flex items-center justify-center px-3 h-8 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
+              className="flex items-center justify-center px-3 h-8 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 "
             >
               3
             </a>
@@ -209,7 +203,7 @@ const TableComponent = () => {
           <li>
             <a
               href="#"
-              className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+              className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 "
             >
               4
             </a>
@@ -217,7 +211,7 @@ const TableComponent = () => {
           <li>
             <a
               href="#"
-              className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+              className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 "
             >
               5
             </a>
@@ -225,7 +219,7 @@ const TableComponent = () => {
           <li>
             <a
               href="#"
-              className="flex items-center justify-center px-3 h-8 leading-tighttext-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+              className="flex items-center justify-center px-3 h-8 leading-tighttext-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 "
             >
               Next
             </a>
