@@ -14,6 +14,17 @@ import {
 interface CounterState {
   status: 'loading' | 'succeeded' | 'failed'
   products: Product[]
+  totalPages: number
+  totalItems: number
+  // {
+  //   data: Product[]
+  //   first: number
+  //   items: number
+  //   last: number
+  //   next: number | null
+  //   pages: number
+  //   prev: number | null
+  // }
   selectedProduct: Product
 }
 
@@ -21,6 +32,17 @@ interface CounterState {
 const initialState: CounterState = {
   status: 'loading',
   products: [],
+  totalPages: 0,
+  totalItems: 0,
+  // {
+  //   data: [],
+  //   first: 1,
+  //   items: 10,
+  //   last: 5,
+  //   next: 2,
+  //   pages: 5,
+  //   prev: null,
+  // },
   selectedProduct: {} as Product,
 }
 
@@ -41,9 +63,9 @@ export const updateProductAsync = createAsyncThunk(
 )
 export const getAllProductsAsync = createAsyncThunk(
   'product/getAllProducts',
-  async () => {
-    const response = await getAllProducts()
-    if (response) return response.data
+  async (page: number) => {
+    const response = await getAllProducts(page)
+    if (response) return response
   },
 )
 export const getProductsByIdAsync = createAsyncThunk(
@@ -73,7 +95,7 @@ export const productSlice = createSlice({
       })
       .addCase(createProductAsync.fulfilled, (state, action) => {
         state.status = 'succeeded'
-        state.products.push(action.payload)
+        state.products.unshift(action.payload)
       })
       .addCase(updateProductAsync.pending, (state) => {
         state.status = 'loading'
@@ -90,7 +112,9 @@ export const productSlice = createSlice({
       })
       .addCase(getAllProductsAsync.fulfilled, (state, action) => {
         state.status = 'succeeded'
-        state.products = action.payload
+        state.products = action.payload?.data
+        state.totalItems = action.payload?.totalItems
+        state.totalPages = action.payload?.totalPages
       })
       .addCase(getProductsByIdAsync.pending, (state) => {
         state.status = 'loading'

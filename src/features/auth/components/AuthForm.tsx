@@ -28,6 +28,18 @@ export interface LogInData {
   password: string
 }
 
+export const professions = [
+  { profession: 'Software Engineer' },
+  { profession: 'Doctor' },
+  { profession: 'Teacher' },
+  { profession: 'Lawyer' },
+  { profession: 'Accountant' },
+  { profession: 'Marketing Manager' },
+  { profession: 'Graphic Designer' },
+  { profession: 'Data Scientist' },
+  { profession: 'Writer' },
+  { profession: 'Actor' },
+]
 const AuthForm: React.FC = () => {
   const path = useLocation()
   const [imageFile, setImageFile] = useState<string>('')
@@ -43,18 +55,6 @@ const AuthForm: React.FC = () => {
   const user = useAppSelector((s) => s.auth.user)
   const errorData = useAppSelector((s) => s.auth.error)
   const navigate = useNavigate()
-  const professions = [
-    { profession: 'Software Engineer' },
-    { profession: 'Doctor' },
-    { profession: 'Teacher' },
-    { profession: 'Lawyer' },
-    { profession: 'Accountant' },
-    { profession: 'Marketing Manager' },
-    { profession: 'Graphic Designer' },
-    { profession: 'Data Scientist' },
-    { profession: 'Writer' },
-    { profession: 'Actor' },
-  ]
   const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault()
     if (path.pathname == '/register') {
@@ -243,6 +243,12 @@ const AuthForm: React.FC = () => {
                       value={profession}
                       className="w-full appearance-none mt-1 cursor-pointer rounded-lg border-gray-400 p-4 pe-12 text-sm shadow-sm  "
                     >
+                      <option
+                        value="Select Profession"
+                        className="capitalize text-base"
+                      >
+                        ----Select Profession----
+                      </option>
                       {professions.map((item, index) => (
                         <option
                           value={item.profession.toLocaleLowerCase()}

@@ -1,10 +1,10 @@
-import { RiDeleteBin5Line } from 'react-icons/ri'
+// import { RiDeleteBin5Line } from 'react-icons/ri'
 import { Product } from '../productApi'
-import { FaRegEdit } from 'react-icons/fa'
-import { Link } from 'react-router-dom'
-import Modal from '../../../components/Modal'
-import { useEffect, useState } from 'react'
-import { deleteProductAsync } from '../productSlice'
+// import { FaRegEdit } from 'react-icons/fa'
+// import { Link } from 'react-router-dom'
+// import Modal from '../../../components/Modal'
+import { useEffect } from 'react'
+// import { deleteProductAsync } from '../productSlice'
 import { useAppDispatch } from '../../../app/hooks'
 import { addToCartProductAsync } from '../../cart/cartSlice'
 import { BiDollar } from 'react-icons/bi'
@@ -14,12 +14,12 @@ type Props = {
   indexNumber: number
 }
 
-const ProductCard = ({ product, indexNumber }: Props) => {
+const ProductCard = ({ product }: Props) => {
   const dispatch = useAppDispatch()
-  const [openShowModal, setOpenShowModal] = useState(-1)
-  const handleDelete = (product1: string | undefined) => {
-    dispatch(deleteProductAsync(product1 as string))
-  }
+  // const [openShowModal, setOpenShowModal] = useState(-1)
+  // const handleDelete = (product1: string | undefined) => {
+  //   dispatch(deleteProductAsync(product1 as string))
+  // }
   const handleAddToCart = () => {
     const cartProduct = {
       product: { ...product },
@@ -83,7 +83,7 @@ const ProductCard = ({ product, indexNumber }: Props) => {
             </span>
             <p>Vanilla JS</p>
           </div>
-          <div className="mx-4 my-6">
+          {/* <div className="mx-4 my-6">
             <div className="flex justify-between">
               <Link to={`/edit/${product.id}`}>
                 <FaRegEdit className="h-5 w-5 text-black" />
@@ -101,7 +101,7 @@ const ProductCard = ({ product, indexNumber }: Props) => {
               showModal={openShowModal === indexNumber}
               cancelAction={() => setOpenShowModal(-1)}
             />
-          </div>
+          </div> */}
 
           {!product.inStock && (
             <div className="absolute top-36 left-4 flex items-center justify-center w-full h-14 border border-red-400 -ml-4  bg-red-400/65 ">

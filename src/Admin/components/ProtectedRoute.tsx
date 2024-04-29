@@ -8,7 +8,6 @@ interface ProtectedRouteProps {
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const user = useAppSelector((s) => s.auth.user)
-  console.log(user.isAdmin)
 
   useEffect(() => {}, [user])
   if (!user.isAdmin) {

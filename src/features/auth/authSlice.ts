@@ -11,6 +11,7 @@ import {
   getAllUsers,
   getUserByEmail,
   logoutUser,
+  updateUserData,
 } from './authApi'
 import { LogInData } from './components/AuthForm'
 
@@ -22,12 +23,16 @@ interface AuthState {
   user: UserType
   error: SerializedError | string | null
   userChecked: boolean
+  totalPages: number
+  totalItems: number
 }
 
 // Define the initial state using that type
 const initialState: AuthState = {
   status: 'loading',
   users: [],
+  totalPages: 0,
+  totalItems: 0,
   user: {} as UserType,
   error: null,
   userChecked: false,
@@ -43,9 +48,9 @@ export const createUserAsync = createAsyncThunk(
 
 export const getAllUsersAsync = createAsyncThunk(
   'auth/getAllUsers',
-  async () => {
-    const response = await getAllUsers()
-    if (response) return response.data
+  async (page: number) => {
+    const response = await getAllUsers(page)
+    if (response) return response
   },
 )
 export const checkUserAsync = createAsyncThunk('auth/checkUsers', async () => {
@@ -66,13 +71,13 @@ export const logoutUserAsync = createAsyncThunk('auth/logoutUser', async () => {
   const response = await logoutUser()
   if (response) return response.data
 })
-// export const updateCartProductAsync = createAsyncThunk(
-//     'product/updateCartProduct',
-//     async (productData: CartProduct) => {
-//       const response = await updateCartProduct(productData)
-//       return response.data
-//     },
-//   )
+export const updateUserDataAsync = createAsyncThunk(
+  'product/updateUserData',
+  async (userData: UserType) => {
+    const response = await updateUserData(userData)
+    return response.data
+  },
+)
 // export const deleteCartProductAsync = createAsyncThunk(
 //   'product/deleteCartProduct',
 //   async (id: string) => {
@@ -101,7 +106,9 @@ export const authSlice = createSlice({
       })
       .addCase(getAllUsersAsync.fulfilled, (state, action) => {
         state.status = 'succeeded'
-        state.users = action.payload
+        state.users = action.payload?.data
+        state.totalItems = action.payload?.totalItems
+        state.totalPages = action.payload?.totalPages
       })
       .addCase(checkUserAsync.pending, (state) => {
         state.status = 'loading'
@@ -135,26 +142,26 @@ export const authSlice = createSlice({
         state.user = {} as UserType
       })
 
-    //   .addCase(deleteCartProductAsync.pending, (state) => {
-    //     state.status = 'loading'
-    //   })
-    //   .addCase(deleteCartProductAsync.fulfilled, (state, action) => {
-    //     state.status = 'succeeded'
-    //     const index = state.cartProducts.findIndex(
-    //       (item) => item.id === action.payload,
-    //     )
-    //     state.cartProducts.splice(index, 1)
-    //   })
-    //   .addCase(updateCartProductAsync.pending, (state) => {
-    //     state.status = 'loading'
-    //   })
-    //   .addCase(updateCartProductAsync.fulfilled, (state, action) => {
-    //     state.status = 'succeeded'
-    //     const index = state.cartProducts.findIndex(
-    //       (product) => product.id == action.payload.id,
-    //     )
-    //     state.cartProducts[index] = action.payload
-    //   })
+      //   .addCase(deleteCartProductAsync.pending, (state) => {
+      //     state.status = 'loading'
+      //   })
+      //   .addCase(deleteCartProductAsync.fulfilled, (state, action) => {
+      //     state.status = 'succeeded'
+      //     const index = state.cartProducts.findIndex(
+      //       (item) => item.id === action.payload,
+      //     )
+      //     state.cartProducts.splice(index, 1)
+      //   })
+      .addCase(updateUserDataAsync.pending, (state) => {
+        state.status = 'loading'
+      })
+      .addCase(updateUserDataAsync.fulfilled, (state, action) => {
+        state.status = 'succeeded'
+        // const index = state.cartProducts.findIndex(
+        //   (product) => product.id == action.payload.id,
+        // )
+        state.user = action.payload
+      })
   },
 })
 

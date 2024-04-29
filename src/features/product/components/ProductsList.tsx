@@ -10,12 +10,11 @@ const ProductsList: React.FC = () => {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    dispatch(getAllProductsAsync())
+    dispatch(getAllProductsAsync(1))
   }, [dispatch])
 
   return (
     <div className="">
-      
       <div className="min-h-screen overflow-y-auto bg-gradient-to-br from-indigo-400 to-indigo-100 flex justify-center items-center py-20">
         <div className="md:px-4 md:grid md:grid-cols-2 lg:grid-cols-3 gap-5 space-y-4 md:space-y-0">
           {/* <div className="max-w-sm bg-white px-6 pt-6 pb-2 rounded-xl shadow-lg transform hover:scale-105 transition duration-500">

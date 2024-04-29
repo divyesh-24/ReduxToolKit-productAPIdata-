@@ -35,10 +35,14 @@ export async function createUser(userData: UserType) {
   return { data }
 }
 
-export async function getAllUsers() {
-  const response = await fetch(`http://localhost:3000/users`)
+export async function getAllUsers(page=1) {
+  const response = await fetch(`http://localhost:3000/users?_page=${page}&_per_page=10`)
   const data = await response.json()
-  return { data }
+  return {
+    data: data.data,
+    totalItems: data.items,
+    totalPages: data.pages,
+  }
 }
 export async function checkUser() {
   const token = localStorage.getItem('JwtToken')
@@ -91,21 +95,21 @@ export async function logoutUser() {
   localStorage.removeItem('JwtToken')
   return { data: 'Logout Successfully' }
 }
-// export async function updateCartProduct(product: UserType) {
-//   const { id, ...updatedFields } = product
+export async function updateUserData(product: UserType) {
+  const { id, ...updatedFields } = product
 
-//   const response = await fetch(`http://localhost:3000/carts/${id}`, {
-//     method: 'PATCH',
-//     headers: { 'content-type': 'application/json' },
-//     body: JSON.stringify(updatedFields),
-//   })
+  const response = await fetch(`http://localhost:3000/users/${id}`, {
+    method: 'PATCH',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify(updatedFields),
+  })
 
-//   if (!response.ok) {
-//     throw new Error('Failed to update product')
-//   }
-//   const data = await response.json()
-//   return { data }
-// }
+  if (!response.ok) {
+    throw new Error('Failed to update product')
+  }
+  const data = await response.json()
+  return { data }
+}
 
 // export async function deleteCartProduct(productId: string) {
 //   const response = await fetch(`http://localhost:3000/carts/${productId}`, {

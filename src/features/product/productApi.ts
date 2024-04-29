@@ -22,10 +22,17 @@ export async function createProduct(product: Product) {
   return { data }
 }
 
-export async function getAllProducts() {
-  const response = await fetch(`http://localhost:3000/products`)
+export async function getAllProducts(page = 1) {
+  const response = await fetch(
+    `http://localhost:3000/products?_page=${page}&_per_page=10`,
+  )
   const data = await response.json()
-  return { data }
+
+  return {
+    data: data.data,
+    totalItems: data.items,
+    totalPages: data.pages,
+  }
 }
 export async function getProductsById(id: string) {
   const response = await fetch(`http://localhost:3000/products/${id}`)

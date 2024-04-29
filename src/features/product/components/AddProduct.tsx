@@ -29,7 +29,7 @@ const AddProduct: React.FC = () => {
   const [price, setPrice] = useState<number>(0)
   const [bgcolor, setBgcolor] = useState<string>('')
   const [category, setCategory] = useState<string>('')
-  const productDataLoder = useAppSelector((state) => state.products.status)
+  const productDataLoader = useAppSelector((state) => state.products.status)
 
   const categories = [
     { category: 'Electronics' },
@@ -50,16 +50,18 @@ const AddProduct: React.FC = () => {
   }, [id, dispatch])
 
   useEffect(() => {
-    if (productDataLoder === 'succeeded') {
+    if (productDataLoader === 'succeeded') {
       setName(productData.name)
       setDesc(productData.desc)
       setBgcolor(productData.bgColor)
       setPrice(productData.price)
       setStock(productData.inStock)
       setImageFile(productData.image)
+      setCategory(productData.category)
     }
   }, [
-    productDataLoder,
+    productData.category,
+    productDataLoader,
     productData.name,
     productData.desc,
     productData.bgColor,
@@ -85,7 +87,7 @@ const AddProduct: React.FC = () => {
     } else {
       dispatch(updateProductAsync({ id, ...product }))
     }
-    navigate('/')
+    navigate('/admin/products')
   }
 
   return (
@@ -165,6 +167,12 @@ const AddProduct: React.FC = () => {
                 value={category}
                 className="w-full appearance-none mt-1 rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm  "
               >
+                <option
+                  value="Select Category"
+                  className="capitalize text-base"
+                >
+                  ----Select Category----
+                </option>
                 {categories.map((item, index) => (
                   <option
                     value={item.category.toLocaleLowerCase()}
@@ -174,7 +182,6 @@ const AddProduct: React.FC = () => {
                     {item.category}
                   </option>
                 ))}
-                
               </select>
             </div>
           </div>

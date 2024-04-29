@@ -1,28 +1,26 @@
 import ProtectedRoute from '../Admin/components/ProtectedRoute'
 import { useAppDispatch, useAppSelector } from '../app/hooks'
+import { getAllUsersAsync } from '../features/auth/authSlice'
 import TableComponent from '../features/product/components/TableComponent'
-import {
-  deleteProductAsync,
-  getAllProductsAsync,
-} from '../features/product/productSlice'
 
-const AllProductsPage = () => {
+const AllUsersPage = () => {
   const dispatch = useAppDispatch()
 
-  const products = useAppSelector((s) => s.products.products)
+  const users = useAppSelector((s) => s.auth.users)
   const totalItems = useAppSelector((s) => s.products.totalItems)
   const totalPages = useAppSelector((s) => s.products.totalPages)
   const getAllData = (page: number) => {
-    dispatch(getAllProductsAsync(page))
+    dispatch(getAllUsersAsync(page))
   }
 
   const deleteFunction = (id: string) => {
-    dispatch(deleteProductAsync(id))
+    console.log(id)
+    // dispatch(deleteProductAs(id))
   }
   return (
     <ProtectedRoute>
       <TableComponent
-        products={products}
+        products={users}
         totalItems={totalItems}
         totalPages={totalPages}
         deleteFunction={deleteFunction}
@@ -32,4 +30,4 @@ const AllProductsPage = () => {
   )
 }
 
-export default AllProductsPage
+export default AllUsersPage
