@@ -1,35 +1,38 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { RiCloseCircleLine } from 'react-icons/ri'
 
 interface ImageUploaderProps {
-  setImageFile: React.Dispatch<React.SetStateAction<string>>
+  setImageFile: React.Dispatch<React.SetStateAction<File | null>>
   imageFile: string
 }
 
 const ImageUploader = ({ setImageFile, imageFile }: ImageUploaderProps) => {
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const [image, setImage] = useState<string>(imageFile)
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileInput = e.target as HTMLInputElement
     if (fileInput.files) {
-      const file = fileInput.files[0]
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        const base64StringUS = reader.result
-          ?.toString()
-          .replace('data:', '')
-          .replace(/^.+,/, '')
-        setImageFile(base64StringUS as string)
-        // Save the image file to local storage
-        //   localStorage.setItem("wallpaperXXX", base64StringUS);
-        // Get the image file from local storage
-        //   const myImage = localStorage.getItem("wallpaperXXX");
-      }
-      reader.readAsDataURL(file)
+      const file = fileInput.files![0]
+      // const reader = new FileReader()
+      // reader.onloadend = () => {
+      //   const base64StringUS = reader.result
+      //     ?.toString()
+      //     .replace('data:', '')
+      //     .replace(/^.+,/, '')
+      //   setImageFile(base64StringUS as string)
+      //   // Save the image file to local storage
+      //   //   localStorage.setItem("wallpaperXXX", base64StringUS);
+      //   // Get the image file from local storage
+      //   //   const myImage = localStorage.getItem("wallpaperXXX");
+      // }
+      // reader.readAsDataURL(file)
+      setImage(URL.createObjectURL(file))
+      setImageFile(file)
     }
   }
 
   return (
     <div>
-      {!imageFile && (
+      {!image && (
         <div className="flex min-fit items-center justify-center  font-sans">
           <label
             htmlFor="dropzone-file"
@@ -68,21 +71,22 @@ const ImageUploader = ({ setImageFile, imageFile }: ImageUploaderProps) => {
         </div>
       )}
       {/* {!imageFile && <input type="file" onChange={handleImageChange} className='hidden' />} */}
-      {imageFile && (
+      {image && (
         <div className="flex min-fit items-center justify-center  font-sans">
           <label
             htmlFor="dropzone-file"
-            className="mx-auto cursor-pointer flex w-full max-w-lg flex-col items-center rounded-xl border-2 border-solid hover:border-indigo-400 bg-white p-2 text-center"
+            className="mx-auto  flex w-full max-w-lg flex-col items-center rounded-xl border-2 border-solid hover:border-indigo-400 bg-white p-2 text-center"
           >
             <div className="relative border w-fit rounded-md">
               <img
-                src={`data:image/png;base64,${imageFile}`}
+                // src={`data:image/png;base64,${imageFile}`}
+                src={image}
                 alt="Preview"
                 className="object-cover h-36 border border-black rounded-md"
               />
               <RiCloseCircleLine
-                className="absolute top-2 w-6 h-6 right-2"
-                onClick={() => setImageFile('')}
+                className="absolute top-2 w-6 h-6 right-2 cursor-pointer bg-red-500  rounded-full"
+                onClick={() => setImage('')}
               />
             </div>
           </label>

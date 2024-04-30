@@ -7,6 +7,7 @@ import {
 } from '../productSlice'
 import { useNavigate, useParams } from 'react-router-dom'
 import ImageUploader from '../../../components/ImageUploader'
+import uploadImage from '../../../components/uploadImage'
 
 interface ProductType {
   name: string
@@ -23,7 +24,9 @@ const AddProduct: React.FC = () => {
   const navigate = useNavigate()
   const productData = useAppSelector((state) => state.products.selectedProduct)
   const [stock, setStock] = useState(true)
-  const [imageFile, setImageFile] = useState<string>('')
+
+  const [image, setImage] = useState<string>('')
+  const [imageFile, setImageFile] = useState<File | null>(null)
   const [name, setName] = useState<string>('')
   const [desc, setDesc] = useState<string>('')
   const [price, setPrice] = useState<number>(0)
@@ -56,7 +59,7 @@ const AddProduct: React.FC = () => {
       setBgcolor(productData.bgColor)
       setPrice(productData.price)
       setStock(productData.inStock)
-      setImageFile(productData.image)
+      setImage(productData.image)
       setCategory(productData.category)
     }
   }, [
@@ -70,13 +73,13 @@ const AddProduct: React.FC = () => {
     productData.price,
   ])
 
-  const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault()
-
+    const url = await uploadImage(imageFile as File)
     const product: ProductType = {
       name: name,
       desc: desc,
-      image: imageFile,
+      image: url,
       bgColor: bgcolor,
       price: price,
       inStock: stock,
@@ -88,21 +91,27 @@ const AddProduct: React.FC = () => {
       dispatch(updateProductAsync({ id, ...product }))
     }
     navigate('/admin/products')
+    setName('')
+    setDesc('')
+    setBgcolor('')
+    setPrice(0)
+    setStock(false)
+    setImage('')
+    setCategory('Select Category')
   }
 
   return (
     <div>
       <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-lg text-center">
-          <h1 className="text-2xl font-bold sm:text-3xl">
-            {!id ? 'ADD' : 'EDIT'} Product
-          </h1>
-        </div>
-
         <form
           onSubmit={handleSubmit}
           className="mx-auto mb-0 mt-8 max-w-md space-y-4 bg-white  rounded-lg p-4 shadow-lg sm:p-6 lg:p-8"
         >
+          <div className="mx-auto max-w-lg text-center">
+            <h1 className="text-2xl font-bold sm:text-3xl">
+              {!id ? 'ADD' : 'EDIT'} Product
+            </h1>
+          </div>
           {/* name */}
           <div>
             <label htmlFor="name" className="sr-only">
@@ -188,10 +197,7 @@ const AddProduct: React.FC = () => {
           {/* Image */}
           <div>
             <div>
-              <ImageUploader
-                imageFile={imageFile}
-                setImageFile={setImageFile}
-              />
+              <ImageUploader imageFile={image} setImageFile={setImageFile} />
             </div>
           </div>
           {/* BGcolor */}

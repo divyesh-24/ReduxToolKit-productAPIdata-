@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import ProtectedRoute from '../Admin/components/ProtectedRoute'
 import { useAppDispatch, useAppSelector } from '../app/hooks'
 import { getAllUsersAsync } from '../features/auth/authSlice'
@@ -7,16 +8,22 @@ const AllUsersPage = () => {
   const dispatch = useAppDispatch()
 
   const users = useAppSelector((s) => s.auth.users)
-  const totalItems = useAppSelector((s) => s.products.totalItems)
-  const totalPages = useAppSelector((s) => s.products.totalPages)
-  const getAllData = (page: number) => {
-    dispatch(getAllUsersAsync(page))
-  }
+  const totalItems = useAppSelector((s) => s.auth.totalItems)
+  const totalPages = useAppSelector((s) => s.auth.totalPages)
+  const getAllData = useCallback(
+    (page: number) => {
+      dispatch(getAllUsersAsync(page))
+    },
+    [dispatch],
+  )
 
-  const deleteFunction = (id: string) => {
-    console.log(id)
-    // dispatch(deleteProductAs(id))
-  }
+  const deleteFunction = useCallback(
+    (id: string) => {
+      console.log(id)
+      // dispatch(deleteProductAs(id))
+    },
+    [dispatch],
+  )
   return (
     <ProtectedRoute>
       <TableComponent

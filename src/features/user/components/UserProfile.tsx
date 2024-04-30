@@ -7,6 +7,7 @@ import { MdOutlineWorkOutline } from 'react-icons/md'
 import ImageUploader from '../../../components/ImageUploader'
 import { professions } from '../../auth/components/AuthForm'
 import { updateUserDataAsync } from '../../auth/authSlice'
+import uploadImage from '../../../components/uploadImage'
 
 interface ProfileProps {}
 
@@ -14,13 +15,21 @@ const UserProfile: React.FC<ProfileProps> = () => {
   const dispatch = useAppDispatch()
   const user = useAppSelector((s) => s.auth.user)
   const [edit, setEdit] = useState(false)
-  const [userData, setUserData] = useState(user)
-  const [imageFile, setImageFile] = useState<string>(userData.profile)
+  const [userData, setUserData] = useState({ ...user })
 
-  const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
+  const [imageFile, setImageFile] = useState<File | null>(null)
+
+  const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault()
-    setEdit(false)
-    dispatch(updateUserDataAsync(userData))
+    if (imageFile) {
+      try {
+        const url = await uploadImage(imageFile as File)
+        setEdit(false)
+        dispatch(updateUserDataAsync({ ...userData, profile: url }))
+      } catch (error) {
+        console.error(error)
+      }
+    }
   }
   useEffect(() => {}, [dispatch, edit])
 
@@ -37,7 +46,8 @@ const UserProfile: React.FC<ProfileProps> = () => {
               onClick={() => setEdit(!edit)}
             />
             <img
-              src={`${`data:image/png;base64,${user.profile}` ?? 'https://source.unsplash.com/random/300x300'}`}
+              // src={`data:image/png;base64,${user.profile}`}
+              src={user.profile}
               alt="Profile"
               className="w-24 h-24 rounded-full mx-auto mb-4 opa100 border border-indigo-700 p-1"
             />
@@ -66,11 +76,14 @@ const UserProfile: React.FC<ProfileProps> = () => {
           </div>
         </div>
       ) : (
-        <div className="w-full flex items-center justify-center">
+        <div className="w-full min-h-screen flex items-center justify-center">
           <form
             onSubmit={handleSubmit}
-            className="mb-0 mt-6 space-y-4 bg-white rounded-lg p-4 shadow-lg sm:p-6 lg:p-8"
+            className=" w-full m-6 pt-10 md:w-1/2  lg:w-1/3 space-y-4 bg-white rounded-lg p-4 shadow-lg sm:p-6 lg:p-8"
           >
+            <h1 className="w-full text-center text-2xl sm:text-3xl font-bold">
+              Edit Profile
+            </h1>
             {/* name */}
             <div>
               <label htmlFor="name" className="sr-only">
@@ -143,6 +156,7 @@ const UserProfile: React.FC<ProfileProps> = () => {
                 </span>
               </div>
             </div>
+            {/* mobile  */}
             <div>
               <label htmlFor="name" className="sr-only">
                 Mobile Number
@@ -169,6 +183,7 @@ const UserProfile: React.FC<ProfileProps> = () => {
                 </span>
               </div>
             </div>
+            {/* category  */}
             <div>
               <label htmlFor="category" className="sr-only">
                 category
@@ -206,7 +221,11 @@ const UserProfile: React.FC<ProfileProps> = () => {
                 </span>
               </div>
             </div>
-            <ImageUploader imageFile={imageFile} setImageFile={setImageFile} />
+            {/* image  */}
+            <ImageUploader
+              imageFile={user.profile}
+              setImageFile={setImageFile}
+            />
             <div>
               <label htmlFor="coverColor" className="sr-only">
                 Cover color
@@ -224,12 +243,20 @@ const UserProfile: React.FC<ProfileProps> = () => {
                 />
               </div>
             </div>
-            <button
-              type="submit"
-              className="block w-full rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white"
-            >
-              SAVE
-            </button>
+            <div className="flex gap-3 justify-between mt-8">
+              <button
+                onClick={() => setEdit(false)}
+                className="block w-1/2 rounded-lg bg-indigo-100 px-5 py-3 text-sm font-medium "
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="block w-1/2 rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white"
+              >
+                SAVE
+              </button>
+            </div>
           </form>
         </div>
       )}

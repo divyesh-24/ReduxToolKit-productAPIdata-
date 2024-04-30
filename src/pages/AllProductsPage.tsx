@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import ProtectedRoute from '../Admin/components/ProtectedRoute'
 import { useAppDispatch, useAppSelector } from '../app/hooks'
 import TableComponent from '../features/product/components/TableComponent'
@@ -12,13 +13,19 @@ const AllProductsPage = () => {
   const products = useAppSelector((s) => s.products.products)
   const totalItems = useAppSelector((s) => s.products.totalItems)
   const totalPages = useAppSelector((s) => s.products.totalPages)
-  const getAllData = (page: number) => {
-    dispatch(getAllProductsAsync(page))
-  }
+  const getAllData = useCallback(
+    (page: number) => {
+      dispatch(getAllProductsAsync(page))
+    },
+    [dispatch],
+  )
 
-  const deleteFunction = (id: string) => {
-    dispatch(deleteProductAsync(id))
-  }
+  const deleteFunction = useCallback(
+    (id: string) => {
+      dispatch(deleteProductAsync(id))
+    },
+    [dispatch],
+  )
   return (
     <ProtectedRoute>
       <TableComponent

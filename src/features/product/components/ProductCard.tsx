@@ -39,7 +39,7 @@ const ProductCard = ({ product }: Props) => {
           <img
             className="w-full rounded-xl"
             alt={product?.name}
-            src={`data:image/png;base64,${product?.image}`}
+            src={`${product?.image}`}
           />
           <p className="absolute top-0 bg-yellow-300 text-gray-800 font-semibold py-1 px-3 rounded-br-lg rounded-tl-lg">
             New
@@ -83,25 +83,6 @@ const ProductCard = ({ product }: Props) => {
             </span>
             <p>Vanilla JS</p>
           </div>
-          {/* <div className="mx-4 my-6">
-            <div className="flex justify-between">
-              <Link to={`/edit/${product.id}`}>
-                <FaRegEdit className="h-5 w-5 text-black" />
-              </Link>
-              <RiDeleteBin5Line
-                className="h-5 w-5 text-black cursor-pointer"
-                onClick={() => setOpenShowModal(indexNumber)}
-              />
-            </div>
-            <Modal
-              title={'Remove'}
-              massage={`Are you sure Remove ${product?.name} ?`}
-              dangerAction={() => handleDelete(product.id)}
-              dangerOption={'Remove'}
-              showModal={openShowModal === indexNumber}
-              cancelAction={() => setOpenShowModal(-1)}
-            />
-          </div> */}
 
           {!product.inStock && (
             <div className="absolute top-36 left-4 flex items-center justify-center w-full h-14 border border-red-400 -ml-4  bg-red-400/65 ">

@@ -141,7 +141,7 @@ const Header = () => {
                       className="inline-flex items-center text-white justify-center h-12 w-12  font-medium tracking-wide  transition duration-200 rounded-full  shadow-md bg-indigo-200 hover:bg-indigo-700 focus:shadow-outline focus:outline-none"
                     >
                       <img
-                        src={`${`data:image/png;base64,${user.profile}` ?? 'https://source.unsplash.com/random/300x300'}`}
+                        src={`${`${user.profile}` ?? 'https://source.unsplash.com/random/300x300'}`}
                         alt="Profile"
                         className="h-full w-full  rounded-full mx-auto border border-indigo-700 p-0.5"
                       />
@@ -318,7 +318,7 @@ const Header = () => {
                                   className="inline-flex text-white items-center justify-center h-12 w-12  font-medium tracking-wide  transition duration-200 rounded-full  shadow-md bg-indigo-400 hover:bg-indigo-700 focus:shadow-outline focus:outline-none"
                                 >
                                   <img
-                                    src={`${`data:image/png;base64,${user?.profile}` ?? 'https://source.unsplash.com/random/300x300'}`}
+                                    src={`${`${user?.profile}` ?? 'https://source.unsplash.com/random/300x300'}`}
                                     alt="Profile"
                                     className="h-full w-full  rounded-full mx-auto border border-indigo-700 p-0.5"
                                   />

@@ -157,9 +157,10 @@ export const authSlice = createSlice({
       })
       .addCase(updateUserDataAsync.fulfilled, (state, action) => {
         state.status = 'succeeded'
-        // const index = state.cartProducts.findIndex(
-        //   (product) => product.id == action.payload.id,
-        // )
+        const index = state.users.findIndex(
+          (product) => product.id == action.payload.id,
+        )
+        state.users[index] = action.payload
         state.user = action.payload
       })
   },

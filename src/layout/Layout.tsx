@@ -13,7 +13,7 @@ const Layout = () => {
   }, [isUserCheck])
   return (
     <div className="h-full w-full">
-      <div className="max-w-[100rem] mx-auto h-screen ">
+      <div className=" mx-auto h-screen ">
         <Header />
 
         <div className=" min-h-[calc(100vh-6rem)] bg-gradient-to-br from-indigo-400 to-indigo-100">

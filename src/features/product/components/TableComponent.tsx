@@ -35,7 +35,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
   }, [page, getAllData, totalItems])
 
   return (
-    <div className=" overflow-x-auto  sm:rounded-lg max-w-[90%] mx-auto p-10 pt-20 my-10 ">
+    <div className=" overflow-x-auto  sm:rounded-lg max-w-[90%] mx-auto p-10 pt-20 ">
       <table className="w-full text-sm text-left text-gray-500 ">
         <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
           <tr>
@@ -44,21 +44,52 @@ const TableComponent: React.FC<TableComponentProps> = ({
                 <h1 className="">ID</h1>
               </div>
             </th>
-            <th scope="col" className="px-6 py-3 ">
-              Product name
-            </th>
-            <th scope="col" className="px-6 py-3 text-center">
-              Color
-            </th>
-            <th scope="col" className="px-6 py-3 text-center">
-              Category
-            </th>
-            <th scope="col" className="px-6 py-3 text-center">
-              Price
-            </th>
-            <th scope="col" className="px-6 py-3 text-center">
-              Available Stocks
-            </th>
+            {pathname == '/admin/products' ? (
+              <>
+                <th scope="col" className="px-6 py-3 ">
+                  Product name
+                </th>
+                <th scope="col" className="px-6 py-3 ">
+                  Pic
+                </th>
+                <th scope="col" className="px-6 py-3 text-center">
+                  Color
+                </th>
+                <th scope="col" className="px-6 py-3 text-center">
+                  Category
+                </th>
+                <th scope="col" className="px-6 py-3 text-center">
+                  Price
+                </th>
+                <th scope="col" className="px-6 py-3 text-center">
+                  Available Stocks
+                </th>
+              </>
+            ) : (
+              <>
+                <th scope="col" className="px-6 py-3 ">
+                  User
+                </th>
+                <th scope="col" className="px-6 py-3 ">
+                  Pic
+                </th>
+                <th scope="col" className="px-6 py-3 text-center">
+                  Email
+                </th>
+                <th scope="col" className="px-6 py-3 text-center">
+                  Mobile
+                </th>
+                <th scope="col" className="px-6 py-3 text-center">
+                  Profession
+                </th>
+                <th scope="col" className="px-6 py-3 text-center">
+                  Cover Color
+                </th>
+                <th scope="col" className="px-6 py-3 text-center">
+                  Admin
+                </th>
+              </>
+            )}
             <th scope="col" className="px-6 py-3 text-center">
               Action
             </th>
@@ -81,39 +112,91 @@ const TableComponent: React.FC<TableComponentProps> = ({
               >
                 {product.name}
               </th>
-              <td className="px-6 py-4 justify-center flex items-center">
-                <div
-                  className="h-4 w-4 mr-1  inline-block rounded-full border border-indigo-600"
-                  style={{ backgroundColor: product.bgColor }}
-                ></div>
-                {product.bgColor}
-              </td>
-              <td className="px-6 py-4 capitalize text-center">
-                {product.category}
-              </td>
-              <td className="px-6 py-4 text-center">${product.price}</td>
-              <td className="px-6 py-4 text-center">
-                {product.inStock ? 'Yes' : 'No'}
-              </td>
-              <td className="px-6 py-4 text-center flex justify-evenly">
-                <Link
-                  to={`/edit/${product.id}`}
-                  className="font-medium text-blue-600  hover:underline"
-                >
-                  <FaRegEdit className="w-5 h-5 cursor-pointer" />
-                </Link>
-                <RiDeleteBin5Line
-                  className="h-5 w-5 text-red-400 cursor-pointer"
-                  onClick={() => setOpenShowModal(indexNumber)}
-                />
-                <Modal
-                  title={'Remove'}
-                  massage={`Are you sure Remove ${product?.name} ?`}
-                  dangerAction={() => handleDelete(product.id)}
-                  dangerOption={'Remove'}
-                  showModal={openShowModal === indexNumber}
-                  cancelAction={() => setOpenShowModal(-1)}
-                />
+              <th
+                scope="row"
+                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
+              >
+                {'image' in product ? (
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="inline-flex items-center text-white justify-center h-10 w-10  font-medium tracking-wide  transition duration-200 rounded-full  shadow-md bg-indigo-200 hover:bg-indigo-700 focus:shadow-outline focus:outline-none"
+                  />
+                ) : (
+                  <img
+                    src={product.profile}
+                    alt={product.name}
+                    className="inline-flex items-center text-white justify-center h-10 w-10  font-medium tracking-wide  transition duration-200 rounded-full  shadow-md bg-indigo-200 hover:bg-indigo-700 focus:shadow-outline focus:outline-none"
+                  />
+                )}
+              </th>
+
+              {'bgColor' in product ? (
+                <td className="px-6 py-4 text-center">
+                  <div
+                    className="px-2 py-1 text-white inline-block rounded-full border border-indigo-600"
+                    style={{ backgroundColor: product.bgColor }}
+                  >
+                    {product.bgColor}
+                  </div>
+                </td>
+              ) : (
+                <>
+                  <td className="px-6 py-4 text-center">{product.email}</td>
+                  <td className="px-6 py-4 text-center">{product.mobileNo}</td>
+                </>
+              )}
+              {'category' in product ? (
+                <td className="px-6 py-4 capitalize text-center">
+                  {product.category}
+                </td>
+              ) : (
+                <td className="px-6 py-4 capitalize text-center">
+                  {product.profession}
+                </td>
+              )}
+              {'price' in product ? (
+                <td className="px-6 py-4 text-center">${product.price}</td>
+              ) : (
+                <td className="px-6 py-4 justify-center flex items-center">
+                  <div
+                    className="h-4 w-4 mr-1  inline-block rounded-full border border-indigo-600"
+                    style={{ backgroundColor: product.coverColor }}
+                  ></div>
+                  {product.coverColor}
+                </td>
+              )}
+              {'inStock' in product ? (
+                <td className="px-6 py-4 text-center">
+                  {product.inStock ? 'Yes' : 'No'}
+                </td>
+              ) : (
+                <td className="px-6 py-4 text-center">
+                  {product.isAdmin ? 'Yes' : 'No'}
+                </td>
+              )}
+
+              <td className="px-6 py-4 text-center ">
+                <div className="flex justify-evenly">
+                  <Link
+                    to={`/edit/${product.id}`}
+                    className="font-medium text-blue-600  hover:underline"
+                  >
+                    <FaRegEdit className="w-5 h-5 cursor-pointer" />
+                  </Link>
+                  <RiDeleteBin5Line
+                    className="h-5 w-5 text-red-400 cursor-pointer"
+                    onClick={() => setOpenShowModal(indexNumber)}
+                  />
+                  <Modal
+                    title={'Remove'}
+                    massage={`Are you sure Remove ${product?.name} ?`}
+                    dangerAction={() => handleDelete(product.id)}
+                    dangerOption={'Remove'}
+                    showModal={openShowModal === indexNumber}
+                    cancelAction={() => setOpenShowModal(-1)}
+                  />
+                </div>
               </td>
             </tr>
           ))}
