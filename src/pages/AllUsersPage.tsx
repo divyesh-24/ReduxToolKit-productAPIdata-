@@ -1,7 +1,7 @@
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 import ProtectedRoute from '../Admin/components/ProtectedRoute'
 import { useAppDispatch, useAppSelector } from '../app/hooks'
-import { getAllUsersAsync } from '../features/auth/authSlice'
+import { deleteUserAsync, getAllUsersAsync } from '../features/auth/authSlice'
 import TableComponent from '../features/product/components/TableComponent'
 
 const AllUsersPage = () => {
@@ -20,10 +20,12 @@ const AllUsersPage = () => {
   const deleteFunction = useCallback(
     (id: string) => {
       console.log(id)
-      // dispatch(deleteProductAs(id))
+      dispatch(deleteUserAsync(id))
     },
     [dispatch],
   )
+  useEffect(() => {}, [dispatch, users])
+
   return (
     <ProtectedRoute>
       <TableComponent

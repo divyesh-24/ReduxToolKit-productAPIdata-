@@ -8,10 +8,12 @@ import ImageUploader from '../../../components/ImageUploader'
 import { professions } from '../../auth/components/AuthForm'
 import { updateUserDataAsync } from '../../auth/authSlice'
 import uploadImage from '../../../components/uploadImage'
+import { useParams } from 'react-router-dom'
 
 interface ProfileProps {}
 
 const UserProfile: React.FC<ProfileProps> = () => {
+  const { id } = useParams()
   const dispatch = useAppDispatch()
   const user = useAppSelector((s) => s.auth.user)
   const [edit, setEdit] = useState(false)
@@ -31,7 +33,12 @@ const UserProfile: React.FC<ProfileProps> = () => {
       }
     }
   }
-  useEffect(() => {}, [dispatch, edit])
+
+  useEffect(() => {
+    if (id) {
+      setEdit(true)
+    }
+  }, [dispatch, edit])
 
   return (
     <>

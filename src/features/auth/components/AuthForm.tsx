@@ -13,6 +13,7 @@ import bcrypt from 'bcryptjs'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks'
 import { createUserAsync, getUserByEmailAsync } from '../authSlice'
 import { HiMiniDevicePhoneMobile } from 'react-icons/hi2'
+import uploadImage from '../../../components/uploadImage'
 interface newUserType {
   name: string
   email: string
@@ -42,7 +43,8 @@ export const professions = [
 ]
 const AuthForm: React.FC = () => {
   const path = useLocation()
-  const [imageFile, setImageFile] = useState<string>('')
+  const [imageFile, setImageFile] = useState<File | null>(null)
+  const [image, setImage] = useState<string>('')
   const [showPass, setShowPass] = useState<boolean>(false)
   const [name, setName] = useState<string>('')
   const [mobileNo, setMobileNo] = useState<string>('')
@@ -55,20 +57,23 @@ const AuthForm: React.FC = () => {
   const user = useAppSelector((s) => s.auth.user)
   const errorData = useAppSelector((s) => s.auth.error)
   const navigate = useNavigate()
-  const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
+  const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault()
     if (path.pathname == '/register') {
+      const url = await uploadImage(imageFile as File)
+      setImage(url)
       const newUser: newUserType = {
         name,
         email: mail,
         password: bcrypt.hashSync(password, bcrypt.genSaltSync(11)),
         coverColor: bgcolor,
         isAdmin,
-        profile: imageFile,
+        profile: url,
         mobileNo,
         profession,
       }
       dispatch(createUserAsync(newUser))
+      navigate('/')
     }
     if (path.pathname == '/login') {
       const newUserData: LogInData = {
@@ -264,10 +269,7 @@ const AuthForm: React.FC = () => {
                     </span>
                   </div>
                 </div>
-                <ImageUploader
-                  imageFile={imageFile}
-                  setImageFile={setImageFile}
-                />
+                <ImageUploader imageFile={image} setImageFile={setImageFile} />
                 <div>
                   <label htmlFor="coverColor" className="sr-only">
                     Cover color

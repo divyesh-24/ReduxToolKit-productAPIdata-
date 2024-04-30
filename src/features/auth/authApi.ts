@@ -35,8 +35,10 @@ export async function createUser(userData: UserType) {
   return { data }
 }
 
-export async function getAllUsers(page=1) {
-  const response = await fetch(`http://localhost:3000/users?_page=${page}&_per_page=10`)
+export async function getAllUsers(page = 1) {
+  const response = await fetch(
+    `http://localhost:3000/users?_page=${page}&_per_page=10`,
+  )
   const data = await response.json()
   return {
     data: data.data,
@@ -111,14 +113,14 @@ export async function updateUserData(product: UserType) {
   return { data }
 }
 
-// export async function deleteCartProduct(productId: string) {
-//   const response = await fetch(`http://localhost:3000/carts/${productId}`, {
-//     method: 'DELETE',
-//   })
+export async function deleteUser(userId: string) {
+  const response = await fetch(`http://localhost:3000/users/${userId}`, {
+    method: 'DELETE',
+  })
 
-//   if (!response.ok) {
-//     throw new Error('Failed to delete product')
-//   }
+  if (!response.ok) {
+    throw new Error('Failed to delete product')
+  }
 
-//   return { message: 'Product deleted successfully' }
-// }
+  return { id: userId, message: 'User deleted successfully' }
+}

@@ -34,7 +34,7 @@
       "id": "bf8d",
       "name": "iphone 15",
       "desc": "Appple pphhoponnee",
-      "image": "https://res.cloudinary.com/dzbko6akd/image/upload/v1714470677/qdilylvyxx7lm3qexyzc.png",
+      "image": "https://res.cloudinary.com/dzbko6akd/image/upload/v1714477899/rsp3spv93msvugzqysx0.jpg",
       "bgColor": "#00ffd5",
       "price": 567,
       "inStock": true,
@@ -45,16 +45,6 @@
       "name": "HP Victus",
       "desc": "Intel Core i5 12th Gen ",
       "image": "https://res.cloudinary.com/dzbko6akd/image/upload/v1714470686/vhboxzcs7sxuvwhnbu2p.png",
-      "bgColor": "#000000",
-      "price": 2222,
-      "inStock": true,
-      "category": "electronics"
-    },
-    {
-      "id": "7830",
-      "name": "HP Victus",
-      "desc": "Intel Core i5 12th Gen ",
-      "image": "https://res.cloudinary.com/dzbko6akd/image/upload/v1714470773/ah8c7wk2sguhy0n1arul.png",
       "bgColor": "#000000",
       "price": 2222,
       "inStock": true,
@@ -167,15 +157,6 @@
       "profile": ""
     },
     {
-      "id": "d851",
-      "name": "divFinal",
-      "email": "div@qw.we",
-      "password": "$2a$11$tP7/DIfZgjGAZciqJFZ8Eeu8TKpapk3WCXZuzfK6tzLXfPCHI9Ewe",
-      "coverColor": "#ffffff",
-      "isAdmin": true,
-      "profile": ""
-    },
-    {
       "id": "2fa7",
       "name": "Divyesh",
       "email": "divyesh@test.com",
@@ -185,6 +166,94 @@
       "profile": "https://res.cloudinary.com/dzbko6akd/image/upload/v1714471238/ltmrwucbdlft6n7n7k4p.jpg",
       "mobileNo": "1234567880",
       "profession": "software engineer"
+    },
+    {
+      "id": "82b3",
+      "name": "testUser",
+      "email": "test@user.ts",
+      "password": "$2a$11$1CnytPGbjuNS.W6V2VcvjelvcStxmLh9S.i0jJwSDmPHSi9SF.fKm",
+      "coverColor": "#f18888",
+      "isAdmin": true,
+      "profile": "https://res.cloudinary.com/dzbko6akd/image/upload/v1714475687/ttmzbthvgy6i728qcqg3.jpg",
+      "mobileNo": "7894563210",
+      "profession": "graphic designer"
+    },
+    {
+      "id": "7ffc",
+      "name": "testuser",
+      "email": "test@user.ts",
+      "password": "$2a$11$UKhHGHM9W4KAvHJYi3fF6eq2m8wafKMT77xIAs4t7sbsgZRgNlGHC",
+      "coverColor": "#f77373",
+      "isAdmin": true,
+      "profile": "https://res.cloudinary.com/dzbko6akd/image/upload/v1714475156/bf8bzxnalb52p96cnwx9.jpg",
+      "mobileNo": "7896541230",
+      "profession": "lawyer"
+    },
+    {
+      "id": "ae0f",
+      "name": "testuser",
+      "email": "test@user.ts",
+      "password": "$2a$11$6Iz1zSxJGTJuspj8N4NupeBEL2n6x.TDer16jmhqLSBzW8kEYS6/O",
+      "coverColor": "#f77373",
+      "isAdmin": true,
+      "profile": "https://res.cloudinary.com/dzbko6akd/image/upload/v1714475328/p0cgyfembdvtb8dkm1z1.jpg",
+      "mobileNo": "7896541230",
+      "profession": "lawyer"
+    },
+    {
+      "id": "b401",
+      "name": "testuser",
+      "email": "test@user.ts",
+      "password": "$2a$11$5f09px/dYtruQpcCTmy7Zu5GWVKVX/owiQQlUe/VESri2G5oNjF6u",
+      "coverColor": "#f77373",
+      "isAdmin": true,
+      "profile": "https://res.cloudinary.com/dzbko6akd/image/upload/v1714475329/gqzhra87a9t7ajgvjbfn.jpg",
+      "mobileNo": "7896541230",
+      "profession": "lawyer"
+    },
+    {
+      "id": "cd93",
+      "name": "testuser",
+      "email": "test@user.ts",
+      "password": "$2a$11$1kxx3vyihRQdWnhz5YMAjOvGVnQN5ig6lit5uUT6/ESkOy1mAL846",
+      "coverColor": "#f77373",
+      "isAdmin": true,
+      "profile": "https://res.cloudinary.com/dzbko6akd/image/upload/v1714475354/v2qyczq1lmhkfjotjduo.jpg",
+      "mobileNo": "7896541230",
+      "profession": "lawyer"
+    },
+    {
+      "id": "e1f2",
+      "name": "testuser",
+      "email": "test@user.ts",
+      "password": "$2a$11$6CoApQYwmp6fFIg7B9MMse0AvfY5mZetMBJ4Of94wEHGqVbTL26Z6",
+      "coverColor": "#f77373",
+      "isAdmin": true,
+      "profile": "https://res.cloudinary.com/dzbko6akd/image/upload/v1714475360/gbuy8p5ktu1zsmlh0omq.jpg",
+      "mobileNo": "7896541230",
+      "profession": "lawyer"
+    },
+    {
+      "id": "4aba",
+      "name": "testuser",
+      "email": "test@user.ts",
+      "password": "$2a$11$B4DQx7hkU/ihzuXjLds82eFE.BezT73ti09ouZkUZoNfaK2ePaytC",
+      "coverColor": "#f77373",
+      "isAdmin": true,
+      "profile": "https://res.cloudinary.com/dzbko6akd/image/upload/v1714475360/epyawh1gqv7uzc4xpf1m.jpg",
+      "mobileNo": "7896541230",
+      "profession": "lawyer"
+    },
+    {
+      "id": "78d3",
+      "name": "testuser",
+      "email": "test@user.ts",
+      "password": "$2a$11$frGf./8c6f/kV1JFytlgAOTVnCM9xSwXh72Bn3OfL25U//UjDLj26",
+      "coverColor": "#f77373",
+      "isAdmin": true,
+      "profile": "https://res.cloudinary.com/dzbko6akd/image/upload/v1714475422/vgpyo5moe1yewekckpna.jpg",
+      "mobileNo": "7896541230",
+      "profession": "lawyer"
     }
   ]
 }

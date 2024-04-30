@@ -65,5 +65,5 @@ export async function deleteProduct(productId: string) {
     throw new Error('Failed to delete product')
   }
 
-  return { message: 'Product deleted successfully' }
+  return { id: productId, message: 'Product deleted successfully' }
 }

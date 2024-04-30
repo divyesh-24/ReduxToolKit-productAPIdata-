@@ -79,7 +79,7 @@ export const deleteProductAsync = createAsyncThunk(
   'product/deleteProduct',
   async (id: string) => {
     const response = await deleteProduct(id)
-    if (response) return response.message
+    if (response) return response
   },
 )
 
@@ -129,7 +129,7 @@ export const productSlice = createSlice({
       .addCase(deleteProductAsync.fulfilled, (state, action) => {
         state.status = 'succeeded'
         const index = state.products.findIndex(
-          (item) => item.id === action.payload,
+          (item) => item.id === action.payload?.id,
         )
         state.products.splice(index, 1)
       })

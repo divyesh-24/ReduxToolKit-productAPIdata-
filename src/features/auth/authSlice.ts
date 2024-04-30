@@ -8,6 +8,7 @@ import {
   UserType,
   checkUser,
   createUser,
+  deleteUser,
   getAllUsers,
   getUserByEmail,
   logoutUser,
@@ -72,19 +73,19 @@ export const logoutUserAsync = createAsyncThunk('auth/logoutUser', async () => {
   if (response) return response.data
 })
 export const updateUserDataAsync = createAsyncThunk(
-  'product/updateUserData',
+  'auth/updateUserData',
   async (userData: UserType) => {
     const response = await updateUserData(userData)
     return response.data
   },
 )
-// export const deleteCartProductAsync = createAsyncThunk(
-//   'product/deleteCartProduct',
-//   async (id: string) => {
-//     const response = await deleteCartProduct(id)
-//     if (response) return response.message
-//   },
-// )
+export const deleteUserAsync = createAsyncThunk(
+  'auth/deleteUser',
+  async (id: string) => {
+    const response = await deleteUser(id)
+    if (response) return response
+  },
+)
 
 export const authSlice = createSlice({
   name: 'auth',
@@ -142,16 +143,16 @@ export const authSlice = createSlice({
         state.user = {} as UserType
       })
 
-      //   .addCase(deleteCartProductAsync.pending, (state) => {
-      //     state.status = 'loading'
-      //   })
-      //   .addCase(deleteCartProductAsync.fulfilled, (state, action) => {
-      //     state.status = 'succeeded'
-      //     const index = state.cartProducts.findIndex(
-      //       (item) => item.id === action.payload,
-      //     )
-      //     state.cartProducts.splice(index, 1)
-      //   })
+      .addCase(deleteUserAsync.pending, (state) => {
+        state.status = 'loading'
+      })
+      .addCase(deleteUserAsync.fulfilled, (state, action) => {
+        state.status = 'succeeded'
+        const index = state.users.findIndex(
+          (item) => item.id === action.payload?.id,
+        )
+        state.users.splice(index, 1)
+      })
       .addCase(updateUserDataAsync.pending, (state) => {
         state.status = 'loading'
       })
