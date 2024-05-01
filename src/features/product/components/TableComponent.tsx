@@ -6,6 +6,7 @@ import { RiDeleteBin5Line } from 'react-icons/ri'
 import Modal from '../../../components/Modal'
 import { Product } from '../productApi'
 import { UserType } from '../../auth/authApi'
+import AddTableData from './AddTableData'
 
 interface TableComponentProps {
   products: Product[] | UserType[]
@@ -14,75 +15,7 @@ interface TableComponentProps {
   deleteFunction: (id: string) => void
   getAllData: (page: number) => void
 }
-const columns = [
-  {
-    label: 'User Name',
-    type: 'text',
-    name: 'user',
-  },
-  {
-    label: 'Profile Picture',
-    type: 'file',
-    name: 'pic',
-  },
-  {
-    label: 'Email',
-    type: 'email',
-    name: 'email',
-  },
-  {
-    label: 'Mobile',
-    type: 'tel',
-    name: 'mobile',
-  },
-  {
-    label: 'Profession',
-    type: 'text',
-    name: 'profession',
-  },
-  {
-    label: 'Cover Color',
-    type: 'color',
-    name: 'coverColor',
-  },
-  {
-    label: 'Admin',
-    type: 'checkbox',
-    name: 'isAdmin',
-  },
-]
-const productsJson = [
-  {
-    label: 'Product name',
-    type: 'text',
-    className: 'px-6 py-3',
-  },
-  {
-    label: 'Pic',
-    type: 'file',
-    className: 'px-6 py-3',
-  },
-  {
-    label: 'Color',
-    type: 'text',
-    className: 'px-6 py-3 text-center',
-  },
-  {
-    label: 'Category',
-    type: 'text',
-    className: 'px-6 py-3 text-center',
-  },
-  {
-    label: 'Price',
-    type: 'number',
-    className: 'px-6 py-3 text-center',
-  },
-  {
-    label: 'Available Stocks',
-    type: 'number',
-    className: 'px-6 py-3 text-center',
-  },
-]
+
 const TableComponent: React.FC<TableComponentProps> = ({
   products,
   totalItems,
@@ -97,18 +30,21 @@ const TableComponent: React.FC<TableComponentProps> = ({
   const [openShowModal, setOpenShowModal] = useState(-1)
   const handleDelete = (product1: string | undefined) => {
     deleteFunction(product1 as string)
+    setOpenShowModal(-1)
   }
   useEffect(() => {
     getAllData(page)
-  }, [page, getAllData, totalItems, deleteFunction])
+  }, [page, getAllData, deleteFunction, openShowModal, isOpen])
 
   return (
     <div className=" overflow-x-auto  sm:rounded-lg max-w-[90%] mx-auto p-10 pt-20 ">
-      <div
-        className="bg-indigo-600 text-white cursor-pointer px-3 py-2 my-2 w-fit border border-black rounded-md "
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        ADD
+      <div className="flex justify-end">
+        <div
+          className="bg-indigo-600 text-white cursor-pointer px-3 py-2 my-2 w-fit border border-black rounded-md "
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          ADD
+        </div>
       </div>
       <table className="w-full text-sm text-left text-gray-500">
         <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
@@ -123,8 +59,11 @@ const TableComponent: React.FC<TableComponentProps> = ({
                 <th scope="col" className="px-6 py-3 ">
                   Product name
                 </th>
-                <th scope="col" className="px-6 py-3 ">
+                <th scope="col" className="px-6 py-3 text-center">
                   Pic
+                </th>
+                <th scope="col" className="px-6 py-3 text-center">
+                  Description
                 </th>
                 <th scope="col" className="px-6 py-3 text-center">
                   Color
@@ -144,7 +83,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
                 <th scope="col" className="px-6 py-3 ">
                   User
                 </th>
-                <th scope="col" className="px-6 py-3 ">
+                <th scope="col" className="px-6 py-3 text-center">
                   Pic
                 </th>
                 <th scope="col" className="px-6 py-3 text-center">
@@ -168,207 +107,114 @@ const TableComponent: React.FC<TableComponentProps> = ({
               Action
             </th>
           </tr>
-          {isOpen && (
-            <>
-              {pathname == '/admin/users' ? (
-                <tr className="bg-black/15">
-                  <th scope="col" className="p-4">
-                    <div className="flex items-center">
-                      <h1 className="">ID</h1>
-                    </div>
-                  </th>
-                  {columns.map((column, index) => (
-                    <th
-                      scope="col"
-                      key={index}
-                      className={`px-6 py-3 ${column.name == 'user' ? '' : 'text-center'}`}
-                    >
-                      <label htmlFor={column.name}>
-                        {column.type === 'file' ? (
-                          <>
-                            <div>
-                              <label
-                                htmlFor="dropzone-file"
-                                className="cursor-pointer flex w-fit flex-col items-center rounded-full border-2 border-dashed hover:border-indigo-400 bg-white p-1 text-center"
-                              >
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  className="h-8 w-8 text-indigo-500"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                  stroke="currentColor"
-                                  strokeWidth={2}
-                                >
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                                  />
-                                </svg>
-
-                                <input
-                                  id="dropzone-file"
-                                  type="file"
-                                  // onChange={}
-                                  className="hidden"
-                                />
-                              </label>
-                            </div>
-                            {/* <button type="button">{column.label}</button> */}
-                          </>
-                        ) : (
-                          <input
-                            type={column.type}
-                            name={column.name}
-                            placeholder={column.label}
-                            className="p-1"
-                          />
-                        )}
-                      </label>
-                    </th>
-                  ))}
-                  <th scope="col" className="p-4">
-                    <div className="flex items-center justify-center">
-                      <button className="bg-green-300 px-3 py-2 rounded-lg hover:bg-green-500">
-                        Save
-                      </button>
-                    </div>
-                  </th>
-                </tr>
-              ) : (
-                <tr className="bg-black/15">
-                  <th scope="col" className="p-4">
-                    <div className="flex items-center">
-                      <h1 className="">ID</h1>
-                    </div>
-                  </th>
-                  <tr>
-                    {productsJson.map((column, index) => (
-                      <th scope="col" key={index} className={column.className}>
-                        {column.label}
-                      </th>
-                    ))}
-                  </tr>
-                  <th scope="col" className="p-4">
-                    <div className="flex items-center justify-center">
-                      <button className="bg-green-300 px-3 py-2 rounded-lg hover:bg-green-500">
-                        Save
-                      </button>
-                    </div>
-                  </th>
-                </tr>
-              )}
-            </>
-          )}
+          {isOpen && <AddTableData pathname={pathname} setIsOpen={setIsOpen} />}
         </thead>
         <tbody>
           {products.map((product, indexNumber) => (
-            <>
-              <tr
-                key={product.id}
-                className="bg-white border-b  hover:bg-gray-50 "
+            <tr
+              key={product.id}
+              className="bg-white border-b  hover:bg-gray-50 "
+            >
+              <td className="w-4 p-4">
+                <div className="flex items-center text-center">
+                  {product.id}
+                </div>
+              </td>
+              <th
+                scope="row"
+                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
               >
-                <td className="w-4 p-4">
-                  <div className="flex items-center text-center">
-                    {product.id}
+                {product.name}
+              </th>
+              <th
+                scope="row"
+                className="px-6 py-4 font-medium text-gray-900 text-center whitespace-nowrap "
+              >
+                {'image' in product ? (
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="inline-flex items-center min-w-10 text-white justify-center h-10 w-10  font-medium tracking-wide  transition duration-200 rounded-full  shadow-md bg-indigo-200 hover:bg-indigo-700 focus:shadow-outline focus:outline-none"
+                  />
+                ) : (
+                  <img
+                    src={product.profile}
+                    alt={product.name}
+                    className="inline-flex items-center min-w-10 text-white justify-center h-10 w-10  font-medium tracking-wide  transition duration-200 rounded-full  shadow-md bg-indigo-200 hover:bg-indigo-700 focus:shadow-outline focus:outline-none"
+                  />
+                )}
+              </th>
+              {'desc' in product && (
+                <td className="px-6 py-4 text-center">{product.desc}</td>
+              )}
+              {'bgColor' in product ? (
+                <td className="px-6 py-4 text-center">
+                  <div
+                    className="px-2 py-1 text-white inline-block rounded-full border border-indigo-600"
+                    style={{ backgroundColor: product.bgColor }}
+                  >
+                    {product.bgColor}
                   </div>
                 </td>
-                <th
-                  scope="row"
-                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
-                >
-                  {product.name}
-                </th>
-                <th
-                  scope="row"
-                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
-                >
-                  {'image' in product ? (
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      className="inline-flex items-center text-white justify-center h-10 w-10  font-medium tracking-wide  transition duration-200 rounded-full  shadow-md bg-indigo-200 hover:bg-indigo-700 focus:shadow-outline focus:outline-none"
-                    />
-                  ) : (
-                    <img
-                      src={product.profile}
-                      alt={product.name}
-                      className="inline-flex items-center text-white justify-center h-10 w-10  font-medium tracking-wide  transition duration-200 rounded-full  shadow-md bg-indigo-200 hover:bg-indigo-700 focus:shadow-outline focus:outline-none"
-                    />
-                  )}
-                </th>
+              ) : (
+                <>
+                  <td className="px-6 py-4 text-center">{product.email}</td>
+                  <td className="px-6 py-4 text-center">{product.mobileNo}</td>
+                </>
+              )}
+              {'category' in product ? (
+                <td className="px-6 py-4 capitalize text-center">
+                  {product.category}
+                </td>
+              ) : (
+                <td className="px-6 py-4 capitalize text-center">
+                  {product.profession}
+                </td>
+              )}
+              {'price' in product ? (
+                <td className="px-6 py-4 text-center">${product.price}</td>
+              ) : (
+                <td className="px-6 py-4 justify-center flex items-center">
+                  <div
+                    className="h-4 w-4 mr-1  inline-block rounded-full border border-indigo-600"
+                    style={{ backgroundColor: product.coverColor }}
+                  ></div>
+                  {product.coverColor}
+                </td>
+              )}
+              {'inStock' in product ? (
+                <td className="px-6 py-4 text-center">
+                  {product.inStock ? 'Yes' : 'No'}
+                </td>
+              ) : (
+                <td className="px-6 py-4 text-center">
+                  {product.isAdmin ? 'Yes' : 'No'}
+                </td>
+              )}
 
-                {'bgColor' in product ? (
-                  <td className="px-6 py-4 text-center">
-                    <div
-                      className="px-2 py-1 text-white inline-block rounded-full border border-indigo-600"
-                      style={{ backgroundColor: product.bgColor }}
+              <td className="px-6 py-4 text-center ">
+                <div className="flex justify-evenly">
+                  {'price' in product ? (
+                    <Link
+                      to={`/edit/${product.id}`}
+                      className="font-medium text-blue-600  hover:underline"
                     >
-                      {product.bgColor}
-                    </div>
-                  </td>
-                ) : (
-                  <>
-                    <td className="px-6 py-4 text-center">{product.email}</td>
-                    <td className="px-6 py-4 text-center">
-                      {product.mobileNo}
-                    </td>
-                  </>
-                )}
-                {'category' in product ? (
-                  <td className="px-6 py-4 capitalize text-center">
-                    {product.category}
-                  </td>
-                ) : (
-                  <td className="px-6 py-4 capitalize text-center">
-                    {product.profession}
-                  </td>
-                )}
-                {'price' in product ? (
-                  <td className="px-6 py-4 text-center">${product.price}</td>
-                ) : (
-                  <td className="px-6 py-4 justify-center flex items-center">
-                    <div
-                      className="h-4 w-4 mr-1  inline-block rounded-full border border-indigo-600"
-                      style={{ backgroundColor: product.coverColor }}
-                    ></div>
-                    {product.coverColor}
-                  </td>
-                )}
-                {'inStock' in product ? (
-                  <td className="px-6 py-4 text-center">
-                    {product.inStock ? 'Yes' : 'No'}
-                  </td>
-                ) : (
-                  <td className="px-6 py-4 text-center">
-                    {product.isAdmin ? 'Yes' : 'No'}
-                  </td>
-                )}
-
-                <td className="px-6 py-4 text-center ">
-                  <div className="flex justify-evenly">
-                    {'price' in product ? (
-                      <Link
-                        to={`/edit/${product.id}`}
-                        className="font-medium text-blue-600  hover:underline"
-                      >
-                        <FaRegEdit className="w-5 h-5 cursor-pointer" />
-                      </Link>
-                    ) : (
-                      <Link
-                        to={`/profile/${product.id}`}
-                        className="font-medium text-blue-600  hover:underline"
-                      >
-                        <FaRegEdit className="w-5 h-5 cursor-pointer" />
-                      </Link>
-                    )}
-                    <RiDeleteBin5Line
-                      className="h-5 w-5 text-red-400 cursor-pointer"
-                      onClick={() => setOpenShowModal(indexNumber)}
-                    />
-                  </div>
-                </td>
-              </tr>
+                      <FaRegEdit className="w-5 h-5 cursor-pointer" />
+                    </Link>
+                  ) : (
+                    <Link
+                      to={`/profile/${product.id}`}
+                      className="font-medium text-blue-600  hover:underline"
+                    >
+                      <FaRegEdit className="w-5 h-5 cursor-pointer" />
+                    </Link>
+                  )}
+                  <RiDeleteBin5Line
+                    className="h-5 w-5 text-red-400 cursor-pointer"
+                    onClick={() => setOpenShowModal(indexNumber)}
+                  />
+                </div>
+              </td>
               <Modal
                 title={'Remove'}
                 massage={`Are you sure Remove ${product?.name} ?`}
@@ -377,7 +223,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
                 showModal={openShowModal === indexNumber}
                 cancelAction={() => setOpenShowModal(-1)}
               />
-            </>
+            </tr>
           ))}
         </tbody>
       </table>

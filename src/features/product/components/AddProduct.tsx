@@ -18,6 +18,20 @@ interface ProductType {
   inStock: boolean
   category: string
 }
+
+export const categories = [
+  { category: 'Electronics' },
+  { category: 'Fashion' },
+  { category: 'Books' },
+  { category: 'Sports' },
+  { category: 'Furniture' },
+  { category: 'Food' },
+  { category: 'Toys' },
+  { category: 'Cars' },
+  { category: 'Travel' },
+  { category: 'Real Estate' },
+]
+
 const AddProduct: React.FC = () => {
   const { id } = useParams()
   const dispatch = useAppDispatch()
@@ -34,18 +48,6 @@ const AddProduct: React.FC = () => {
   const [category, setCategory] = useState<string>('')
   const productDataLoader = useAppSelector((state) => state.products.status)
 
-  const categories = [
-    { category: 'Electronics' },
-    { category: 'Fashion' },
-    { category: 'Books' },
-    { category: 'Sports' },
-    { category: 'Furniture' },
-    { category: 'Food' },
-    { category: 'Toys' },
-    { category: 'Cars' },
-    { category: 'Travel' },
-    { category: 'Real Estate' },
-  ]
   useEffect(() => {
     if (id) {
       dispatch(getProductsByIdAsync(id))
