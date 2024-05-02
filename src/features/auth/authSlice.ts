@@ -99,7 +99,7 @@ export const authSlice = createSlice({
       })
       .addCase(createUserAsync.fulfilled, (state, action) => {
         state.status = 'succeeded'
-        state.users.push(action.payload)
+        state.users.unshift(action.payload)
       })
 
       .addCase(getAllUsersAsync.pending, (state) => {

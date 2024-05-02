@@ -8,7 +8,7 @@ import ImageUploader from '../../../components/ImageUploader'
 import { professions } from '../../auth/components/AuthForm'
 import { updateUserDataAsync } from '../../auth/authSlice'
 import uploadImage from '../../../components/uploadImage'
-import { useParams } from 'react-router-dom'
+import { Navigate, useParams } from 'react-router-dom'
 
 interface ProfileProps {}
 
@@ -32,6 +32,8 @@ const UserProfile: React.FC<ProfileProps> = () => {
         console.error(error)
       }
     }
+    setEdit(false)
+    dispatch(updateUserDataAsync({ ...userData }))
   }
 
   useEffect(() => {
@@ -40,6 +42,9 @@ const UserProfile: React.FC<ProfileProps> = () => {
     }
   }, [dispatch, edit])
 
+  if (Object.keys(user).length == 0) {
+    return <Navigate to="/" replace={true} />
+  }
   return (
     <>
       {!edit ? (

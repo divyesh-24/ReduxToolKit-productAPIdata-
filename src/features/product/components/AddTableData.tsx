@@ -1,13 +1,16 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { RiCloseCircleLine } from 'react-icons/ri'
 import { professions } from '../../auth/components/AuthForm'
 import { categories } from './AddProduct'
 import uploadImage from '../../../components/uploadImage'
 import { useAppDispatch } from '../../../app/hooks'
-import { createUserAsync } from '../../auth/authSlice'
+import { createUserAsync, updateUserDataAsync } from '../../auth/authSlice'
 //@ts-expect-error hash password from backend
 import bcrypt from 'bcryptjs'
-import { createProductAsync } from '../productSlice'
+import { createProductAsync, updateProductAsync } from '../productSlice'
+import { Product } from '../productApi'
+import { UserType } from '../../auth/authApi'
+import { CgClose } from 'react-icons/cg'
 
 interface Column {
   name: string
@@ -18,6 +21,8 @@ interface Column {
 interface Props {
   pathname: string
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
+  product?: Product | UserType
+  setIsOpenEdit: React.Dispatch<React.SetStateAction<number>>
 }
 const columns = [
   {
@@ -94,15 +99,57 @@ const productsJson = [
   },
 ]
 type UserDaType = {
-  [key: string]: string
+  [key: string]:
+    | string
+    | number
+    | readonly string[]
+    | (undefined & boolean)
+    | undefined
 }
 
-const AddTableData: React.FC<Props> = ({ pathname, setIsOpen }) => {
+const AddTableData: React.FC<Props> = ({
+  pathname,
+  setIsOpen,
+  product,
+  setIsOpenEdit,
+}) => {
   const dispatch = useAppDispatch()
   const [UserData, setUserData] = React.useState({} as UserDaType)
   const [image, setImage] = React.useState<string | null>(null)
   const [imageFile, setImageFile] = React.useState<File>()
   const [errors, setErrors] = React.useState({} as UserDaType)
+
+  useEffect(() => {
+    if (product) {
+      if ('inStock' in product) {
+        setUserData({
+          id: product.id,
+          productName: product.name,
+          productDesc: product.desc,
+          productPrice: product.price,
+          productColor: product.bgColor,
+          productCategory: product.category,
+          productPic: product.image,
+          availableStocks: String(product.inStock),
+        })
+        setImage(product.image)
+      }
+      if ('isAdmin' in product) {
+        setUserData({
+          id: product?.id as string,
+          user: product.name,
+          email: product.email,
+          coverColor: product.coverColor,
+          // isAdmin: product.isAdmin,
+          pic: product.profile,
+          mobile: product.mobileNo,
+          profession: product.profession,
+          isAdmin: String(product.isAdmin),
+        })
+        setImage(product.profile)
+      }
+    }
+  }, [product])
 
   const renderColumn = (column: Column) => {
     if (column.type === 'file') {
@@ -173,8 +220,8 @@ const AddTableData: React.FC<Props> = ({ pathname, setIsOpen }) => {
               [column.name]: e.target.value,
             }))
           }
-          //   value={userData.profession}
-          className="w-fit appearance-none cursor-pointer border-gray-400 px-3 text-center text-sm "
+          value={UserData?.[column.name]}
+          className="w-fit appearance-none cursor-pointer border-gray-400 px-3 py-1 rounded-xl text-center text-sm "
         >
           {pathname == '/admin/users' ? (
             <>
@@ -217,8 +264,10 @@ const AddTableData: React.FC<Props> = ({ pathname, setIsOpen }) => {
         <input
           type={column.type}
           name={column.name}
+          value={UserData?.[column.name]}
           placeholder={column.label}
-          className="p-1 "
+          className={`rounded-xl ${column.type == 'color' ? 'px-1' : 'px-2 py-1 '}`}
+          checked={UserData?.[column.name] == 'true' ? true : false}
           required
           maxLength={column.type === 'tel' ? 10 : 100}
           onChange={(e) => {
@@ -245,20 +294,23 @@ const AddTableData: React.FC<Props> = ({ pathname, setIsOpen }) => {
   }
   const handleSave = async () => {
     const errors = {} as UserDaType
+
     if (pathname === '/admin/users') {
-      if (!UserData.user || UserData.user.length < 3) {
+      if (!UserData.user || String(UserData.user).length < 3) {
         errors.user = '**Name must be at least 3 characters'
       }
       if (
         !UserData.email ||
-        !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(UserData.email)
+        !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(
+          String(UserData.email),
+        )
       ) {
         errors.email = '**Invalid email address'
       }
       if (!UserData.pic) {
         errors.pic = '**Product picture is required'
       }
-      if (!UserData.mobile || UserData.mobile.length !== 10) {
+      if (!UserData.mobile || String(UserData.mobile).length !== 10) {
         errors.mobile = '**Mobile number must be 10 digits'
       }
       if (!UserData.profession) {
@@ -270,11 +322,12 @@ const AddTableData: React.FC<Props> = ({ pathname, setIsOpen }) => {
       //   if (!UserData.isAdmin) {
       //     errors.isAdmin = 'Admin status is required'
       //   }
-    } else {
-      if (!UserData.productName || UserData.productName.length < 3) {
+    }
+    if (pathname == '/admin/products') {
+      if (!UserData.productName || String(UserData.productName).length < 3) {
         errors.productName = '**Product name must be at least 3 characters'
       }
-      if (!UserData.productDesc || UserData.productDesc.length < 3) {
+      if (!UserData.productDesc || String(UserData.productDesc).length < 3) {
         errors.productDesc =
           '**Product Description must be at least 10 characters'
       }
@@ -300,44 +353,60 @@ const AddTableData: React.FC<Props> = ({ pathname, setIsOpen }) => {
       return
     }
     if (pathname == '/admin/products') {
+      let url
+      if (imageFile) {
+        url = await uploadImage(imageFile as File)
+      }
       const newProduct = {
-        name: UserData?.productName.trim(),
-        desc: UserData?.productDesc.trim(),
+        name: String(UserData?.productName).trim(),
+        desc: String(UserData?.productDesc).trim(),
         price: Number(UserData?.productPrice),
-        image: UserData?.productPic,
-        bgColor: UserData?.productColor,
-        inStock: Boolean(UserData?.availableStocks),
-        category: UserData?.productCategory,
+        image: imageFile ? url : UserData.productPic,
+        bgColor: String(UserData?.productColor),
+        inStock: UserData?.availableStocks == 'true' ? true : false,
+        category: String(UserData?.productCategory),
+      }
+      if (UserData.id) {
+        dispatch(updateProductAsync({ id: String(UserData.id), ...newProduct }))
       }
       dispatch(createProductAsync(newProduct))
       console.log(newProduct)
     }
     if (pathname == '/admin/users') {
-      const url = await uploadImage(imageFile as File)
-      const newUser = {
-        name: UserData?.user.trim(),
-        email: UserData?.email.trim(),
-        coverColor: UserData?.coverColor,
-        isAdmin: Boolean(UserData?.isAdmin),
-        password: bcrypt.hashSync('default password', bcrypt.genSaltSync(11)),
-        profile: url,
-        mobileNo: UserData?.mobile,
-        profession: UserData?.profession,
+      let url
+      if (imageFile) {
+        url = await uploadImage(imageFile as File)
       }
-      dispatch(createUserAsync(newUser))
+      const newUser = {
+        name: String(UserData?.user).trim(),
+        email: String(UserData?.email).trim(),
+        coverColor: String(UserData?.coverColor),
+        isAdmin: UserData?.isAdmin == 'true' ? true : false,
+        password: bcrypt.hashSync('default password', bcrypt.genSaltSync(11)),
+        profile: imageFile ? url : UserData.pic,
+        mobileNo: String(UserData?.mobile),
+        profession: String(UserData?.profession),
+      }
+      if (UserData.id) {
+        dispatch(updateUserDataAsync({ id: String(UserData.id), ...newUser }))
+      }
+      if (!Object.keys(UserData).includes('id')) {
+        dispatch(createUserAsync(newUser))
+      }
       console.log(newUser)
     }
     // If no errors, save the data
     // console.log('Saving data:', UserData)
     setErrors({})
     setIsOpen(false)
+    setIsOpenEdit(-1)
   }
 
   return (
-    <tr className="bg-black/15">
+    <tr className={UserData?.id ? `bg-indigo-200 ` : 'bg-black/15'}>
       <th scope="col" className="p-4">
         <div className="flex items-center">
-          <h1 className="">ID</h1>
+          <h1 className="text-gray-700">{UserData?.id ?? 'ID'}</h1>
         </div>
       </th>
       {pathname === '/admin/users'
@@ -375,13 +444,21 @@ const AddTableData: React.FC<Props> = ({ pathname, setIsOpen }) => {
             </th>
           ))}
       <th scope="col" className="p-4">
-        <div className="flex items-center justify-center">
+        <div className="flex items-center justify-center gap-5">
           <button
-            className="bg-green-300 px-3 py-2 rounded-lg hover:bg-green-500"
+            className="hover:bg-green-300 drop-shadow-md px-3 py-2 rounded-lg text-gray-700 bg-green-500 hover:transition-transform hover:scale-110"
             onClick={handleSave}
           >
-            Save
+            SAVE
           </button>
+          {UserData.id && (
+            <button
+              className="hover:bg-red-500 drop-shadow-md px-2 py-2 rounded-lg text-gray-700 bg-red-400 hover:transition-transform hover:scale-110"
+              onClick={() => setIsOpenEdit(-1)}
+            >
+              <CgClose className="w-5 h-5" />
+            </button>
+          )}
         </div>
       </th>
     </tr>

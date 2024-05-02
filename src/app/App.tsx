@@ -44,10 +44,7 @@ const router = createBrowserRouter([
         path: '/profile',
         element: <UserProfilePage />,
       },
-      {
-        path: '/profile/:id',
-        element: <UserProfilePage />,
-      },
+
       {
         path: '/login',
         element: <AuthForm />,

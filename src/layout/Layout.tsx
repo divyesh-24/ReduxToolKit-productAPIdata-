@@ -10,7 +10,7 @@ const Layout = () => {
   const isUserCheck = useAppSelector((s) => s.auth.userChecked)
   useEffect(() => {
     dispatch(checkUserAsync())
-  }, [isUserCheck])
+  }, [isUserCheck, dispatch])
   return (
     <div className="h-full w-full">
       <div className=" mx-auto h-screen ">

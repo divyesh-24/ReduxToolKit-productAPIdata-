@@ -62,7 +62,7 @@ const CartList: React.FC = () => {
                 {cartProducts.map((cartItem, indexNumber) => (
                   <li className="flex items-center bg-white p-3 rounded-lg shadow-md gap-4" key={indexNumber}>
                     <img
-                      src={`data:image/png;base64,${cartItem.product?.image}`}
+                      src={`${cartItem.product?.image}`}
                       alt=""
                       className="size-16 rounded object-cover"
                     />
