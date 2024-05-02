@@ -162,7 +162,7 @@ export const authSlice = createSlice({
           (product) => product.id == action.payload.id,
         )
         state.users[index] = action.payload
-        state.user = action.payload
+        // state.user = action.payload
       })
   },
 })

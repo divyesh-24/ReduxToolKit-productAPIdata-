@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import ProtectedRoute from '../Admin/components/ProtectedRoute'
 import { useAppDispatch, useAppSelector } from '../app/hooks'
-import TableComponent from '../features/product/components/TableComponent'
+import TableComponent from '../components/TableComponent'
 import {
   deleteProductAsync,
   getAllProductsAsync,

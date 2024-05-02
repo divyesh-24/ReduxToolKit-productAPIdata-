@@ -92,8 +92,8 @@
     },
     {
       "id": "352e",
-      "name": "new mobile ",
-      "desc": "new mobile ",
+      "name": "new mobile",
+      "desc": "new mobile",
       "image": "https://res.cloudinary.com/dzbko6akd/image/upload/v1714470957/chy5sxgmokjhqts64tnu.png",
       "bgColor": "#ff1a1a",
       "price": 234,
@@ -195,41 +195,44 @@
       "category": "furniture"
     },
     {
-      "id": "975b",
-      "name": "new phone",
-      "desc": "new phone toy",
-      "price": 12,
-      "image": "https://res.cloudinary.com/dzbko6akd/image/upload/v1714641692/sevkj5v5zwprtwfihfbv.jpg",
-      "bgColor": "#c7c7c7",
+      "id": "d82a",
+      "name": "new mobile",
+      "desc": "new mobile",
+      "price": 234,
+      "image": "https://res.cloudinary.com/dzbko6akd/image/upload/v1714470957/chy5sxgmokjhqts64tnu.png",
+      "bgColor": "#ff1a1a",
       "inStock": true,
-      "category": "furniture"
+      "category": "sports"
     },
     {
-      "id": "7e63",
-      "name": "new phone",
-      "desc": "new phone toy",
-      "price": 120,
-      "bgColor": "#c7c7c7",
-      "inStock": true,
-      "category": "furniture"
-    },
-    {
-      "id": "3169",
-      "name": "new phone",
-      "desc": "new phone toy",
-      "price": 120,
-      "bgColor": "#c7c7c7",
-      "inStock": true,
-      "category": "furniture"
-    },
-    {
-      "id": "15cf",
+      "id": "aae3",
       "name": "HP Victus last",
       "desc": "Intel Core i5 12th Gen",
       "price": 2222,
+      "image": "https://res.cloudinary.com/dzbko6akd/image/upload/v1714650744/vvjnxh5lgl9yocenkrry.png",
       "bgColor": "#000000",
       "inStock": true,
       "category": "electronics"
+    },
+    {
+      "id": "5091",
+      "name": "new phone",
+      "desc": "new phone toy",
+      "price": 120,
+      "image": "https://res.cloudinary.com/dzbko6akd/image/upload/v1714650756/yjxibrevzxkmlnirq2iz.png",
+      "bgColor": "#c7c7c7",
+      "inStock": true,
+      "category": "furniture"
+    },
+    {
+      "id": "804f",
+      "name": "new phone",
+      "desc": "new phone toy",
+      "price": 120,
+      "image": "https://res.cloudinary.com/dzbko6akd/image/upload/v1714650768/cy4hvfup9l6ivs0ektui.png",
+      "bgColor": "#c7c7c7",
+      "inStock": true,
+      "category": "furniture"
     }
   ],
   "carts": [
@@ -310,7 +313,7 @@
       "email": "div@ads.com",
       "coverColor": "#ff0000",
       "isAdmin": false,
-      "password": "$2a$11$tZQN8PT2NiJlEf59/YwhrODAQnhF0N44Al6ezJit3IwkwPq1AzUue",
+      "password": "$2a$11$hEOamkx9zUUSl4T0aCJ51uFdMuwFyygFjk1ks.t5A62BV.Y04zWp.",
       "profile": "https://res.cloudinary.com/dzbko6akd/image/upload/v1714649794/ktbgvoyjqoztygietjhm.png",
       "mobileNo": "9874563210",
       "profession": "marketing manager"

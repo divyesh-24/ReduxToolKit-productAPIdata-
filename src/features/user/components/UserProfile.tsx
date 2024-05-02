@@ -40,7 +40,7 @@ const UserProfile: React.FC<ProfileProps> = () => {
     if (id) {
       setEdit(true)
     }
-  }, [dispatch, edit])
+  }, [dispatch, edit, id])
 
   if (Object.keys(user).length == 0) {
     return <Navigate to="/" replace={true} />

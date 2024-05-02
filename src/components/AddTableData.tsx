@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react'
 import { RiCloseCircleLine } from 'react-icons/ri'
-import { professions } from '../../auth/components/AuthForm'
-import { categories } from './AddProduct'
-import uploadImage from '../../../components/uploadImage'
-import { useAppDispatch } from '../../../app/hooks'
-import { createUserAsync, updateUserDataAsync } from '../../auth/authSlice'
+import { professions } from '../features/auth/components/AuthForm'
+import { categories } from '../features/product/components/AddProduct'
+import uploadImage from './uploadImage'
+import { useAppDispatch } from '../app/hooks'
+import { createUserAsync, updateUserDataAsync } from '../features/auth/authSlice'
 //@ts-expect-error hash password from backend
 import bcrypt from 'bcryptjs'
-import { createProductAsync, updateProductAsync } from '../productSlice'
-import { Product } from '../productApi'
-import { UserType } from '../../auth/authApi'
+import { createProductAsync, updateProductAsync } from '../features/product/productSlice'
+import { Product } from '../features/product/productApi'
+import { UserType } from '../features/auth/authApi'
 import { CgClose } from 'react-icons/cg'
 
 interface Column {
@@ -294,7 +294,7 @@ const AddTableData: React.FC<Props> = ({
   }
   const handleSave = async () => {
     const errors = {} as UserDaType
-
+    // errors shows
     if (pathname === '/admin/users') {
       if (!UserData.user || String(UserData.user).length < 3) {
         errors.user = '**Name must be at least 3 characters'
@@ -352,6 +352,7 @@ const AddTableData: React.FC<Props> = ({
       setErrors(errors)
       return
     }
+    // check updating or create data
     if (pathname == '/admin/products') {
       let url
       if (imageFile) {
@@ -369,7 +370,9 @@ const AddTableData: React.FC<Props> = ({
       if (UserData.id) {
         dispatch(updateProductAsync({ id: String(UserData.id), ...newProduct }))
       }
-      dispatch(createProductAsync(newProduct))
+      if (!Object.keys(UserData).includes('id')) {
+        dispatch(createProductAsync(newProduct))
+      }
       console.log(newProduct)
     }
     if (pathname == '/admin/users') {

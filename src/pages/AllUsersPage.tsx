@@ -2,7 +2,7 @@ import { useCallback, useEffect } from 'react'
 import ProtectedRoute from '../Admin/components/ProtectedRoute'
 import { useAppDispatch, useAppSelector } from '../app/hooks'
 import { deleteUserAsync, getAllUsersAsync } from '../features/auth/authSlice'
-import TableComponent from '../features/product/components/TableComponent'
+import TableComponent from '../components/TableComponent'
 
 const AllUsersPage = () => {
   const dispatch = useAppDispatch()

@@ -3,9 +3,9 @@ import { useLocation } from 'react-router-dom'
 
 import { useEffect, useState } from 'react'
 import { RiDeleteBin5Line } from 'react-icons/ri'
-import Modal from '../../../components/Modal'
-import { Product } from '../productApi'
-import { UserType } from '../../auth/authApi'
+import Modal from './Modal'
+import { Product } from '../features/product/productApi'
+import { UserType } from '../features/auth/authApi'
 import AddTableData from './AddTableData'
 
 interface TableComponentProps {
