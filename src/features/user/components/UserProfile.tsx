@@ -1,14 +1,14 @@
 import React, { FormEventHandler, useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks'
-import { LuMail } from 'react-icons/lu'
 import { FaRegEdit, FaUserAlt } from 'react-icons/fa'
-import { HiMiniDevicePhoneMobile } from 'react-icons/hi2'
-import { MdOutlineWorkOutline } from 'react-icons/md'
+import { MdOutlineWorkOutline, MdWork } from 'react-icons/md'
 import ImageUploader from '../../../components/ImageUploader'
 import { professions } from '../../auth/components/AuthForm'
 import { updateUserDataAsync } from '../../auth/authSlice'
 import uploadImage from '../../../components/uploadImage'
 import { Navigate, useParams } from 'react-router-dom'
+import { IoMdMail } from 'react-icons/io'
+import { FaMobileRetro } from 'react-icons/fa6'
 
 interface ProfileProps {}
 
@@ -50,7 +50,7 @@ const UserProfile: React.FC<ProfileProps> = () => {
       {!edit ? (
         <div className="flex items-center justify-center h-[80vh] bg-transparent">
           <div
-            className={`bg-opacity-50 relative p-8 rounded-lg shadow-md md:w-1/3`}
+            className={`bg-opacity-50 relative p-8 rounded-lg shadow-md w-96 h-80 mx-4 xl:w-1/3 xl:h-fit`}
             style={{ backgroundColor: user.coverColor }}
           >
             <FaRegEdit
@@ -63,25 +63,26 @@ const UserProfile: React.FC<ProfileProps> = () => {
               alt="Profile"
               className="w-24 h-24 rounded-full mx-auto mb-4 opa100 border border-indigo-700 p-1"
             />
-            <h1 className="text-2xl font-bold text-gray-800 text-center">
+            <h1 className="text-2xl font-bold text-gray-800 text-center capitalize">
               {user.name}
             </h1>
-            <p className="text-sm text-gray-600 text-center capitalize">
+            <p className="text-sm text-gray-700 text-center capitalize flex items-center justify-center">
+              <MdWork className="h-5 w-5 mr-2" />
               {user.profession ?? 'Frontend Developer'}
             </p>
-            <ul className="mt-4">
+            <ul className="mt-4 xl:mt-8">
               <li className="flex items-center text-gray-700">
                 <FaUserAlt className="h-5 w-5 mr-2" />
 
                 {user.isAdmin ? 'Admin User' : 'User'}
               </li>
               <li className="flex items-center text-gray-700">
-                <LuMail className="h-5 w-5 mr-2" />
+                <IoMdMail className="h-5 w-5 mr-2" />
 
                 {user.email}
               </li>
               <li className="flex items-center text-gray-700">
-                <HiMiniDevicePhoneMobile className="h-5 w-5 mr-2" />
+                <FaMobileRetro className="h-5 w-5 mr-2" />
                 {user.mobileNo ?? '(123) 456-7890'}
               </li>
             </ul>
@@ -191,7 +192,7 @@ const UserProfile: React.FC<ProfileProps> = () => {
                   placeholder="Enter Mobile Number"
                 />
                 <span className="absolute inset-y-0 end-0 grid place-content-center px-4">
-                  <HiMiniDevicePhoneMobile className="size-4 text-gray-400" />
+                  <FaMobileRetro className="size-4 text-gray-400" />
                 </span>
               </div>
             </div>

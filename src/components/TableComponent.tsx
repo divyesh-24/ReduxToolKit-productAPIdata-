@@ -38,233 +38,237 @@ const TableComponent: React.FC<TableComponentProps> = ({
   }, [page, getAllData, deleteFunction, openShowModal, isOpen])
 
   return (
-    <div className=" overflow-x-auto  sm:rounded-lg max-w-[90%] mx-auto p-10 pt-20 ">
+    <div className="sm:rounded-lg max-w-[90%] mx-auto lg:p-10 lg:pt-20 pt-8 ">
       <div className="flex justify-end">
         <div
-          className="bg-indigo-600 text-white cursor-pointer px-3 py-2 my-2 w-fit border border-black rounded-md "
+          className="bg-indigo-600 hover:bg-indigo-500 hover:scale-110 hover:transition-transform text-white cursor-pointer uppercase px-3 py-2 my-2 w-fit  rounded-lg "
           onClick={() => setIsOpen(!isOpen)}
         >
-          {!isOpen ? 'ADD' : 'CLOSE'}
+          {!isOpen
+            ? `ADD ${pathname == '/admin/users' ? 'User' : 'Product'}`
+            : 'CLOSE'}
         </div>
       </div>
-      <table className="w-full text-sm text-left text-gray-500">
-        <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
-          <tr>
-            <th scope="col" className="p-4">
-              <div className="flex items-center">
-                <h1 className="">ID</h1>
-              </div>
-            </th>
-            {pathname == '/admin/products' ? (
-              <>
-                <th scope="col" className="px-6 py-3 w-1/6">
-                  Product name
-                </th>
-                <th scope="col" className="px-6 py-3 text-center">
-                  Pic
-                </th>
-                <th scope="col" className="px-6 py-3 text-center w-1/6">
-                  Description
-                </th>
-                <th scope="col" className="px-6 py-3 text-center">
-                  Color
-                </th>
-                <th scope="col" className="px-6 py-3 text-center">
-                  Category
-                </th>
-                <th scope="col" className="px-6 py-3 text-center">
-                  Price
-                </th>
-                <th scope="col" className="px-6 py-3 text-center">
-                  Available Stocks
-                </th>
-              </>
-            ) : (
-              <>
-                <th scope="col" className="px-6 py-3 w-1/6">
-                  User
-                </th>
-                <th scope="col" className="px-6 py-3 text-center">
-                  Pic
-                </th>
-                <th
-                  scope="col"
-                  className="px-6 py-3 text-center w-1/6 break-words text-wrap"
-                >
-                  Email
-                </th>
-                <th scope="col" className="px-6 py-3 text-center">
-                  Mobile
-                </th>
-                <th scope="col" className="px-6 py-3 text-center">
-                  Profession
-                </th>
-                <th scope="col" className="px-6 py-3 text-center">
-                  Cover Color
-                </th>
-                <th scope="col" className="px-6 py-3 text-center">
-                  Admin
-                </th>
-              </>
+      <div className=" overflow-x-auto">
+        <table className="w-full text-sm text-left text-gray-500">
+          <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
+            <tr>
+              <th scope="col" className="p-4">
+                <div className="flex items-center">
+                  <h1 className="">ID</h1>
+                </div>
+              </th>
+              {pathname == '/admin/products' ? (
+                <>
+                  <th scope="col" className="px-6 py-3 w-1/6">
+                    Product name
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-center">
+                    Pic
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-center w-1/6">
+                    Description
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-center">
+                    Color
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-center">
+                    Category
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-center">
+                    Price
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-center">
+                    Available Stocks
+                  </th>
+                </>
+              ) : (
+                <>
+                  <th scope="col" className="px-6 py-3 w-1/6">
+                    User
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-center">
+                    Pic
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-center w-1/6 break-words text-wrap"
+                  >
+                    Email
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-center">
+                    Mobile
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-center">
+                    Profession
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-center">
+                    Cover Color
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-center">
+                    Admin
+                  </th>
+                </>
+              )}
+              <th scope="col" className="px-6 py-3 text-center">
+                Action
+              </th>
+            </tr>
+            {isOpen && (
+              <AddTableData
+                pathname={pathname}
+                setIsOpen={setIsOpen}
+                setIsOpenEdit={setIsOpenEdit}
+              />
             )}
-            <th scope="col" className="px-6 py-3 text-center">
-              Action
-            </th>
-          </tr>
-          {isOpen && (
-            <AddTableData
-              pathname={pathname}
-              setIsOpen={setIsOpen}
-              setIsOpenEdit={setIsOpenEdit}
-            />
-          )}
-        </thead>
-        <tbody>
-          {products
-            .map((product, indexNumber) => {
-              if (isOpenEdit == indexNumber) {
-                return (
-                  <AddTableData
-                    key={product.id}
-                    pathname={pathname}
-                    setIsOpen={setIsOpen}
-                    product={product}
-                    setIsOpenEdit={setIsOpenEdit}
-                  />
-                )
-              }
-              return (
-                <tr
-                  key={product.id}
-                  className="bg-white border-b  hover:bg-gray-50 "
-                >
-                  <>
-                    <td className="w-4 p-4">
-                      <div className="flex items-center text-center">
-                        {product.id}
-                      </div>
-                    </td>
-                    <th
-                      scope="row"
-                      className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
-                    >
-                      {product.name}
-                    </th>
-                    <th
-                      scope="row"
-                      className="px-6 py-4 font-medium text-gray-900 text-center whitespace-nowrap "
-                    >
-                      {'image' in product ? (
-                        <img
-                          src={product.image}
-                          alt={product.name}
-                          className="inline-flex items-center min-w-10 text-white justify-center h-10 w-10  font-medium tracking-wide  transition duration-200 rounded-full  shadow-md bg-indigo-200 hover:bg-indigo-700 focus:shadow-outline focus:outline-none"
-                        />
-                      ) : (
-                        <img
-                          src={product.profile}
-                          alt={product.name}
-                          className="inline-flex items-center min-w-10 text-white justify-center h-10 w-10  font-medium tracking-wide  transition duration-200 rounded-full  shadow-md bg-indigo-200 hover:bg-indigo-700 focus:shadow-outline focus:outline-none"
-                        />
-                      )}
-                    </th>
-                    {'desc' in product && (
-                      <td className="px-6 py-4 text-center text-wrap">
-                        {product.desc}
-                      </td>
-                    )}
-                    {'bgColor' in product ? (
-                      <td className="px-6 py-4 text-center">
-                        <div
-                          className="px-2 py-1 text-white inline-block rounded-full border border-indigo-600"
-                          style={{ backgroundColor: product.bgColor }}
-                        >
-                          {product.bgColor}
-                        </div>
-                      </td>
-                    ) : (
-                      <>
-                        <td className="px-6 py-4 text-center">
-                          {product.email}
-                        </td>
-                        <td className="px-6 py-4 text-center">
-                          {product.mobileNo}
-                        </td>
-                      </>
-                    )}
-                    {'category' in product ? (
-                      <td className="px-6 py-4 capitalize text-center">
-                        {product.category}
-                      </td>
-                    ) : (
-                      <td className="px-6 py-4 capitalize text-center">
-                        {product.profession}
-                      </td>
-                    )}
-                    {'price' in product ? (
-                      <td className="px-6 py-4 text-center">
-                        ${product.price}
-                      </td>
-                    ) : (
-                      <td className="px-6 py-4 justify-center flex items-center">
-                        <div
-                          className="px-2 py-1 text-white inline-block rounded-full  border border-indigo-600"
-                          style={{ backgroundColor: product.coverColor }}
-                        >
-                          {product.coverColor}
-                        </div>
-                      </td>
-                    )}
-                    {'inStock' in product ? (
-                      <td className="px-6 py-4 text-center">
-                        {product.inStock ? 'Yes' : 'No'}
-                      </td>
-                    ) : (
-                      <td className="px-6 py-4 text-center">
-                        {product.isAdmin ? 'Yes' : 'No'}
-                      </td>
-                    )}
-
-                    <td className="px-6 py-4 text-center ">
-                      <div className="flex justify-evenly gap-5">
-                        {'price' in product ? (
-                          <div
-                            // to={`/edit/${product.id}`}
-                            onClick={() => setIsOpenEdit(indexNumber)}
-                            className="font-medium text-blue-600  hover:underline"
-                          >
-                            <FaRegEdit className="w-5 h-5 cursor-pointer" />
-                          </div>
-                        ) : (
-                          <div
-                            // to={`/profile/${product.id}`}
-                            onClick={() => setIsOpenEdit(indexNumber)}
-                            className="font-medium text-blue-600  hover:underline"
-                          >
-                            <FaRegEdit className="w-5 h-5 cursor-pointer" />
-                          </div>
-                        )}
-                        <RiDeleteBin5Line
-                          className="h-5 w-5 text-red-400 cursor-pointer"
-                          onClick={() => setOpenShowModal(indexNumber)}
-                        />
-                      </div>
-                    </td>
-                    <Modal
-                      title={'Remove'}
-                      massage={`Are you sure Remove ${product?.name} ?`}
-                      dangerAction={() => handleDelete(product.id)}
-                      dangerOption={'Remove'}
-                      showModal={openShowModal === indexNumber}
-                      cancelAction={() => setOpenShowModal(-1)}
+          </thead>
+          <tbody>
+            {products
+              .map((product, indexNumber) => {
+                if (isOpenEdit == indexNumber) {
+                  return (
+                    <AddTableData
+                      key={product.id}
+                      pathname={pathname}
+                      setIsOpen={setIsOpen}
+                      product={product}
+                      setIsOpenEdit={setIsOpenEdit}
                     />
-                  </>
-                </tr>
-              )
-            })
-            .reverse()}
-        </tbody>
-      </table>
+                  )
+                }
+                return (
+                  <tr
+                    key={product.id}
+                    className="bg-white border-b  hover:bg-gray-50 "
+                  >
+                    <>
+                      <td className="w-4 p-4">
+                        <div className="flex items-center text-center">
+                          {product.id}
+                        </div>
+                      </td>
+                      <th
+                        scope="row"
+                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
+                      >
+                        {product.name}
+                      </th>
+                      <th
+                        scope="row"
+                        className="px-6 py-4 font-medium text-gray-900 text-center whitespace-nowrap "
+                      >
+                        {'image' in product ? (
+                          <img
+                            src={product.image}
+                            alt={product.name}
+                            className="inline-flex items-center min-w-10 text-white justify-center h-10 w-10  font-medium tracking-wide  transition duration-200 rounded-full  shadow-md bg-indigo-200 hover:bg-indigo-700 focus:shadow-outline focus:outline-none"
+                          />
+                        ) : (
+                          <img
+                            src={product.profile}
+                            alt={product.name}
+                            className="inline-flex items-center min-w-10 text-white justify-center h-10 w-10  font-medium tracking-wide  transition duration-200 rounded-full  shadow-md bg-indigo-200 hover:bg-indigo-700 focus:shadow-outline focus:outline-none"
+                          />
+                        )}
+                      </th>
+                      {'desc' in product && (
+                        <td className="px-6 py-4 text-center text-wrap">
+                          {product.desc}
+                        </td>
+                      )}
+                      {'bgColor' in product ? (
+                        <td className="px-6 py-4 text-center">
+                          <div
+                            className="px-2 py-1 text-white inline-block rounded-full border border-indigo-600"
+                            style={{ backgroundColor: product.bgColor }}
+                          >
+                            {product.bgColor}
+                          </div>
+                        </td>
+                      ) : (
+                        <>
+                          <td className="px-6 py-4 text-center">
+                            {product.email}
+                          </td>
+                          <td className="px-6 py-4 text-center">
+                            {product.mobileNo}
+                          </td>
+                        </>
+                      )}
+                      {'category' in product ? (
+                        <td className="px-6 py-4 capitalize text-center">
+                          {product.category}
+                        </td>
+                      ) : (
+                        <td className="px-6 py-4 capitalize text-center">
+                          {product.profession}
+                        </td>
+                      )}
+                      {'price' in product ? (
+                        <td className="px-6 py-4 text-center">
+                          ${product.price}
+                        </td>
+                      ) : (
+                        <td className="px-6 py-4 justify-center flex items-center">
+                          <div
+                            className="px-2 py-1 text-white inline-block rounded-full  border border-indigo-600"
+                            style={{ backgroundColor: product.coverColor }}
+                          >
+                            {product.coverColor}
+                          </div>
+                        </td>
+                      )}
+                      {'inStock' in product ? (
+                        <td className="px-6 py-4 text-center">
+                          {product.inStock ? 'Yes' : 'No'}
+                        </td>
+                      ) : (
+                        <td className="px-6 py-4 text-center">
+                          {product.isAdmin ? 'Yes' : 'No'}
+                        </td>
+                      )}
+
+                      <td className="px-6 py-4 text-center ">
+                        <div className="flex justify-evenly gap-5">
+                          {'price' in product ? (
+                            <div
+                              // to={`/edit/${product.id}`}
+                              onClick={() => setIsOpenEdit(indexNumber)}
+                              className="font-medium text-blue-600  hover:underline"
+                            >
+                              <FaRegEdit className="w-5 h-5 cursor-pointer" />
+                            </div>
+                          ) : (
+                            <div
+                              // to={`/profile/${product.id}`}
+                              onClick={() => setIsOpenEdit(indexNumber)}
+                              className="font-medium text-blue-600  hover:underline"
+                            >
+                              <FaRegEdit className="w-5 h-5 cursor-pointer" />
+                            </div>
+                          )}
+                          <RiDeleteBin5Line
+                            className="h-5 w-5 text-red-400 cursor-pointer"
+                            onClick={() => setOpenShowModal(indexNumber)}
+                          />
+                        </div>
+                      </td>
+                      <Modal
+                        title={'Remove'}
+                        massage={`Are you sure Remove ${product?.name} ?`}
+                        dangerAction={() => handleDelete(product.id)}
+                        dangerOption={'Remove'}
+                        showModal={openShowModal === indexNumber}
+                        cancelAction={() => setOpenShowModal(-1)}
+                      />
+                    </>
+                  </tr>
+                )
+              })
+              .reverse()}
+          </tbody>
+        </table>
+      </div>
       <nav
         className="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4"
         aria-label="Table navigation"

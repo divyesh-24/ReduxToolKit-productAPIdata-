@@ -1,16 +1,26 @@
 import { BsCart4 } from 'react-icons/bs'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../app/hooks'
 import { logoutUserAsync } from '../features/auth/authSlice'
 import { useEffect, useState } from 'react'
+import {
+  CheckCartProductAsync,
+  ClearCartProductLocalAsync,
+} from '../features/cart/cartSlice'
 
 const Header = () => {
+  const navigate = useNavigate()
+
   const cartTotalItem = useAppSelector(
     (state) => state.carts.cartProducts.length,
   )
   const user = useAppSelector((s) => s.auth.user)
 
   const dispatch = useAppDispatch()
+  useEffect(() => {
+    dispatch(CheckCartProductAsync())
+  }, [])
+
   useEffect(() => {}, [dispatch, user])
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   return (
@@ -87,14 +97,14 @@ const Header = () => {
                       All Users
                     </Link>
                   </li>
-                  <li>
+                  {/* <li>
                     <Link
                       to="/new"
                       className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-indigo-400"
                     >
                       New Product
                     </Link>
-                  </li>
+                  </li> */}
                 </>
               )}
               <li>
@@ -103,8 +113,8 @@ const Header = () => {
                   className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-indigo-400 relative"
                 >
                   {cartTotalItem > 0 && (
-                    <span className="absolute -top-1 -right-1 text-xs bg-white w-4 h-4 rounded-full border border-black text-center ">
-                      {cartTotalItem}
+                    <span className="absolute  -top-1 -right-1 text-xs bg-white w-4 h-4 rounded-full border border-black text-center ">
+                      <p>{cartTotalItem}</p>
                     </span>
                   )}
                   <BsCart4 className="h-8 w-8" />
@@ -150,7 +160,11 @@ const Header = () => {
                   <li>
                     <button
                       className="inline-flex items-center text-white justify-center h-12 px-6 font-medium tracking-wide  transition duration-200 rounded shadow-md bg-indigo-400 hover:bg-indigo-700 focus:shadow-outline focus:outline-none"
-                      onClick={() => dispatch(logoutUserAsync())}
+                      onClick={() => {
+                        dispatch(logoutUserAsync())
+                        dispatch(ClearCartProductLocalAsync())
+                        navigate('/')
+                      }}
                     >
                       Logout
                     </button>
@@ -267,11 +281,22 @@ const Header = () => {
                         {user.isAdmin && (
                           <li>
                             <Link
-                              to="/new"
+                              to="admin/products"
                               className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-indigo-400"
                               onClick={() => setIsMenuOpen(false)}
                             >
-                              New Product
+                              All Products
+                            </Link>
+                          </li>
+                        )}
+                        {user.isAdmin && (
+                          <li>
+                            <Link
+                              to="admin/users"
+                              className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-indigo-400"
+                              onClick={() => setIsMenuOpen(false)}
+                            >
+                              All Users
                             </Link>
                           </li>
                         )}
@@ -308,6 +333,7 @@ const Header = () => {
                                 <Link
                                   to="/profile"
                                   className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-indigo-400"
+                                  onClick={() => setIsMenuOpen(false)}
                                 >
                                   My Profile
                                 </Link>
@@ -316,6 +342,7 @@ const Header = () => {
                                 <Link
                                   to="/profile"
                                   className="inline-flex text-white items-center justify-center h-12 w-12  font-medium tracking-wide  transition duration-200 rounded-full  shadow-md bg-indigo-400 hover:bg-indigo-700 focus:shadow-outline focus:outline-none"
+                                  onClick={() => setIsMenuOpen(false)}
                                 >
                                   <img
                                     src={`${`${user?.profile}` ?? 'https://source.unsplash.com/random/300x300'}`}
@@ -331,6 +358,8 @@ const Header = () => {
                                 onClick={() => {
                                   setIsMenuOpen(false)
                                   dispatch(logoutUserAsync())
+                                  dispatch(ClearCartProductLocalAsync())
+                                  navigate('/')
                                 }}
                               >
                                 Logout

@@ -14,6 +14,7 @@ import { useAppDispatch, useAppSelector } from '../../../app/hooks'
 import { createUserAsync, getUserByEmailAsync } from '../authSlice'
 import { HiMiniDevicePhoneMobile } from 'react-icons/hi2'
 import uploadImage from '../../../components/uploadImage'
+
 interface newUserType {
   name: string
   email: string
@@ -73,7 +74,9 @@ const AuthForm: React.FC = () => {
         profession,
       }
       dispatch(createUserAsync(newUser))
-      navigate('/')
+      if (errorData == null) {
+        navigate('/')
+      }
     }
     if (path.pathname == '/login') {
       const newUserData: LogInData = {
@@ -81,7 +84,10 @@ const AuthForm: React.FC = () => {
         password,
       }
       dispatch(getUserByEmailAsync(newUserData))
-      navigate('/')
+      if (errorData == null) {
+        
+        navigate('/')
+      }
     }
   }
   const handleChangeMobile = (event: React.ChangeEvent<HTMLInputElement>) => {

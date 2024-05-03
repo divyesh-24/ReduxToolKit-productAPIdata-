@@ -27,7 +27,7 @@ export async function createUser(userData: UserType) {
     throw new Error('Failed to create User')
   }
   const data = await response.json()
-  const token = jwt.sign({ userId: data[0].id }, 'your-secret-key', {
+  const token = jwt.sign({ userId: data[0].id }, 'My-DeMo', {
     expiresIn: '1h',
   })
   localStorage.setItem('JwtToken', token)
@@ -88,6 +88,7 @@ export async function getUserByEmail(userData: LogInData) {
 
   if (checkPassword) {
     localStorage.setItem('JwtToken', token)
+    localStorage.removeItem('Cart')
     return { data: data[0] }
   } else {
     throw new Error('Failed to Login User')

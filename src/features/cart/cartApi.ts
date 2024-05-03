@@ -4,6 +4,7 @@ export type CartProduct = {
   id?: string
   product: Product
   quantity: number
+  userId?: string
 }
 
 export async function addToCartProduct(product: CartProduct) {
@@ -16,11 +17,26 @@ export async function addToCartProduct(product: CartProduct) {
     throw new Error('Failed to create product')
   }
   const data = await response.json()
+
   return { data }
 }
+export async function syncToCartProduct(
+  products: CartProduct[],
+  userId: string,
+) {
+  if (products.length > 0) {
+    const newProducts: Product[] = []
+    for (const product of products) {
+      const response = await addToCartProduct({ ...product, userId })
+      newProducts.push(response.data)
+    }
+    console.log(newProducts)
+    return newProducts
+  }
+}
 
-export async function getAllCartProducts() {
-  const response = await fetch(`http://localhost:3000/carts`)
+export async function getCartProductsByUser(id: string) {
+  const response = await fetch(`http://localhost:3000/carts?userId=${id}`)
   const data = await response.json()
   return { data }
 }
@@ -56,4 +72,12 @@ export async function deleteCartProduct(productId: string) {
   }
 
   return { message: 'Product deleted successfully' }
+}
+
+export async function deleteAllCartProducts(productData: CartProduct[]) {
+  const promises = productData.map((product) =>
+    deleteCartProduct(product.id as string),
+  )
+  await Promise.all(promises)
+  return { message: 'All products deleted successfully' }
 }

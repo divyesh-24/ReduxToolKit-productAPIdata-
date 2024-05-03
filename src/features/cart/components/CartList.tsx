@@ -1,31 +1,47 @@
 // import React from 'react'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks'
 import {
+  ClearCartProductLocalAsync,
+  deleteAllCartProductsAsync,
   deleteCartProductAsync,
-  getAllCartProductsAsync,
+  deleteCartProductLocalAsync,
+  getCartProductsByUserAsync,
   updateCartProductAsync,
+  updateCartProductLocalAsync,
 } from '../cartSlice'
 import Modal from '../../../components/Modal'
 import { CartProduct } from '../cartApi'
 
 const CartList: React.FC = () => {
   const cartProducts = useAppSelector((state) => state.carts.cartProducts)
+  const user = useAppSelector((s) => s.auth.user)
   const dispatch = useAppDispatch()
   const [openShowModal, setOpenShowModal] = useState(-1)
 
-  const total = cartProducts.reduce(
+  const total = cartProducts?.reduce(
     (amount, item) => item?.product?.price * item.quantity + amount,
     0,
   )
 
-  const handleDelete = (product1: string | undefined) => {
-    dispatch(deleteCartProductAsync(product1 as string))
-  }
+  const handleDelete = useCallback(
+    (product1: string | undefined, indexNumber: number) => {
+      if (!product1) {
+        console.log(indexNumber, cartProducts)
+        dispatch(deleteCartProductLocalAsync(indexNumber))
+      } else {
+        dispatch(deleteCartProductAsync(product1 as string))
+      }
+      setOpenShowModal(-1)
+    },
+    [dispatch, cartProducts],
+  )
+
   const handleQuantity = (
     e: React.ChangeEvent<HTMLSelectElement>,
     item: CartProduct,
+    indexNumber: number,
   ) => {
     dispatch(
       updateCartProductAsync({
@@ -33,13 +49,21 @@ const CartList: React.FC = () => {
         quantity: +e.target.value,
       }),
     )
+    const product = {
+      productData: {
+        ...item,
+        quantity: +e.target.value,
+      },
+      index: indexNumber,
+    }
+    dispatch(updateCartProductLocalAsync(product))
   }
 
   useEffect(() => {
-    dispatch(getAllCartProductsAsync())
-  }, [dispatch])
+    if (user.id) dispatch(getCartProductsByUserAsync(user.id as string))
+  }, [dispatch, total, openShowModal, user.id])
 
-  if (cartProducts.length < 1) {
+  if (cartProducts?.length < 1) {
     return (
       <div className=" min-h-[50vh] flex justify-center items-center">
         ADD ITEM TO CARTS
@@ -52,15 +76,16 @@ const CartList: React.FC = () => {
         <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
           <div className="mx-auto max-w-3xl">
             <header className="text-center">
-              <h1 className="text-xl font-bold   sm:text-3xl">
-                Your Cart
-              </h1>
+              <h1 className="text-xl font-bold   sm:text-3xl">Your Cart</h1>
             </header>
 
             <div className="mt-8">
               <ul className="space-y-4">
                 {cartProducts.map((cartItem, indexNumber) => (
-                  <li className="flex items-center bg-white p-3 rounded-lg shadow-md gap-4" key={indexNumber}>
+                  <li
+                    className="flex items-center bg-white p-3 rounded-lg shadow-md gap-4"
+                    key={indexNumber}
+                  >
                     <img
                       src={`${cartItem.product?.image}`}
                       alt=""
@@ -107,7 +132,10 @@ const CartList: React.FC = () => {
                             Quantity
                           </label>
                           <select
-                            onChange={(e) => handleQuantity(e, cartItem)}
+                            className="border border-black rounded-md relative"
+                            onChange={(e) =>
+                              handleQuantity(e, cartItem, indexNumber)
+                            }
                             value={cartItem?.quantity}
                           >
                             <option value="1">1</option>
@@ -150,7 +178,9 @@ const CartList: React.FC = () => {
                       <Modal
                         title={'Remove'}
                         massage={`Are you sure Remove ${cartItem.product?.name} from your cart?`}
-                        dangerAction={() => handleDelete(cartItem.id)}
+                        dangerAction={() =>
+                          handleDelete(cartItem.id, indexNumber)
+                        }
                         dangerOption={'Remove'}
                         showModal={openShowModal === indexNumber}
                         cancelAction={() => setOpenShowModal(-1)}
@@ -184,7 +214,17 @@ const CartList: React.FC = () => {
                     </div>
                   </dl>
 
-                  <div className="flex justify-end">
+                  <div className="flex justify-end gap-5">
+                    <button
+                      onClick={() => {
+                        if (user.id)
+                          dispatch(deleteAllCartProductsAsync(cartProducts))
+                        dispatch(ClearCartProductLocalAsync())
+                      }}
+                      className="block rounded bg-red-700 px-5 py-3 text-sm text-white transition hover:bg-red-400"
+                    >
+                      Clear Cart
+                    </button>
                     <a
                       href="#"
                       className="block rounded bg-indigo-700 px-5 py-3 text-sm text-white transition hover:bg-indigo-400"

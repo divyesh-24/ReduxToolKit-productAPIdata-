@@ -3,14 +3,34 @@ import Header from './Header'
 import { useAppDispatch, useAppSelector } from '../app/hooks'
 import { useEffect } from 'react'
 import { checkUserAsync } from '../features/auth/authSlice'
+import {
+  getCartProductsByUserAsync,
+  syncToCartProductAsync,
+} from '../features/cart/cartSlice'
 
 // }
 const Layout = () => {
   const dispatch = useAppDispatch()
   const isUserCheck = useAppSelector((s) => s.auth.userChecked)
+  const cart = useAppSelector((s) => s.carts.cartProducts)
+  const user = useAppSelector((s) => s.auth.user)
+
   useEffect(() => {
     dispatch(checkUserAsync())
   }, [isUserCheck, dispatch])
+  useEffect(() => {
+    if (user.id) {
+      const cartDetail = {
+        cart,
+        userId: user.id,
+      }
+      dispatch(getCartProductsByUserAsync(user.id))
+      if (!localStorage.getItem('Cart')) {
+        dispatch(syncToCartProductAsync(cartDetail))
+      }
+    }
+  }, [dispatch, user.id])
+
   return (
     <div className="h-full w-full">
       <div className=" mx-auto h-screen ">
