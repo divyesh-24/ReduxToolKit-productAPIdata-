@@ -6,20 +6,25 @@ import { useEffect, useState } from 'react'
 import {
   CheckCartProductAsync,
   ClearCartProductLocalAsync,
+  getCartProductsByUserAsync,
 } from '../features/cart/cartSlice'
 
 const Header = () => {
   const navigate = useNavigate()
 
   const cartTotalItem = useAppSelector(
-    (state) => state.carts.cartProducts.length,
+    (state) => state.carts.cartProducts?.length,
   )
   const user = useAppSelector((s) => s.auth.user)
 
   const dispatch = useAppDispatch()
   useEffect(() => {
-    dispatch(CheckCartProductAsync())
-  }, [])
+    if (user.id) {
+      dispatch(getCartProductsByUserAsync(user.id as string))
+    } else {
+      dispatch(CheckCartProductAsync())
+    }
+  }, [user.id, dispatch])
 
   useEffect(() => {}, [dispatch, user])
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -64,18 +69,18 @@ const Header = () => {
               </li>
               <li>
                 <Link
-                  to="/"
+                  to="/feedback"
                   className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-indigo-400"
                 >
-                  Features
+                  Feedback
                 </Link>
               </li>
               <li>
                 <Link
-                  to="/"
+                  to="/admin/feedbackForm"
                   className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-indigo-400"
                 >
-                  Pricing
+                  Edit FeedBack
                 </Link>
               </li>
 
@@ -120,7 +125,7 @@ const Header = () => {
                   <BsCart4 className="h-8 w-8" />
                 </Link>
               </li>
-              {Object.keys(user).length == 0 ? (
+              {Object.keys(user)?.length == 0 ? (
                 <>
                   <li>
                     <Link
@@ -269,13 +274,21 @@ const Header = () => {
                         </li>
                         <li>
                           <Link
-                            to="/features"
+                            to="/feedback"
                             aria-label="Our product"
                             title="Our product"
                             className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-indigo-400"
                             onClick={() => setIsMenuOpen(false)}
                           >
-                            Features
+                            FeedBack
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            to="/admin/feedbackForm"
+                            className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-indigo-400"
+                          >
+                            Edit FeedBack
                           </Link>
                         </li>
                         {user.isAdmin && (
@@ -301,7 +314,7 @@ const Header = () => {
                           </li>
                         )}
 
-                        {Object.keys(user).length == 0 ? (
+                        {Object.keys(user)?.length == 0 ? (
                           <>
                             <li>
                               <Link

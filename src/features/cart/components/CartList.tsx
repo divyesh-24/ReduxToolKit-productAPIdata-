@@ -81,7 +81,7 @@ const CartList: React.FC = () => {
 
             <div className="mt-8">
               <ul className="space-y-4">
-                {cartProducts.map((cartItem, indexNumber) => (
+                {cartProducts?.map((cartItem, indexNumber) => (
                   <li
                     className="flex items-center bg-white p-3 rounded-lg shadow-md gap-4"
                     key={indexNumber}

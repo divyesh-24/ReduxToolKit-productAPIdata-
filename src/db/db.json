@@ -241,23 +241,7 @@
       "category": "furniture"
     }
   ],
-  "carts": [
-    {
-      "id": "31f4",
-      "product": {
-        "id": "97af",
-        "name": "iPhone 9x pronew",
-        "desc": "An apple mobile which is nothing like apple",
-        "image": "https://res.cloudinary.com/dzbko6akd/image/upload/v1714472032/xfkxqlavvnz8hp2srfyh.jpg",
-        "bgColor": "#ff0000",
-        "price": 1240,
-        "inStock": true,
-        "category": "electronics"
-      },
-      "quantity": 1,
-      "userId": "2fa7"
-    }
-  ],
+  "carts": [],
   "users": [
     {
       "id": "9914",
@@ -325,5 +309,6 @@
       "mobileNo": "9874563210",
       "profession": "marketing manager"
     }
-  ]
+  ],
+  "feedbackForm": []
 }

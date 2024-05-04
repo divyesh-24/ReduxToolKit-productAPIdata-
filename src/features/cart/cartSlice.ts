@@ -51,14 +51,9 @@ export const addToCartProductAsync = createAsyncThunk(
 )
 export const syncToCartProductAsync = createAsyncThunk(
   'product/syncToCartProduct',
-  async (productData: { cart: CartProduct[]; userId: string }) => {
-    const response = await syncToCartProduct(
-      productData.cart,
-      productData.userId,
-    )
-    console.log(response)
-
-    return response ?? 'empty'
+  async ({ cart, userId }: { cart: CartProduct[]; userId: string }) => {
+    const response = await syncToCartProduct(cart, userId)
+    return response as CartProduct[]
   },
 )
 
@@ -147,9 +142,7 @@ export const cartSlice = createSlice({
       })
       .addCase(syncToCartProductAsync.fulfilled, (state, action) => {
         state.status = 'succeeded'
-        if (action.payload !== 'empty') {
-          state.cartProducts = action.payload
-        }
+        state.cartProducts = action.payload
       })
       .addCase(updateCartProductAsync.pending, (state) => {
         state.status = 'loading'
@@ -183,7 +176,7 @@ export const cartSlice = createSlice({
       })
       .addCase(deleteAllCartProductsAsync.fulfilled, (state) => {
         state.status = 'succeeded'
-        state.cartProducts = []
+        state.cartProducts = [] as CartProduct[]
       })
       .addCase(deleteCartProductAsync.pending, (state) => {
         state.status = 'loading'

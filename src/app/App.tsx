@@ -10,6 +10,7 @@ import AddProductPage from '../pages/AddProductPage'
 import AllProductsPage from '../pages/AllProductsPage'
 import UserProfilePage from '../pages/UserProfilePage'
 import AllUsersPage from '../pages/AllUsersPage'
+import DynamicFBForm from '../components/DynamicFBForm'
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
       {
         path: '/admin/products',
         element: <AllProductsPage />,
+      },
+      {
+        path: '/admin/feedbackForm',
+        element: <DynamicFBForm />,
       },
       {
         path: '/admin/users',

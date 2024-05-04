@@ -17,7 +17,6 @@ export async function addToCartProduct(product: CartProduct) {
     throw new Error('Failed to create product')
   }
   const data = await response.json()
-
   return { data }
 }
 export async function syncToCartProduct(
@@ -25,12 +24,11 @@ export async function syncToCartProduct(
   userId: string,
 ) {
   if (products.length > 0) {
-    const newProducts: Product[] = []
+    const newProducts: CartProduct[] = []
     for (const product of products) {
       const response = await addToCartProduct({ ...product, userId })
       newProducts.push(response.data)
     }
-    console.log(newProducts)
     return newProducts
   }
 }
