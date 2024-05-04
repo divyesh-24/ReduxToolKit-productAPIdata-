@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
+import { useAppDispatch } from '../../../app/hooks'
+import { createFeedbackFormFieldAsync } from '../feedBackFormSlice'
 
-interface Field {
+export interface FeedbackField {
+  id?: string
   fieldName: string
   inputType: 'text' | 'number' | 'select'
   label: string
@@ -14,7 +17,8 @@ const DynamicFBForm: React.FC = () => {
   // const [newOption, setOption] = useState<{
   //   value: string
   // }>()
-  const [fields, setFields] = useState<Field[]>([
+  const dispatch = useAppDispatch()
+  const [fields, setFields] = useState<FeedbackField[]>([
     {
       fieldName: '',
       inputType: 'text',
@@ -53,6 +57,7 @@ const DynamicFBForm: React.FC = () => {
     //   result[field.fieldName] = field.defaultValue
     //   return result
     // }, {} as Field)
+    dispatch(createFeedbackFormFieldAsync(fields))
     console.log(fields)
   }
 
@@ -121,7 +126,7 @@ const DynamicFBForm: React.FC = () => {
                   onChange={(event) => {
                     const newFields = [...fields]
                     newFields[index].inputType = event.target
-                      .value as Field['inputType']
+                      .value as FeedbackField['inputType']
                     setFields(newFields)
                   }}
                 >
@@ -188,15 +193,28 @@ const DynamicFBForm: React.FC = () => {
                   </>
                 ))}
             </div>
-            <button type="button" onClick={() => handleRemoveField(index)}>
+            <button
+              className="bg-red-300 px-2 py-1 rounded-lg hover:bg-red-500"
+              type="button"
+              onClick={() => handleRemoveField(index)}
+            >
               Remove Field
             </button>
           </div>
         ))}
-        <button type="button" onClick={handleAddField}>
+        <button
+          type="button"
+          className="bg-indigo-300 px-2 py-1 rounded-lg hover:bg-indigo-500"
+          onClick={handleAddField}
+        >
           Add Field
         </button>
-        <button type="submit">Submit</button>
+        <button
+          type="submit"
+          className="bg-green-300 px-2 py-1 rounded-lg hover:bg-green-500"
+        >
+          Submit
+        </button>
       </form>
     </div>
   )

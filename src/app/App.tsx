@@ -10,7 +10,7 @@ import AddProductPage from '../pages/AddProductPage'
 import AllProductsPage from '../pages/AllProductsPage'
 import UserProfilePage from '../pages/UserProfilePage'
 import AllUsersPage from '../pages/AllUsersPage'
-import DynamicFBForm from '../components/DynamicFBForm'
+import DynamicFBForm from '../features/Feedback form/components/DynamicFBForm'
 
 const router = createBrowserRouter([
   {
