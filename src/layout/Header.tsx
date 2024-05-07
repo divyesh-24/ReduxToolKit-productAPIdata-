@@ -75,17 +75,17 @@ const Header = () => {
                   Feedback
                 </Link>
               </li>
-              <li>
-                <Link
-                  to="/admin/feedbackForm"
-                  className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-indigo-400"
-                >
-                  Edit FeedBack
-                </Link>
-              </li>
 
               {user.isAdmin && (
                 <>
+                  <li>
+                    <Link
+                      to="/admin/feedbackForm"
+                      className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-indigo-400"
+                    >
+                      Edit FeedBack
+                    </Link>
+                  </li>
                   <li>
                     <Link
                       to="/admin/products"
@@ -283,14 +283,16 @@ const Header = () => {
                             FeedBack
                           </Link>
                         </li>
-                        <li>
-                          <Link
-                            to="/admin/feedbackForm"
-                            className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-indigo-400"
-                          >
-                            Edit FeedBack
-                          </Link>
-                        </li>
+                        {user.isAdmin && (
+                          <li>
+                            <Link
+                              to="/admin/feedbackForm"
+                              className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-indigo-400"
+                            >
+                              Edit FeedBack
+                            </Link>
+                          </li>
+                        )}
                         {user.isAdmin && (
                           <li>
                             <Link

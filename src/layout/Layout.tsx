@@ -18,6 +18,8 @@ const Layout = () => {
   useEffect(() => {
     dispatch(checkUserAsync())
   }, [isUserCheck, dispatch])
+
+  //cart data sync with user cart with login
   useEffect(() => {
     if (user.id) {
       const cartDetail = {

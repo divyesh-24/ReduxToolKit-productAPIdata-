@@ -10,9 +10,8 @@ import AddProductPage from '../pages/AddProductPage'
 import AllProductsPage from '../pages/AllProductsPage'
 import UserProfilePage from '../pages/UserProfilePage'
 import AllUsersPage from '../pages/AllUsersPage'
-import DynamicFBForm from '../features/Feedback form/components/DynamicFBForm'
-// import Form from '../features/Feedback/components/Form'
 import DynamicForm from '../features/Feedback/components/DynamicForm'
+import FeedBackFormPage from '../pages/FeedBackFormPage'
 
 const router = createBrowserRouter([
   {
@@ -45,7 +44,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/admin/feedbackForm',
-        element: <DynamicFBForm />,
+        element: <FeedBackFormPage />,
       },
       {
         path: '/admin/users',

@@ -4,6 +4,7 @@ import {
   createFeedbackFormField,
   deleteFeedbackFormField,
   getFeedbackForm,
+  updateAllFeedbackFormField,
   updateFeedbackForm,
 } from './feedBackFormApi'
 import { Field } from './components/FormBuilder'
@@ -30,6 +31,13 @@ export const createFeedbackFormFieldAsync = createAsyncThunk(
   'feedback/createFeedbackFormField',
   async (feedbackData: Field[]) => {
     const response = await createFeedbackFormField(feedbackData)
+    return response
+  },
+)
+export const updateAllFeedbackFormFieldAsync = createAsyncThunk(
+  'feedback/updateAllFeedbackFormField',
+  async (feedbackData: Field[]) => {
+    const response = await updateAllFeedbackFormField(feedbackData)
     return response
   },
 )
@@ -67,6 +75,13 @@ export const feedBackFormSlice = createSlice({
         state.status = 'loading'
       })
       .addCase(createFeedbackFormFieldAsync.fulfilled, (state, action) => {
+        state.status = 'succeeded'
+        state.feedbacksForm = action.payload
+      })
+      .addCase(updateAllFeedbackFormFieldAsync.pending, (state) => {
+        state.status = 'loading'
+      })
+      .addCase(updateAllFeedbackFormFieldAsync.fulfilled, (state, action) => {
         state.status = 'succeeded'
         state.feedbacksForm = action.payload
       })

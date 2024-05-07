@@ -2,6 +2,7 @@ import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 // import { Field } from './FormBuilder'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks'
 import { getFeedbackFormAsync } from '../../Feedback form/feedBackFormSlice'
+// import { Navigate } from 'react-router-dom'
 
 // interface DynamicFormProps {
 //   // formData: Field[]
@@ -9,12 +10,18 @@ import { getFeedbackFormAsync } from '../../Feedback form/feedBackFormSlice'
 
 const DynamicForm: React.FC = () => {
   const formData = useAppSelector((s) => s.feedBackForm.feedbacksForm)
+  // const user = useAppSelector((s) => s.auth.user)
   const dispatch = useAppDispatch()
 
   const [formValues, setFormValues] = useState<{ [key: string]: string }>({})
   useEffect(() => {
     dispatch(getFeedbackFormAsync())
   }, [dispatch])
+
+  // useEffect(() => {}, [user])
+  // if (Object.keys(user).length == 0) {
+  //   return <Navigate to="/" replace={true} />
+  // }
 
   const handleChange = (
     event: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -30,45 +37,50 @@ const DynamicForm: React.FC = () => {
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="mx-auto mb-0 mt-8 max-w-md space-y-4 bg-white  rounded-lg p-4 shadow-lg sm:p-6 lg:p-8"
-    >
-      {formData.map((field, index) => (
-        <div key={index}>
-          {field.type === 'select' ? (
-            <select
-              name={field.name}
-              value={formValues[field.name] || ''}
-              className="w-full appearance-none  border rounded-lg border-gray-200 p-2 md:p-4 pe-12 text-sm shadow-sm"
-              onChange={handleChange}
-            >
-              <option value="">Select {field.label}</option>
-              {field.options.map((option, optionIndex) => (
-                <option key={optionIndex} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
-          ) : (
-            <input
-              type={field.type}
-              name={field.name}
-              placeholder={field.label}
-              value={formValues[field.name] || ''}
-              className="w-full rounded-lg border border-gray-200 p-4 pe-12 text-sm  placeholder:capitalize"
-              onChange={handleChange}
-            />
-          )}
-        </div>
-      ))}
-      <button
-        className="inline-block w-full  rounded-lg bg-indigo-700 hover:bg-indigo-400 px-5 py-3 text-sm font-medium text-white uppercase"
-        type="submit"
+    <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
+      <form
+        onSubmit={handleSubmit}
+        className="mx-auto mb-0 mt-8 max-w-md space-y-4 bg-white  rounded-lg p-4 shadow-lg sm:p-6 lg:p-8"
       >
-        Submit
-      </button>
-    </form>
+        <div className="mx-auto max-w-lg text-center">
+          <h1 className="text-2xl font-bold sm:text-3xl">FeedBack</h1>
+        </div>
+        {formData.map((field, index) => (
+          <div key={index}>
+            {field.type === 'select' ? (
+              <select
+                name={field.name}
+                value={formValues[field.name] || ''}
+                className="w-full appearance-none  border rounded-lg border-gray-200 p-2 md:p-4 pe-12 text-sm shadow-sm"
+                onChange={handleChange}
+              >
+                <option value="">Select {field.label}</option>
+                {field.options.map((option, optionIndex) => (
+                  <option key={optionIndex} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <input
+                type={field.type}
+                name={field.name}
+                placeholder={field.label}
+                value={formValues[field.name] || ''}
+                className="w-full rounded-lg border border-gray-200 p-4 pe-12 text-sm  placeholder:capitalize"
+                onChange={handleChange}
+              />
+            )}
+          </div>
+        ))}
+        <button
+          className="inline-block w-full  rounded-lg bg-indigo-700 hover:bg-indigo-400 px-5 py-3 text-sm font-medium text-white uppercase"
+          type="submit"
+        >
+          Submit
+        </button>
+      </form>
+    </div>
   )
 }
 

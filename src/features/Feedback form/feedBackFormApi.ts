@@ -1,5 +1,14 @@
 import { Field } from './components/FormBuilder'
 
+export async function updateAllFeedbackFormField(feedbackArray: Field[]) {
+  const responses = [] as Field[]
+  for (const feedbackField of feedbackArray) {
+    const data = await updateFeedbackForm(feedbackField)
+    responses.push(data.data)
+    console.log(responses)
+  }
+  return responses
+}
 export async function createFeedbackFormField(feedback: Field[]) {
   const responses = [] as Field[]
   for (const feedbackField of feedback) {

@@ -1,5 +1,5 @@
 import React from 'react'
-import DynamicForm from '../../Feedback/components/DynamicForm'
+// import DynamicForm from '../../Feedback/components/DynamicForm'
 import FormBuilder from './FormBuilder'
 
 const DynamicFBForm: React.FC = () => {
@@ -8,8 +8,8 @@ const DynamicFBForm: React.FC = () => {
   return (
     <div>
       <div>
-        <h1>Dynamic Form</h1>
-        <DynamicForm />
+        {/* <h1>Dynamic Form</h1>
+        <DynamicForm /> */}
         <hr />
         <h1>Form Builder</h1>
         <FormBuilder />
