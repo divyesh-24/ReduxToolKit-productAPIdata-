@@ -1,11 +1,6 @@
-export type Feedback = {
-  id?: string
-  user: string
-  rating: number
-  comment: string
-}
+import { DynamicFormProps } from './components/DynamicForm'
 
-export async function createFeedback(feedback: Feedback) {
+export async function createFeedback(feedback: DynamicFormProps) {
   const response = await fetch(`http://localhost:3000/feedbacks`, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
@@ -18,18 +13,23 @@ export async function createFeedback(feedback: Feedback) {
   return { data }
 }
 
-export async function getFeedbacksByUser(id: string) {
-  const response = await fetch(`http://localhost:3000/feedbacks?userId=${id}`)
+export async function getFeedbacksByUser(id: string, page: number) {
+  const response = await fetch(
+    `http://localhost:3000/feedbacks?userId=${id}&_page=${page}&_per_page=10`,
+  )
   const data = await response.json()
-  return { data }
+
+  return { data: data.data, totalItems: data.items, totalPages: data.pages }
 }
-export async function getFeedbacks() {
-  const response = await fetch(`http://localhost:3000/feedbacks`)
+export async function getFeedbacks(page = 1) {
+  const response = await fetch(
+    `http://localhost:3000/feedbacks?_page=${page}&_per_page=10`,
+  )
   const data = await response.json()
   return { data }
 }
 
-export async function updateFeedback(feedback: Feedback) {
+export async function updateFeedback(feedback: DynamicFormProps) {
   const { id, ...updatedFields } = feedback
 
   const response = await fetch(`http://localhost:3000/feedbacks/${id}`, {
@@ -60,7 +60,7 @@ export async function deleteFeedback(feedbackId: string) {
   return { message: 'Feedback deleted successfully' }
 }
 
-export async function deleteAllFeedbacks(feedbacks: Feedback[]) {
+export async function deleteAllFeedbacks(feedbacks: DynamicFormProps[]) {
   const promises = feedbacks.map((feedback) =>
     deleteFeedback(feedback.id as string),
   )

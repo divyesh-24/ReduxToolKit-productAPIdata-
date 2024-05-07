@@ -69,12 +69,22 @@ const Header = () => {
               </li>
               <li>
                 <Link
-                  to="/feedback"
+                  to="/feedbackDetails"
                   className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-indigo-400"
                 >
-                  Feedback
+                  Feedback Details
                 </Link>
               </li>
+              {Object.keys(user).includes('id') && (
+                <li>
+                  <Link
+                    to="/feedback"
+                    className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-indigo-400"
+                  >
+                    Feedback
+                  </Link>
+                </li>
+              )}
 
               {user.isAdmin && (
                 <>
@@ -272,17 +282,19 @@ const Header = () => {
                             Home
                           </Link>
                         </li>
-                        <li>
-                          <Link
-                            to="/feedback"
-                            aria-label="Our product"
-                            title="Our product"
-                            className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-indigo-400"
-                            onClick={() => setIsMenuOpen(false)}
-                          >
-                            FeedBack
-                          </Link>
-                        </li>
+                        {Object.keys(user).includes('id') && (
+                          <li>
+                            <Link
+                              to="/feedback"
+                              aria-label="Our product"
+                              title="Our product"
+                              className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-indigo-400"
+                              onClick={() => setIsMenuOpen(false)}
+                            >
+                              FeedBack
+                            </Link>
+                          </li>
+                        )}
                         {user.isAdmin && (
                           <li>
                             <Link

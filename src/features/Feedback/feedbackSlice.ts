@@ -1,23 +1,37 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { RootState } from '../../app/Store'
 import {
-  Feedback,
   createFeedback,
   deleteFeedback,
   getFeedbacks,
+  getFeedbacksByUser,
   updateFeedback,
 } from './feedbackApi'
+import { DynamicFormProps } from './components/DynamicForm'
+
+export interface Feedback extends DynamicFormProps {}
 
 interface FeedbackState {
   status: 'loading' | 'succeeded' | 'failed'
   feedbacks: Feedback[]
+  totalPages: number
+  totalItems: number
 }
 
 const initialState: FeedbackState = {
   status: 'loading',
   feedbacks: [],
+  totalPages: 0,
+  totalItems: 0,
 }
 
+export const getFeedbacksByUserAsync = createAsyncThunk(
+  'feedback/getFeedbacksByUser',
+  async ({ id, page }: { id: string; page: number }) => {
+    const response = await getFeedbacksByUser(id, page)
+    return response
+  },
+)
 export const getFeedbacksAsync = createAsyncThunk(
   'feedback/getFeedbacks',
   async () => {
@@ -56,6 +70,15 @@ export const feedbackSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      .addCase(getFeedbacksByUserAsync.pending, (state) => {
+        state.status = 'loading'
+      })
+      .addCase(getFeedbacksByUserAsync.fulfilled, (state, action) => {
+        state.status = 'succeeded'
+        state.feedbacks = action.payload.data
+        state.totalItems = action.payload?.totalItems
+        state.totalPages = action.payload?.totalPages
+      })
       .addCase(getFeedbacksAsync.pending, (state) => {
         state.status = 'loading'
       })

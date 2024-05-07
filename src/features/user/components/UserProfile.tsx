@@ -6,14 +6,13 @@ import ImageUploader from '../../../components/ImageUploader'
 import { professions } from '../../auth/components/AuthForm'
 import { updateUserDataAsync } from '../../auth/authSlice'
 import uploadImage from '../../../components/uploadImage'
-import { Navigate, useParams } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 import { IoMdMail } from 'react-icons/io'
 import { FaMobileRetro } from 'react-icons/fa6'
 
 interface ProfileProps {}
 
 const UserProfile: React.FC<ProfileProps> = () => {
-  const { id } = useParams()
   const dispatch = useAppDispatch()
   const user = useAppSelector((s) => s.auth.user)
   const [edit, setEdit] = useState(false)
@@ -32,15 +31,11 @@ const UserProfile: React.FC<ProfileProps> = () => {
         console.error(error)
       }
     }
-    setEdit(false)
     dispatch(updateUserDataAsync({ ...userData }))
+    setEdit(false)
   }
 
-  useEffect(() => {
-    if (id) {
-      setEdit(true)
-    }
-  }, [dispatch, edit, id])
+  useEffect(() => {}, [dispatch, edit])
 
   if (Object.keys(user).length == 0) {
     return <Navigate to="/" replace={true} />
@@ -51,39 +46,39 @@ const UserProfile: React.FC<ProfileProps> = () => {
         <div className="flex items-center justify-center h-[80vh] bg-transparent">
           <div
             className={`bg-opacity-50 relative p-8 rounded-lg shadow-md w-96 h-80 mx-4 xl:w-1/3 xl:h-fit`}
-            style={{ backgroundColor: user.coverColor }}
+            style={{ backgroundColor: userData.coverColor }}
           >
             <FaRegEdit
               className="w-5 h-5 absolute top-2 right-2 cursor-pointer"
               onClick={() => setEdit(!edit)}
             />
             <img
-              // src={`data:image/png;base64,${user.profile}`}
-              src={user.profile}
+              // src={`data:image/png;base64,${userData.profile}`}
+              src={userData.profile}
               alt="Profile"
               className="w-24 h-24 rounded-full mx-auto mb-4 opa100 border border-indigo-700 p-1"
             />
             <h1 className="text-2xl font-bold text-gray-800 text-center capitalize">
-              {user.name}
+              {userData.name}
             </h1>
             <p className="text-sm text-gray-700 text-center capitalize flex items-center justify-center">
               <MdWork className="h-5 w-5 mr-2" />
-              {user.profession ?? 'Frontend Developer'}
+              {userData.profession ?? 'Frontend Developer'}
             </p>
             <ul className="mt-4 xl:mt-8">
               <li className="flex items-center text-gray-700">
                 <FaUserAlt className="h-5 w-5 mr-2" />
 
-                {user.isAdmin ? 'Admin User' : 'User'}
+                {userData.isAdmin ? 'Admin User' : 'User'}
               </li>
               <li className="flex items-center text-gray-700">
                 <IoMdMail className="h-5 w-5 mr-2" />
 
-                {user.email}
+                {userData.email}
               </li>
               <li className="flex items-center text-gray-700">
                 <FaMobileRetro className="h-5 w-5 mr-2" />
-                {user.mobileNo ?? '(123) 456-7890'}
+                {userData.mobileNo ?? '(123) 456-7890'}
               </li>
             </ul>
           </div>
@@ -236,7 +231,7 @@ const UserProfile: React.FC<ProfileProps> = () => {
             </div>
             {/* image  */}
             <ImageUploader
-              imageFile={user.profile}
+              imageFile={userData.profile}
               setImageFile={setImageFile}
             />
             <div>

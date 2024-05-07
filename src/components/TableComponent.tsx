@@ -291,7 +291,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
             </button>
           </li>
 
-          {Array.from({ length: totalPages }).map((e, index) => (
+          {Array.from({ length: totalPages }).map((_, index) => (
             <div
               key={index}
               onClick={() => setPage(index + 1)}

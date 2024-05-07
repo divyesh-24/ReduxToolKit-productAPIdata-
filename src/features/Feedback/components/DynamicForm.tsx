@@ -2,29 +2,32 @@ import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 // import { Field } from './FormBuilder'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks'
 import { getFeedbackFormAsync } from '../../Feedback form/feedBackFormSlice'
-// import { Navigate } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
+import { createFeedbackAsync } from '../feedbackSlice'
 
-// interface DynamicFormProps {
-//   // formData: Field[]
-// }
+export interface DynamicFormProps {
+  [key: string]: string
+}
 
 const DynamicForm: React.FC = () => {
   const formData = useAppSelector((s) => s.feedBackForm.feedbacksForm)
-  // const user = useAppSelector((s) => s.auth.user)
+  const user = useAppSelector((s) => s.auth.user)
   const dispatch = useAppDispatch()
 
-  const [formValues, setFormValues] = useState<{ [key: string]: string }>({})
+  const [formValues, setFormValues] = useState<DynamicFormProps>({})
   useEffect(() => {
     dispatch(getFeedbackFormAsync())
   }, [dispatch])
 
-  // useEffect(() => {}, [user])
-  // if (Object.keys(user).length == 0) {
-  //   return <Navigate to="/" replace={true} />
-  // }
+  useEffect(() => {}, [user])
+  if (!Object.keys(user).includes('id')) {
+    return <Navigate to="/" replace={true} />
+  }
 
   const handleChange = (
-    event: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    event: ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
   ) => {
     const { name, value } = event.target
     setFormValues({ ...formValues, [name]: value })
@@ -32,7 +35,8 @@ const DynamicForm: React.FC = () => {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    console.log('Form Data:', formValues)
+    console.log('Form Data:', { userId: user.id, ...formValues })
+    dispatch(createFeedbackAsync({ userId: user.id as string, ...formValues }))
     // You can further process or send the form data to your backend here
   }
 
@@ -61,6 +65,15 @@ const DynamicForm: React.FC = () => {
                   </option>
                 ))}
               </select>
+            ) : field.type === 'textarea' ? (
+              <textarea
+                name={field.name}
+                rows={4}
+                placeholder={field.label}
+                value={formValues[field.name] || ''}
+                className="w-full rounded-lg border border-gray-200 p-4 pe-12 text-sm  placeholder:capitalize"
+                onChange={handleChange}
+              />
             ) : (
               <input
                 type={field.type}

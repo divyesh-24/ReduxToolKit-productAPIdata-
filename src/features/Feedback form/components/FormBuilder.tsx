@@ -18,14 +18,15 @@ export interface Field {
 const FormBuilder: React.FC = () => {
   const formData = useAppSelector((s) => s.feedBackForm.feedbacksForm)
   const dispatch = useAppDispatch()
-  const [fields, setFields] = useState<Field[]>([...formData])
+  const formFieldData = JSON.parse(JSON.stringify(formData))
+  const [fields, setFields] = useState<Field[]>([...formFieldData])
 
   useEffect(() => {
     dispatch(getFeedbackFormAsync())
   }, [dispatch])
 
   const addField = () => {
-    const newField: Field = { type: 'text', label: '', name: '', options: [] }
+    const newField: Field = { type: '', label: '', name: '', options: [] }
     setFields([...fields, newField])
   }
 
@@ -50,15 +51,36 @@ const FormBuilder: React.FC = () => {
     updateField(index, updatedField)
   }
 
+  // const handleOptionChange = (
+  //   fieldIndex: number,
+  //   optionIndex: number,
+  //   event: ChangeEvent<HTMLInputElement>,
+  // ) => {
+  //   const { value } = event.target
+  //   const newFields = [...fields]
+
+  //   const updatedField = { ...newFields[fieldIndex] }
+  //   console.log(updatedField)
+  //   updatedField.options[optionIndex] = value
+  //   newFields[fieldIndex] = updatedField
+  //   setFields(newFields)
+  // }
+
   const handleOptionChange = (
     fieldIndex: number,
     optionIndex: number,
     event: ChangeEvent<HTMLInputElement>,
   ) => {
     const { value } = event.target
-    const updatedField = { ...fields[fieldIndex] }
-    updatedField.options[optionIndex] = value
-    updateField(fieldIndex, updatedField)
+
+    // Create a deep copy of the fields array
+    const newFields = JSON.parse(JSON.stringify(fields))
+
+    // Update the option value
+    newFields[fieldIndex].options[optionIndex] = value
+
+    // Set the state with the updated fields array
+    setFields(newFields)
   }
 
   const addOption = (fieldIndex: number) => {
@@ -70,8 +92,11 @@ const FormBuilder: React.FC = () => {
   }
 
   const removeOption = (fieldIndex: number, optionIndex: number) => {
+    // const newFields = [...JSON.parse(JSON.stringify(fields))]
     const updatedField = { ...fields[fieldIndex] }
     updatedField.options.splice(optionIndex, 1)
+    // newFields[fieldIndex] = updatedField
+    // setFields(newFields)
     updateField(fieldIndex, updatedField)
   }
 
@@ -87,7 +112,9 @@ const FormBuilder: React.FC = () => {
     <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
       <div className="mx-auto mb-0 mt-8 w-4/5 space-y-4 bg-white  rounded-lg p-4 shadow-lg sm:p-6 lg:p-8">
         <div className="mx-auto max-w-lg text-center">
-          <h1 className="text-2xl font-bold sm:text-3xl">Feedback Form Fields</h1>
+          <h1 className="text-2xl font-bold sm:text-3xl">
+            Feedback Form Fields
+          </h1>
         </div>
         {fields.map((field, fieldIndex) => (
           <div
@@ -139,7 +166,7 @@ const FormBuilder: React.FC = () => {
                             }
                           />
                           <button
-                            className="inline-block  w-full md:w-1/5  rounded-lg bg-red-700 hover:bg-indigo-400 py-2 md:px-5 md:py-3 text-sm font-medium text-white uppercase"
+                            className="inline-block  w-full md:w-1/5  rounded-lg bg-red-700 hover:bg-red-400 py-2 md:px-5 md:py-3 text-sm font-medium text-white uppercase"
                             type="button"
                             onClick={() =>
                               removeOption(fieldIndex, optionIndex)
@@ -170,7 +197,7 @@ const FormBuilder: React.FC = () => {
               </div>
 
               <button
-                className="inline-block md:w-1/6 w-full h-full rounded-lg bg-red-700 hover:bg-indigo-400 px-3 py-2 md:py-4 my-4 text-sm font-medium text-white uppercase"
+                className="inline-block md:w-1/6 w-full h-full rounded-lg bg-red-700 hover:bg-red-400 px-3 py-2 md:py-4 my-4 text-sm font-medium text-white uppercase"
                 type="button"
                 onClick={() => removeField(fieldIndex)}
               >
@@ -195,7 +222,7 @@ const FormBuilder: React.FC = () => {
                         }
                       />
                       <button
-                        className="inline-block  w-full md:w-1/5  rounded-lg bg-red-700 hover:bg-indigo-400 py-2 md:px-5 md:py-3 text-sm font-medium text-white uppercase"
+                        className="inline-block  w-full md:w-1/5  rounded-lg bg-red-700 hover:bg-red-400 py-2 md:px-5 md:py-3 text-sm font-medium text-white uppercase"
                         type="button"
                         onClick={() => removeOption(fieldIndex, optionIndex)}
                       >
@@ -224,7 +251,8 @@ const FormBuilder: React.FC = () => {
             Add Field
           </button>
           <button
-            className="inline-block w-full  rounded-lg bg-indigo-700 hover:bg-indigo-400 px-5 py-3 text-sm font-medium text-white uppercase"
+            disabled={JSON.stringify(formData) === JSON.stringify(fields)}
+            className="inline-block w-full disabled:bg-gray-300 rounded-lg bg-indigo-700 hover:bg-indigo-400 px-5 py-3 text-sm font-medium text-white uppercase"
             type="button"
             onClick={generateJSON}
           >

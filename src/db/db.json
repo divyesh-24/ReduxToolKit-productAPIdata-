@@ -263,7 +263,7 @@
       "isAdmin": true,
       "profile": "https://res.cloudinary.com/dzbko6akd/image/upload/v1714471238/ltmrwucbdlft6n7n7k4p.jpg",
       "mobileNo": "1234567880",
-      "profession": "software engineer"
+      "profession": "graphic designer"
     },
     {
       "id": "78d3",
@@ -313,23 +313,17 @@
   "feedbackForm": [
     {
       "id": "f473",
-      "type": "text",
-      "label": "name",
-      "name": "name",
-      "options": []
+      "type": "select",
+      "label": "category",
+      "name": "category",
+      "options": ["sports", "toys", "books", "musics"]
     },
     {
       "id": "c2fe",
       "type": "select",
-      "label": "category",
-      "name": "category",
-      "options": [
-        "sports",
-        "toys",
-        "books",
-        "musics",
-        "racer"
-      ]
+      "label": "experience",
+      "name": "experience",
+      "options": ["worst", "bad", "batter", "good ", "excellent"]
     },
     {
       "id": "574b",
@@ -337,6 +331,36 @@
       "label": "feedback",
       "name": "feedback",
       "options": []
+    }
+  ],
+  "feedbacks": [
+    {
+      "id": "166f",
+      "userId": "2fa7",
+      "category": "musics",
+      "experience": "good ",
+      "feedback": "feel good"
+    },
+    {
+      "id": "dc1c",
+      "userId": "2fa7",
+      "category": "books",
+      "experience": "good ",
+      "feedback": "feel good"
+    },
+    {
+      "id": "5697",
+      "userId": "2fa7",
+      "category": "sports",
+      "experience": "good ",
+      "feedback": "feel good"
+    },
+    {
+      "id": "f3f4",
+      "userId": "2fa7",
+      "category": "toys",
+      "experience": "good ",
+      "feedback": "feel good"
     }
   ]
 }

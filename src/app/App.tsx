@@ -12,6 +12,7 @@ import UserProfilePage from '../pages/UserProfilePage'
 import AllUsersPage from '../pages/AllUsersPage'
 import DynamicForm from '../features/Feedback/components/DynamicForm'
 import FeedBackFormPage from '../pages/FeedBackFormPage'
+import AllFeedbackPage from '../pages/AllFeedbackPage'
 
 const router = createBrowserRouter([
   {
@@ -53,6 +54,10 @@ const router = createBrowserRouter([
       {
         path: '/profile',
         element: <UserProfilePage />,
+      },
+      {
+        path: '/feedbackDetails',
+        element: <AllFeedbackPage />,
       },
 
       {
