@@ -312,30 +312,29 @@
   ],
   "feedbackForm": [
     {
-      "id": "5ec9",
-      "fieldName": "test",
-      "inputType": "text",
-      "label": "test",
-      "defaultValue": "test",
-      "required": false,
-      "options": []
-    },
-    {
-      "id": "11ee",
-      "fieldName": "test",
-      "inputType": "text",
-      "label": "test",
-      "defaultValue": "test",
-      "required": false,
-      "options": []
-    },
-    {
-      "id": "1a26",
-      "fieldName": "name",
-      "inputType": "text",
+      "id": "f473",
+      "type": "text",
       "label": "name",
-      "defaultValue": "name",
-      "required": false,
+      "name": "name",
+      "options": []
+    },
+    {
+      "id": "c2fe",
+      "type": "select",
+      "label": "category",
+      "name": "category",
+      "options": [
+        "sports",
+        "toys",
+        "books",
+        "musics"
+      ]
+    },
+    {
+      "id": "574b",
+      "type": "textarea",
+      "label": "feedback",
+      "name": "feedback",
       "options": []
     }
   ]

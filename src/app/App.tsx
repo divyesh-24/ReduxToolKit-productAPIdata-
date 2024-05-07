@@ -11,6 +11,8 @@ import AllProductsPage from '../pages/AllProductsPage'
 import UserProfilePage from '../pages/UserProfilePage'
 import AllUsersPage from '../pages/AllUsersPage'
 import DynamicFBForm from '../features/Feedback form/components/DynamicFBForm'
+// import Form from '../features/Feedback/components/Form'
+import DynamicForm from '../features/Feedback/components/DynamicForm'
 
 const router = createBrowserRouter([
   {
@@ -32,6 +34,10 @@ const router = createBrowserRouter([
       {
         path: '/cart',
         element: <CartList />,
+      },
+      {
+        path: '/feedback',
+        element: <DynamicForm />,
       },
       {
         path: '/admin/products',

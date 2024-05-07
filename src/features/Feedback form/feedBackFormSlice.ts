@@ -6,11 +6,11 @@ import {
   getFeedbackForm,
   updateFeedbackForm,
 } from './feedBackFormApi'
-import { FeedbackField } from './components/DynamicFBForm'
+import { Field } from './components/FormBuilder'
 
 interface FeedbackFormState {
   status: 'loading' | 'succeeded' | 'failed'
-  feedbacksForm: FeedbackField[]
+  feedbacksForm: Field[]
 }
 
 const initialState: FeedbackFormState = {
@@ -28,15 +28,15 @@ export const getFeedbackFormAsync = createAsyncThunk(
 
 export const createFeedbackFormFieldAsync = createAsyncThunk(
   'feedback/createFeedbackFormField',
-  async (feedbackData: FeedbackField[]) => {
+  async (feedbackData: Field[]) => {
     const response = await createFeedbackFormField(feedbackData)
-    return response 
+    return response
   },
 )
 
 export const updateFeedbackFormAsync = createAsyncThunk(
   'feedback/updateFeedbackForm',
-  async (feedbackData: FeedbackField) => {
+  async (feedbackData: Field) => {
     const response = await updateFeedbackForm(feedbackData)
     return response.data
   },

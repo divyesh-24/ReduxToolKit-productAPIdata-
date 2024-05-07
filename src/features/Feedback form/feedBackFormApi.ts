@@ -1,7 +1,7 @@
-import { FeedbackField } from './components/DynamicFBForm'
+import { Field } from './components/FormBuilder'
 
-export async function createFeedbackFormField(feedback: FeedbackField[]) {
-  const responses = [] as FeedbackField[]
+export async function createFeedbackFormField(feedback: Field[]) {
+  const responses = [] as Field[]
   for (const feedbackField of feedback) {
     const response = await fetch(`http://localhost:3000/feedbackForm`, {
       method: 'POST',
@@ -27,15 +27,15 @@ export async function createFeedbackFormField(feedback: FeedbackField[]) {
 //   return { data }
 // }
 export async function getFeedbackForm() {
-  const response = await fetch(`http://localhost:3000/feedbacks`)
+  const response = await fetch(`http://localhost:3000/feedbackForm`)
   const data = await response.json()
   return { data }
 }
 
-export async function updateFeedbackForm(feedback: FeedbackField) {
+export async function updateFeedbackForm(feedback: Field) {
   const { id, ...updatedFields } = feedback
 
-  const response = await fetch(`http://localhost:3000/feedbacks/${id}`, {
+  const response = await fetch(`http://localhost:3000/feedbackForm/${id}`, {
     method: 'PATCH',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify(updatedFields),
@@ -50,7 +50,7 @@ export async function updateFeedbackForm(feedback: FeedbackField) {
 
 export async function deleteFeedbackFormField(feedbackId: string) {
   const response = await fetch(
-    `http://localhost:3000/feedbacks/${feedbackId}`,
+    `http://localhost:3000/feedbackForm/${feedbackId}`,
     {
       method: 'DELETE',
     },
@@ -63,7 +63,7 @@ export async function deleteFeedbackFormField(feedbackId: string) {
   return { message: 'Feedback deleted successfully' }
 }
 
-export async function deleteAllFeedbacks(feedbacks: FeedbackField[]) {
+export async function deleteAllFeedbacks(feedbacks: Field[]) {
   const promises = feedbacks.map((feedback) =>
     deleteFeedbackFormField(feedback.id as string),
   )
