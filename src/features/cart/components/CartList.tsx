@@ -13,6 +13,8 @@ import {
 } from '../cartSlice'
 import Modal from '../../../components/Modal'
 import { CartProduct } from '../cartApi'
+import { Link } from 'react-router-dom'
+import { BsCartX } from 'react-icons/bs'
 
 const CartList: React.FC = () => {
   const cartProducts = useAppSelector((state) => state.carts.cartProducts)
@@ -65,8 +67,23 @@ const CartList: React.FC = () => {
 
   if (cartProducts?.length < 1) {
     return (
-      <div className=" min-h-[50vh] flex justify-center items-center">
-        ADD ITEM TO CARTS
+      <div className="grid min-h-[90vh] place-content-center bg-gradient-to-br from-indigo-400 to-indigo-100 px-4">
+        <div className="text-center">
+          <div className="text-9xl font-black text-white/80 flex justify-center  my-8 mx-auto">
+            <BsCartX className="drop-shadow-lg" />
+          </div>
+
+          <p className="text-2xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+            ADD ITEM TO CARTS
+          </p>
+
+          <Link
+            to="/"
+            className="mt-6 inline-block rounded bg-indigo-600 px-5 py-3 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring"
+          >
+            Go Back Home
+          </Link>
+        </div>
       </div>
     )
   }

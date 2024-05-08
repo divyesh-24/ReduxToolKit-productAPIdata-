@@ -67,14 +67,7 @@ const Header = () => {
                   Home
                 </Link>
               </li>
-              <li>
-                <Link
-                  to="/feedbackDetails"
-                  className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-indigo-400"
-                >
-                  Feedback Details
-                </Link>
-              </li>
+
               {Object.keys(user).includes('id') && (
                 <li>
                   <Link
@@ -85,7 +78,16 @@ const Header = () => {
                   </Link>
                 </li>
               )}
-
+              {Object.keys(user).includes('id') && (
+                <li>
+                  <Link
+                    to="/feedbackDetails"
+                    className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-indigo-400"
+                  >
+                    Feedback Details
+                  </Link>
+                </li>
+              )}
               {user.isAdmin && (
                 <>
                   <li>
