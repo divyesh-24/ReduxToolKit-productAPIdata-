@@ -3,8 +3,19 @@ import { Field } from './components/FormBuilder'
 export async function updateAllFeedbackFormField(feedbackArray: Field[]) {
   const responses = [] as Field[]
   for (const feedbackField of feedbackArray) {
-    const data = await updateFeedbackForm(feedbackField)
-    responses.push(data.data)
+    if (feedbackField.id) {
+      const data = await updateFeedbackForm(feedbackField)
+      responses.push(data.data)
+    } else {
+      const response1 = await fetch(`http://localhost:3000/feedbackForm`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(feedbackField),
+      })
+      const data = await response1.json()
+      responses.push(data)
+    }
+    // responses.push(data.data)
     console.log(responses)
   }
   return responses
@@ -43,6 +54,7 @@ export async function getFeedbackForm() {
 
 export async function updateFeedbackForm(feedback: Field) {
   const { id, ...updatedFields } = feedback
+  console.log(feedback)
 
   const response = await fetch(`http://localhost:3000/feedbackForm/${id}`, {
     method: 'PATCH',
