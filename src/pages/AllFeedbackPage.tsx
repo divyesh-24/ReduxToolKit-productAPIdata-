@@ -56,7 +56,7 @@ const AllFeedbackPage = () => {
   const [page, setPage] = useState(1)
   const data = [...feedbacks]
 
-  const [columns, setColumns] = useState<ColumnDef<Feedback, any>[]>([])
+  const [columns, setColumns] = useState<ColumnDef<Feedback, unknown>[]>([])
 
   useEffect(() => {
     if (data.length > 0) {
@@ -67,7 +67,7 @@ const AllFeedbackPage = () => {
       setColumns(newColumns)
     }
     console.log(columns)
-  }, [columns])
+  }, [])
 
   // useEffect(() => {
   //   if (data.length > 0) {
