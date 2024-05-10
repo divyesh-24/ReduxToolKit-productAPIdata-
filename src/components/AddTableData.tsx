@@ -4,13 +4,20 @@ import { professions } from '../features/auth/components/AuthForm'
 import { categories } from '../features/product/components/AddProduct'
 import uploadImage from './uploadImage'
 import { useAppDispatch } from '../app/hooks'
-import { createUserAsync, updateUserDataAsync } from '../features/auth/authSlice'
+import {
+  createUserAsync,
+  updateUserDataAsync,
+} from '../features/auth/authSlice'
 //@ts-expect-error hash password from backend
 import bcrypt from 'bcryptjs'
-import { createProductAsync, updateProductAsync } from '../features/product/productSlice'
+import {
+  createProductAsync,
+  updateProductAsync,
+} from '../features/product/productSlice'
 import { Product } from '../features/product/productApi'
 import { UserType } from '../features/auth/authApi'
 import { CgClose } from 'react-icons/cg'
+import { TableCell, TableRow } from '@mui/material'
 
 interface Column {
   name: string
@@ -406,15 +413,15 @@ const AddTableData: React.FC<Props> = ({
   }
 
   return (
-    <tr className={UserData?.id ? `bg-indigo-200 ` : 'bg-black/15'}>
-      <th scope="col" className="p-4">
+    <TableRow className={UserData?.id ? `bg-indigo-200 ` : 'bg-black/15'}>
+      <TableCell scope="col" className="p-4">
         <div className="flex items-center">
           <h1 className="text-gray-700">{UserData?.id ?? 'ID'}</h1>
         </div>
-      </th>
+      </TableCell>
       {pathname === '/admin/users'
         ? columns.map((column, index) => (
-            <th
+            <TableCell
               scope="col"
               key={index}
               className={`px-6 py-3 
@@ -428,10 +435,10 @@ const AddTableData: React.FC<Props> = ({
                   {errors[column.name]}
                 </div>
               )}
-            </th>
+            </TableCell>
           ))
         : productsJson.map((column, index) => (
-            <th
+            <TableCell
               scope="col"
               key={index}
               className={`px-6 py-3 ${column.name === 'productName' ? '' : 'text-center'}
@@ -444,9 +451,9 @@ const AddTableData: React.FC<Props> = ({
                   {errors[column.name]}
                 </div>
               )}
-            </th>
+            </TableCell>
           ))}
-      <th scope="col" className="p-4">
+      <TableCell scope="col" className="p-4">
         <div className="flex items-center justify-center gap-5">
           <button
             className="hover:bg-green-300 drop-shadow-md px-3 py-2 rounded-lg text-gray-700 bg-green-500 hover:transition-transform hover:scale-110"
@@ -463,8 +470,8 @@ const AddTableData: React.FC<Props> = ({
             </button>
           )}
         </div>
-      </th>
-    </tr>
+      </TableCell>
+    </TableRow>
   )
 }
 

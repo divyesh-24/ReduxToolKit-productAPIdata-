@@ -5,6 +5,7 @@ import {
   createProduct,
   deleteProduct,
   getAllProducts,
+  getAllProductsWithPage,
   getProductsById,
   updateProduct,
 } from './productApi'
@@ -14,6 +15,7 @@ import {
 interface CounterState {
   status: 'loading' | 'succeeded' | 'failed'
   products: Product[]
+  AllProducts: Product[]
   totalPages: number
   totalItems: number
   // {
@@ -32,6 +34,7 @@ interface CounterState {
 const initialState: CounterState = {
   status: 'loading',
   products: [],
+  AllProducts: [],
   totalPages: 0,
   totalItems: 0,
   // {
@@ -63,8 +66,15 @@ export const updateProductAsync = createAsyncThunk(
 )
 export const getAllProductsAsync = createAsyncThunk(
   'product/getAllProducts',
+  async () => {
+    const response = await getAllProducts()
+    return response.data
+  },
+)
+export const getAllProductsWithPageAsync = createAsyncThunk(
+  'product/getAllProductsWithPage',
   async (page: number) => {
-    const response = await getAllProducts(page)
+    const response = await getAllProductsWithPage(page)
     if (response) return response
   },
 )
@@ -111,6 +121,13 @@ export const productSlice = createSlice({
         state.status = 'loading'
       })
       .addCase(getAllProductsAsync.fulfilled, (state, action) => {
+        state.status = 'succeeded'
+        state.AllProducts = action.payload
+      })
+      .addCase(getAllProductsWithPageAsync.pending, (state) => {
+        state.status = 'loading'
+      })
+      .addCase(getAllProductsWithPageAsync.fulfilled, (state, action) => {
         state.status = 'succeeded'
         state.products = action.payload?.data
         state.totalItems = action.payload?.totalItems

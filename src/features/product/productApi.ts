@@ -22,7 +22,7 @@ export async function createProduct(product: Product) {
   return { data }
 }
 
-export async function getAllProducts(page = 1) {
+export async function getAllProductsWithPage(page = 1) {
   const response = await fetch(
     `http://localhost:3000/products?_page=${page}&_per_page=10`,
   )
@@ -32,6 +32,14 @@ export async function getAllProducts(page = 1) {
     data: data.data,
     totalItems: data.items,
     totalPages: data.pages,
+  }
+}
+export async function getAllProducts() {
+  const response = await fetch(`http://localhost:3000/products`)
+  const data = await response.json()
+
+  return {
+    data,
   }
 }
 export async function getProductsById(id: string) {

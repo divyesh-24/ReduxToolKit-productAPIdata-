@@ -18,6 +18,8 @@ import {
   flexRender,
   getCoreRowModel,
   ColumnDef,
+  getSortedRowModel,
+  SortingState,
   // createColumnHelper,
 } from '@tanstack/react-table'
 import { Paper } from '@mui/material'
@@ -54,10 +56,10 @@ const AllFeedbackPage = () => {
   const totalItems = useAppSelector((s) => s.feedBack.totalItems)
   const totalPages = useAppSelector((s) => s.feedBack.totalPages)
   const [page, setPage] = useState(1)
-  const data = [...feedbacks]
+  const data = React.useMemo(() => [...feedbacks], [feedbacks])
 
   const [columns, setColumns] = useState<ColumnDef<Feedback, unknown>[]>([])
-
+  const [sorting, setSorting] = useState<SortingState>([])
   useEffect(() => {
     if (data.length > 0) {
       const newColumns = Object.keys(data[data.length - 1]).map((key) => ({
@@ -66,7 +68,7 @@ const AllFeedbackPage = () => {
       }))
       setColumns(newColumns)
     }
-  }, [])
+  }, [data])
 
   // useEffect(() => {
   //   if (data.length > 0) {
@@ -96,16 +98,22 @@ const AllFeedbackPage = () => {
     dispatch(getFeedbacksByUserAsync({ id: user.id as string, page }))
   }, [dispatch, user.id, page])
 
+  // columns: React.useMemo(() => columns, [columns]),
   const table = useReactTable({
     data,
-    columns: React.useMemo(() => columns, [columns]),
+    columns,
     getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    state: {
+      sorting,
+    },
+    onSortingChange: setSorting,
   })
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage)
   }
-
+  // console.log(table.getState().sorting)
   return (
     <div className="sm:rounded-lg max-w-[90%] mx-auto lg:p-10 lg:pt-20 pt-8 cpa">
       <div className="overflow-x-auto">
@@ -114,15 +122,30 @@ const AllFeedbackPage = () => {
             <TableHead className="h-10" sx={{ textTransform: 'capitalize' }}>
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
+                  <TableCell
+                    sx={{
+                      fontWeight: '700',
+                      textAlign: 'left',
+                      backgroundColor: '#ddd6fe',
+                    }}
+                  >
+                    No
+                  </TableCell>
                   {headerGroup.headers.map((header) => (
                     <TableCell
+                      colSpan={header.colSpan}
                       sx={{
                         fontWeight: '700',
                         textAlign: 'center',
                         backgroundColor: '#ddd6fe',
                       }}
                       key={header.id}
-                      className=" font-bold text-center"
+                      className={
+                        header.column.getCanSort()
+                          ? 'cursor-pointer select-none'
+                          : ' font-bold text-center'
+                      }
+                      onClick={header.column.getToggleSortingHandler()}
                     >
                       {header.isPlaceholder
                         ? null
@@ -130,6 +153,11 @@ const AllFeedbackPage = () => {
                             header.column.columnDef.header,
                             header.getContext(),
                           )}
+                      {
+                        { asc: '⬆️', desc: '⬇️' }[
+                          (header.column.getIsSorted() as string) ?? null
+                        ]
+                      }
                     </TableCell>
                   ))}
                 </TableRow>
@@ -151,6 +179,7 @@ const AllFeedbackPage = () => {
                     // },
                   }}
                 >
+                  <TableCell>{Number(row.id) + 1}</TableCell>
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}

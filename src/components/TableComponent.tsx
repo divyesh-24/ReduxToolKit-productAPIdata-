@@ -7,6 +7,7 @@ import Modal from './Modal'
 import { Product } from '../features/product/productApi'
 import { UserType } from '../features/auth/authApi'
 import AddTableData from './AddTableData'
+import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
 
 interface TableComponentProps {
   products: Product[] | UserType[]
@@ -50,70 +51,73 @@ const TableComponent: React.FC<TableComponentProps> = ({
         </div>
       </div>
       <div className=" overflow-x-auto">
-        <table className="w-full text-sm text-left text-gray-500">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
-            <tr>
-              <th scope="col" className="p-4">
+        <Table className="w-full text-sm text-left text-gray-500">
+          <TableHead className="text-xs text-gray-700 uppercase bg-gray-50 ">
+            <TableRow>
+              <TableCell scope="col" className="p-4">
                 <div className="flex items-center">
                   <h1 className="">ID</h1>
                 </div>
-              </th>
+              </TableCell>
               {pathname == '/admin/products' ? (
                 <>
-                  <th scope="col" className="px-6 py-3 w-1/6">
+                  <TableCell scope="col" className="px-6 py-3 w-1/6">
                     Product name
-                  </th>
-                  <th scope="col" className="px-6 py-3 text-center">
+                  </TableCell>
+                  <TableCell scope="col" className="px-6 py-3 text-center">
                     Pic
-                  </th>
-                  <th scope="col" className="px-6 py-3 text-center w-1/6">
+                  </TableCell>
+                  <TableCell
+                    scope="col"
+                    className="px-6 py-3 text-center w-1/6"
+                  >
                     Description
-                  </th>
-                  <th scope="col" className="px-6 py-3 text-center">
+                  </TableCell>
+                  <TableCell scope="col" className="px-6 py-3 text-center">
                     Color
-                  </th>
-                  <th scope="col" className="px-6 py-3 text-center">
+                  </TableCell>
+                  <TableCell scope="col" className="px-6 py-3 text-center">
                     Category
-                  </th>
-                  <th scope="col" className="px-6 py-3 text-center">
+                  </TableCell>
+                  <TableCell scope="col" className="px-6 py-3 text-center">
                     Price
-                  </th>
-                  <th scope="col" className="px-6 py-3 text-center">
+                  </TableCell>
+                  <TableCell scope="col" className="px-6 py-3 text-center">
                     Available Stocks
-                  </th>
+                  </TableCell>
                 </>
               ) : (
                 <>
-                  <th scope="col" className="px-6 py-3 w-1/6">
+                  <TableCell scope="col" className="px-6 py-3 w-1/6">
                     User
-                  </th>
-                  <th scope="col" className="px-6 py-3 text-center">
+                  </TableCell>
+                  <TableCell scope="col" className="px-6 py-3 text-center">
                     Pic
-                  </th>
-                  <th
+                  </TableCell>
+                  <TableCell
                     scope="col"
                     className="px-6 py-3 text-center w-1/6 break-words text-wrap"
                   >
                     Email
-                  </th>
-                  <th scope="col" className="px-6 py-3 text-center">
+                  </TableCell>
+                  <TableCell scope="col" className="px-6 py-3 text-center">
                     Mobile
-                  </th>
-                  <th scope="col" className="px-6 py-3 text-center">
+                  </TableCell>
+                  <TableCell scope="col" className="px-6 py-3 text-center">
                     Profession
-                  </th>
-                  <th scope="col" className="px-6 py-3 text-center">
+                  </TableCell>
+                  <TableCell scope="col" className="px-6 py-3 text-center">
                     Cover Color
-                  </th>
-                  <th scope="col" className="px-6 py-3 text-center">
+                  </TableCell>
+                  <TableCell scope="col" className="px-6 py-3 text-center">
                     Admin
-                  </th>
+                  </TableCell>
                 </>
               )}
-              <th scope="col" className="px-6 py-3 text-center">
+              <TableCell scope="col" className="px-6 py-3 text-center">
                 Action
-              </th>
-            </tr>
+              </TableCell>
+            </TableRow>
             {isOpen && (
               <AddTableData
                 pathname={pathname}
@@ -121,8 +125,8 @@ const TableComponent: React.FC<TableComponentProps> = ({
                 setIsOpenEdit={setIsOpenEdit}
               />
             )}
-          </thead>
-          <tbody>
+          </TableHead>
+          <TableBody>
             {products
               .map((product, indexNumber) => {
                 if (isOpenEdit == indexNumber) {
@@ -137,23 +141,23 @@ const TableComponent: React.FC<TableComponentProps> = ({
                   )
                 }
                 return (
-                  <tr
+                  <TableRow
                     key={product.id}
                     className="bg-white border-b  hover:bg-gray-50 "
                   >
                     <>
-                      <td className="w-4 p-4">
+                      <TableCell className="w-4 p-4">
                         <div className="flex items-center text-center">
                           {product.id}
                         </div>
-                      </td>
-                      <th
+                      </TableCell>
+                      <TableCell
                         scope="row"
                         className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
                       >
                         {product.name}
-                      </th>
-                      <th
+                      </TableCell>
+                      <TableCell
                         scope="row"
                         className="px-6 py-4 font-medium text-gray-900 text-center whitespace-nowrap "
                       >
@@ -170,65 +174,65 @@ const TableComponent: React.FC<TableComponentProps> = ({
                             className="inline-flex items-center min-w-10 text-white justify-center h-10 w-10  font-medium tracking-wide  transition duration-200 rounded-full  shadow-md bg-indigo-200 hover:bg-indigo-700 focus:shadow-outline focus:outline-none"
                           />
                         )}
-                      </th>
+                      </TableCell>
                       {'desc' in product && (
-                        <td className="px-6 py-4 text-center text-wrap">
+                        <TableCell className="px-6 py-4 text-center text-wrap">
                           {product.desc}
-                        </td>
+                        </TableCell>
                       )}
                       {'bgColor' in product ? (
-                        <td className="px-6 py-4 text-center">
+                        <TableCell className="px-6 py-4 text-center">
                           <div
                             className="px-2 py-1 text-white inline-block rounded-full border border-indigo-600"
                             style={{ backgroundColor: product.bgColor }}
                           >
                             {product.bgColor}
                           </div>
-                        </td>
+                        </TableCell>
                       ) : (
                         <>
-                          <td className="px-6 py-4 text-center">
+                          <TableCell className="px-6 py-4 text-center">
                             {product.email}
-                          </td>
-                          <td className="px-6 py-4 text-center">
+                          </TableCell>
+                          <TableCell className="px-6 py-4 text-center">
                             {product.mobileNo}
-                          </td>
+                          </TableCell>
                         </>
                       )}
                       {'category' in product ? (
-                        <td className="px-6 py-4 capitalize text-center">
+                        <TableCell className="px-6 py-4 capitalize text-center">
                           {product.category}
-                        </td>
+                        </TableCell>
                       ) : (
-                        <td className="px-6 py-4 capitalize text-center">
+                        <TableCell className="px-6 py-4 capitalize text-center">
                           {product.profession}
-                        </td>
+                        </TableCell>
                       )}
                       {'price' in product ? (
-                        <td className="px-6 py-4 text-center">
+                        <TableCell className="px-6 py-4 text-center">
                           ${product.price}
-                        </td>
+                        </TableCell>
                       ) : (
-                        <td className="px-6 py-4 justify-center flex items-center">
+                        <TableCell className="px-6 py-4 justify-center flex items-center">
                           <div
                             className="px-2 py-1 text-white inline-block rounded-full  border border-indigo-600"
                             style={{ backgroundColor: product.coverColor }}
                           >
                             {product.coverColor}
                           </div>
-                        </td>
+                        </TableCell>
                       )}
                       {'inStock' in product ? (
-                        <td className="px-6 py-4 text-center">
+                        <TableCell className="px-6 py-4 text-center">
                           {product.inStock ? 'Yes' : 'No'}
-                        </td>
+                        </TableCell>
                       ) : (
-                        <td className="px-6 py-4 text-center">
+                        <TableCell className="px-6 py-4 text-center">
                           {product.isAdmin ? 'Yes' : 'No'}
-                        </td>
+                        </TableCell>
                       )}
 
-                      <td className="px-6 py-4 text-center ">
+                      <TableCell className="px-6 py-4 text-center ">
                         <div className="flex justify-evenly gap-5">
                           {'price' in product ? (
                             <div
@@ -252,7 +256,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
                             onClick={() => setOpenShowModal(indexNumber)}
                           />
                         </div>
-                      </td>
+                      </TableCell>
                       <Modal
                         title={'Remove'}
                         massage={`Are you sure Remove ${product?.name} ?`}
@@ -262,12 +266,12 @@ const TableComponent: React.FC<TableComponentProps> = ({
                         cancelAction={() => setOpenShowModal(-1)}
                       />
                     </>
-                  </tr>
+                  </TableRow>
                 )
               })
               .reverse()}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
       <nav
         className="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4"

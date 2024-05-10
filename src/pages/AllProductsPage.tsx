@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '../app/hooks'
 import TableComponent from '../components/TableComponent'
 import {
   deleteProductAsync,
-  getAllProductsAsync,
+  getAllProductsWithPageAsync,
 } from '../features/product/productSlice'
 
 const AllProductsPage = () => {
@@ -15,7 +15,7 @@ const AllProductsPage = () => {
   const totalPages = useAppSelector((s) => s.products.totalPages)
   const getAllData = useCallback(
     (page: number) => {
-      dispatch(getAllProductsAsync(page))
+      dispatch(getAllProductsWithPageAsync(page))
     },
     [dispatch],
   )

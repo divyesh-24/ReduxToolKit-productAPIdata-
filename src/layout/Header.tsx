@@ -8,6 +8,7 @@ import {
   ClearCartProductLocalAsync,
   getCartProductsByUserAsync,
 } from '../features/cart/cartSlice'
+import { getAllProductsAsync } from '../features/product/productSlice'
 
 const Header = () => {
   const navigate = useNavigate()
@@ -19,6 +20,7 @@ const Header = () => {
 
   const dispatch = useAppDispatch()
   useEffect(() => {
+    dispatch(getAllProductsAsync())
     if (user.id) {
       dispatch(getCartProductsByUserAsync(user.id as string))
     } else {
