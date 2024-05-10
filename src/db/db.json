@@ -331,13 +331,6 @@
       "label": "feedback",
       "name": "feedback",
       "options": []
-    },
-    {
-      "id": "c913",
-      "type": "text",
-      "label": "name",
-      "name": "name",
-      "options": []
     }
   ],
   "feedbacks": [

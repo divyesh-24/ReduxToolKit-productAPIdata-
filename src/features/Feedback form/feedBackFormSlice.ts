@@ -12,11 +12,13 @@ import { Field } from './components/FormBuilder'
 interface FeedbackFormState {
   status: 'loading' | 'succeeded' | 'failed'
   feedbacksForm: Field[]
+  deletedField: Field[]
 }
 
 const initialState: FeedbackFormState = {
   status: 'loading',
   feedbacksForm: [],
+  deletedField: [],
 }
 
 export const getFeedbackFormAsync = createAsyncThunk(
@@ -34,10 +36,22 @@ export const createFeedbackFormFieldAsync = createAsyncThunk(
     return response
   },
 )
+export const deleteFeedbackFormFieldLocalAsync = createAsyncThunk(
+  'feedback/deleteFeedbackFormFieldLocal',
+  async (feedbackData: Field[]) => {
+    return feedbackData
+  },
+)
 export const updateAllFeedbackFormFieldAsync = createAsyncThunk(
   'feedback/updateAllFeedbackFormField',
-  async (feedbackData: Field[]) => {
-    const response = await updateAllFeedbackFormField(feedbackData)
+  async ({
+    fields,
+    deletedField,
+  }: {
+    fields: Field[]
+    deletedField: Field[]
+  }) => {
+    const response = await updateAllFeedbackFormField(fields, deletedField)
     return response
   },
 )
@@ -77,6 +91,13 @@ export const feedBackFormSlice = createSlice({
       .addCase(createFeedbackFormFieldAsync.fulfilled, (state, action) => {
         state.status = 'succeeded'
         state.feedbacksForm = action.payload
+      })
+      .addCase(deleteFeedbackFormFieldLocalAsync.pending, (state) => {
+        state.status = 'loading'
+      })
+      .addCase(deleteFeedbackFormFieldLocalAsync.fulfilled, (state, action) => {
+        state.status = 'succeeded'
+        state.deletedField = action.payload
       })
       .addCase(updateAllFeedbackFormFieldAsync.pending, (state) => {
         state.status = 'loading'

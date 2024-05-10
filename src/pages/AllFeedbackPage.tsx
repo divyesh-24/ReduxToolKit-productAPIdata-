@@ -66,7 +66,6 @@ const AllFeedbackPage = () => {
       }))
       setColumns(newColumns)
     }
-    console.log(columns)
   }, [])
 
   // useEffect(() => {

@@ -19,7 +19,6 @@ const AllUsersPage = () => {
 
   const deleteFunction = useCallback(
     (id: string) => {
-      console.log(id)
       dispatch(deleteUserAsync(id))
     },
     [dispatch],

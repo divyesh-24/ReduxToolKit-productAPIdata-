@@ -2,6 +2,7 @@ import React, { ChangeEvent, useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks'
 import {
   createFeedbackFormFieldAsync,
+  deleteFeedbackFormFieldLocalAsync,
   getFeedbackFormAsync,
   updateAllFeedbackFormFieldAsync,
 } from '../feedBackFormSlice'
@@ -17,9 +18,12 @@ export interface Field {
 
 const FormBuilder: React.FC = () => {
   const formData = useAppSelector((s) => s.feedBackForm.feedbacksForm)
+  const formDeleteData = useAppSelector((s) => s.feedBackForm.deletedField)
   const dispatch = useAppDispatch()
   const formFieldData = JSON.parse(JSON.stringify(formData))
   const [fields, setFields] = useState<Field[]>([...formFieldData])
+  // const [deletedField, setDeletedField] = useState>([] as Field[])
+  const deletedField = [...formDeleteData] as Field[]
 
   useEffect(() => {
     dispatch(getFeedbackFormAsync())
@@ -32,6 +36,10 @@ const FormBuilder: React.FC = () => {
 
   const removeField = (index: number) => {
     const newFields = [...fields]
+    // setDeletedField(newFields[index] as Field)
+    deletedField.push(newFields[index])
+    dispatch(deleteFeedbackFormFieldLocalAsync(deletedField))
+
     newFields.splice(index, 1)
     setFields(newFields)
   }
@@ -104,8 +112,7 @@ const FormBuilder: React.FC = () => {
     if (formData.length <= 0) {
       dispatch(createFeedbackFormFieldAsync(fields))
     }
-    console.log(fields)
-    dispatch(updateAllFeedbackFormFieldAsync(fields))
+    dispatch(updateAllFeedbackFormFieldAsync({ fields, deletedField }))
   }
 
   return (
