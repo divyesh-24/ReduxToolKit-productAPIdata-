@@ -30,6 +30,7 @@ interface Props {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
   product?: Product | UserType
   setIsOpenEdit: React.Dispatch<React.SetStateAction<number>>
+  no?: number
 }
 const columns = [
   {
@@ -119,6 +120,7 @@ const AddTableData: React.FC<Props> = ({
   setIsOpen,
   product,
   setIsOpenEdit,
+  no,
 }) => {
   const dispatch = useAppDispatch()
   const [UserData, setUserData] = React.useState({} as UserDaType)
@@ -416,9 +418,15 @@ const AddTableData: React.FC<Props> = ({
     <TableRow className={UserData?.id ? `bg-indigo-200 ` : 'bg-black/15'}>
       <TableCell scope="col" className="p-4">
         <div className="flex items-center">
-          <h1 className="text-gray-700">{UserData?.id ?? 'ID'}</h1>
+          <h1 className="text-gray-700">{no ? no : '--'}</h1>
         </div>
       </TableCell>
+      <TableCell scope="col" className="p-4">
+        <div className="flex items-center">
+          <h1 className="text-gray-700">{UserData?.id ?? '--'}</h1>
+        </div>
+      </TableCell>
+
       {pathname === '/admin/users'
         ? columns.map((column, index) => (
             <TableCell
@@ -429,12 +437,14 @@ const AddTableData: React.FC<Props> = ({
                ${column.type === 'file' ? 'px-6 py-4 font-medium text-gray-900 whitespace-nowrap ' : ''} 
                `}
             >
-              <label htmlFor={column.name}>{renderColumn(column)}</label>
-              {errors[column.name] && (
-                <div className="text-red-500 text-wrap">
-                  {errors[column.name]}
-                </div>
-              )}
+              <div className="w-full flex justify-center items-center">
+                <label htmlFor={column.name}>{renderColumn(column)}</label>
+                {errors[column.name] && (
+                  <div className="text-red-500 text-wrap">
+                    {errors[column.name]}
+                  </div>
+                )}
+              </div>
             </TableCell>
           ))
         : productsJson.map((column, index) => (
@@ -445,12 +455,14 @@ const AddTableData: React.FC<Props> = ({
               ${column.type === 'file' ? 'px-6 py-4 font-medium text-gray-900 whitespace-nowrap ' : ''} 
               `}
             >
-              <label htmlFor={column.label}>{renderColumn(column)}</label>
-              {errors[column.name] && (
-                <div className="text-red-500 text-wrap">
-                  {errors[column.name]}
-                </div>
-              )}
+              <div className="w-full flex justify-center items-center">
+                <label htmlFor={column.label}>{renderColumn(column)}</label>
+                {errors[column.name] && (
+                  <div className="text-red-500 text-wrap">
+                    {errors[column.name]}
+                  </div>
+                )}
+              </div>
             </TableCell>
           ))}
       <TableCell scope="col" className="p-4">

@@ -14,6 +14,7 @@ import { useAppDispatch, useAppSelector } from '../../../app/hooks'
 import { createUserAsync, getUserByEmailAsync } from '../authSlice'
 import { HiMiniDevicePhoneMobile } from 'react-icons/hi2'
 import uploadImage from '../../../components/uploadImage'
+import { Typography } from '@mui/material'
 
 interface newUserType {
   name: string
@@ -85,7 +86,6 @@ const AuthForm: React.FC = () => {
       }
       dispatch(getUserByEmailAsync(newUserData))
       if (errorData == null) {
-        
         navigate('/')
       }
     }
@@ -109,18 +109,24 @@ const AuthForm: React.FC = () => {
     <div>
       <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-lg">
-          <h1 className="text-center text-2xl font-bold text-white sm:text-3xl">
+          <Typography
+            variant="h1"
+            className="text-center text-2xl font-bold text-white sm:text-3xl"
+          >
             Get started today
-          </h1>
+          </Typography>
 
           <form
             onSubmit={handleSubmit}
             className="mb-0 mt-6 space-y-4 bg-white rounded-lg p-4 shadow-lg sm:p-6 lg:p-8"
           >
-            <p className="text-center text-lg font-medium">
+            <Typography
+              variant="h5"
+              className="text-center text-lg font-medium"
+            >
               {path.pathname == '/login' ? 'Log in' : 'Register'} to your
               account
-            </p>
+            </Typography>
 
             {path.pathname != '/login' && (
               <div>

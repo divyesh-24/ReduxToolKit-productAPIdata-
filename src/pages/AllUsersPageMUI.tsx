@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import ProtectedRoute from '../Admin/components/ProtectedRoute'
 import { useAppDispatch, useAppSelector } from '../app/hooks'
 
@@ -11,14 +11,14 @@ import { Product } from '../features/product/productApi'
 import { UserType } from '../features/auth/authApi'
 import AllProducts from '../features/product/components/AllProducts'
 import { getAllUsersAsync } from '../features/user/userSlice'
+import { deleteUserAsync } from '../features/auth/authSlice'
 
 const AllUsersPageMUI = () => {
   const dispatch = useAppDispatch()
 
-  const products = useAppSelector((s) => s.user.users)
+  const users = useAppSelector((s) => s.user.users)
 
   const columnHelper = createColumnHelper<Product | UserType>()
-  console.log(products)
 
   // id?: string | undefined;
   //   name: string;
@@ -96,11 +96,14 @@ const AllUsersPageMUI = () => {
     [columnHelper],
   )
 
-  const deleteFunction = useCallback((id: string) => {
-    // dispatch(deleteProductAsync(id))
-    console.log(id)
-  }, [])
-  const data = React.useMemo(() => [...products], [products])
+  const deleteFunction = useCallback(
+    (id: string) => {
+      dispatch(deleteUserAsync(id))
+    },
+    [dispatch],
+  )
+  useEffect(() => {}, [dispatch, users])
+  const data = React.useMemo(() => [...users], [users])
   const getAllData = useCallback(() => {
     dispatch(getAllUsersAsync())
   }, [dispatch])

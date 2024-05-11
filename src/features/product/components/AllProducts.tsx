@@ -1,4 +1,5 @@
 import {
+  Button,
   Paper,
   Table,
   TableBody,
@@ -14,6 +15,7 @@ import {
   SortingState,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
@@ -24,9 +26,10 @@ import TablePaginationActions from './actions'
 import AddTableData from '../../../components/AddTableData'
 import { useLocation } from 'react-router-dom'
 import Modal from '../../../components/Modal'
-import { RiDeleteBin5Line } from 'react-icons/ri'
-import { FaRegEdit } from 'react-icons/fa'
 import { UserType } from '../../auth/authApi'
+import { MdClose } from 'react-icons/md'
+import { FaRegEdit } from 'react-icons/fa'
+import { RiDeleteBin5Line } from 'react-icons/ri'
 
 interface AllProductsProps {
   data: Product[] | UserType[]
@@ -50,6 +53,7 @@ const AllProducts: React.FC<AllProductsProps> = ({
   const { pathname } = useLocation()
 
   const [sorting, setSorting] = useState<SortingState>([])
+  const [filtering, setFiltering] = useState('')
 
   const handleDelete = (product1: string | undefined) => {
     console.log(product1)
@@ -161,15 +165,43 @@ const AllProducts: React.FC<AllProductsProps> = ({
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
     state: {
       sorting,
+      globalFilter: filtering,
     },
     onSortingChange: setSorting,
+    onGlobalFilterChange: setFiltering,
   })
 
   const { pageSize, pageIndex } = table.getState().pagination
   return (
     <div className="sm:rounded-lg max-w-[90%] mx-auto lg:p-10 lg:pt-20 pt-8 cpa">
+      <div className="flex justify-between items-center w-full mb-2">
+        <div className="w-2/5 flex items-center">
+          <input
+            type="text"
+            className={`rounded-md px-2 py-1.5 w-full`}
+            placeholder="Search here"
+            value={filtering}
+            onChange={(e) => setFiltering(e.target.value)}
+          />
+          {filtering != '' && (
+            <button onClick={() => setFiltering('')}>
+              <MdClose className="w-8 h-8 bg-white rounded-md mx-4 px-1" />
+            </button>
+          )}
+        </div>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          {!isOpen
+            ? `ADD ${pathname == '/admin/users' ? 'User' : 'Product'}`
+            : 'CLOSE'}
+        </Button>
+      </div>
       <div className="overflow-x-auto">
         <TableContainer component={Paper}>
           <Table className=" text-center min-w-full" sx={{ minWidth: 650 }}>
@@ -246,6 +278,7 @@ const AllProducts: React.FC<AllProductsProps> = ({
                         setIsOpen={setIsOpen}
                         product={row.original}
                         setIsOpenEdit={setIsOpenEdit}
+                        no={Number(row.id) + 1}
                       />
                     </>
                   )

@@ -54,14 +54,10 @@ const AllProductsPageMUI = () => {
         ),
       },
       {
-        header: 'category',
-        accessorKey: 'category',
-      },
-      {
-        header: 'price',
-        accessorKey: 'price',
+        header: 'desc',
+        accessorKey: 'desc',
         cell: ({ getValue }: { getValue: () => string }) => (
-          <div className="px-6 py-4 text-center">$ {getValue()}</div>
+          <div className="text-center capitalize">{getValue()}</div>
         ),
       },
 
@@ -75,6 +71,20 @@ const AllProductsPageMUI = () => {
           >
             {getValue()}
           </div>
+        ),
+      },
+      {
+        header: 'category',
+        accessorKey: 'category',
+        cell: ({ getValue }: { getValue: () => string }) => (
+          <div className="px-6 py-4 text-center capitalize">{getValue()}</div>
+        ),
+      },
+      {
+        header: 'price',
+        accessorKey: 'price',
+        cell: ({ getValue }: { getValue: () => string }) => (
+          <div className="px-6 py-4 text-center">$ {getValue()}</div>
         ),
       },
       {
