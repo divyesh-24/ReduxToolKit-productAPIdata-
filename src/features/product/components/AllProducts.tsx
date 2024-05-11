@@ -5,9 +5,11 @@ import {
   TableCell,
   TableContainer,
   TableHead,
+  TablePagination,
   TableRow,
 } from '@mui/material'
 import {
+  AccessorKeyColumnDef,
   ColumnDef,
   SortingState,
   flexRender,
@@ -17,82 +19,114 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import React, { useEffect, useState } from 'react'
-import { useAppSelector } from '../../../app/hooks'
 import { Product } from '../productApi'
+import TablePaginationActions from './actions'
+import AddTableData from '../../../components/AddTableData'
+import { useLocation } from 'react-router-dom'
+import Modal from '../../../components/Modal'
+import { RiDeleteBin5Line } from 'react-icons/ri'
+import { FaRegEdit } from 'react-icons/fa'
+import { UserType } from '../../auth/authApi'
 
-const AllProducts = () => {
-  const products = useAppSelector((s) => s.products.AllProducts)
+interface AllProductsProps {
+  data: Product[] | UserType[]
+  deleteFunction: (id: string) => void
+  getAllData: () => void
+  columns:
+    | ColumnDef<Product | UserType, unknown>[]
+    | AccessorKeyColumnDef<Product | UserType, string>[]
+}
+const AllProducts: React.FC<AllProductsProps> = ({
+  data,
+  columns,
+  getAllData,
+  deleteFunction,
+}) => {
+  // const products = useAppSelector((s) => s.products.AllProducts)
+  const [isOpenEdit, setIsOpenEdit] = useState(-1)
+  const [isOpen, setIsOpen] = useState(false)
+  const [openShowModal, setOpenShowModal] = useState(-1)
+
+  const { pathname } = useLocation()
 
   const [sorting, setSorting] = useState<SortingState>([])
-  const data = React.useMemo(() => [...products], [products])
 
-  const [columns, setColumns] = useState<ColumnDef<Product, unknown>[]>([])
+  const handleDelete = (product1: string | undefined) => {
+    console.log(product1)
+    deleteFunction(product1 as string)
+
+    setOpenShowModal(-1)
+  }
 
   useEffect(() => {
-    if (data.length > 0) {
-      const newColumns = Object.keys(data[data.length - 1]).map((key) =>
-        createColumn(key),
-      )
-      setColumns(newColumns as ColumnDef<Product, unknown>[])
-    }
-  }, [data])
+    getAllData()
+  }, [getAllData, deleteFunction, openShowModal, isOpen])
 
-  const createColumn = (key: string) => {
-    switch (key) {
-      case 'image':
-        return {
-          header: key.toUpperCase(),
-          accessorKey: key.toString(),
-          cell: ({ getValue }: { getValue: () => string }) => (
-            <img
-              src={getValue()}
-              alt=""
-              className="inline-flex items-center min-w-10 text-white justify-center h-10 w-10  font-medium tracking-wide  transition duration-200 rounded-full  shadow-md bg-indigo-200 hover:bg-indigo-700 focus:shadow-outline focus:outline-none"
-            />
-          ),
-        }
-      case 'bgColor':
-        return {
-          header: key.toUpperCase(),
-          accessorKey: key.toString(),
-          cell: ({ getValue }: { getValue: () => string }) => (
-            <div
-              className="px-2 py-1 text-white inline-block rounded-full border border-indigo-600"
-              style={{ backgroundColor: getValue() }}
-            >
-              {getValue()}
-            </div>
-          ),
-        }
-      case 'inStock':
-        return {
-          header: key.toUpperCase(),
-          accessorKey: key.toString(),
-          cell: ({ getValue }: { getValue: () => string }) => (
-            <div className="px-6 py-4 text-center">
-              {getValue() ? 'Yes' : 'No'}
-            </div>
-          ),
-        }
-      case 'price':
-        return {
-          header: key.toUpperCase(),
-          accessorKey: key.toString(),
-          cell: ({ getValue }: { getValue: () => string }) => (
-            <div className="px-6 py-4 text-center">$ {getValue()}</div>
-          ),
-        }
+  // useEffect(() => {
+  //   if (data.length > 0) {
+  //     const newColumns = Object.keys(data[data.length - 1]).map((key) =>
+  //       createColumn(key),
+  //     )
+  //     setColumns(newColumns as ColumnDef<Product, unknown>[])
+  //   }
+  // }, [data])
 
-      default:
-        return {
-          header: key.toUpperCase(),
-          accessorKey: key.toString(),
-          cell: ({ getValue }: { getValue: () => string }) => (
-            <div className="px-6 py-4 text-center capitalize">{getValue()}</div>
-          ),
-        }
-    }
-  }
+  // const createColumn = (key: string) => {
+  //   switch (key) {
+  //     case 'image':
+  //       return {
+  //         header: key.toUpperCase(),
+  //         accessorKey: key.toString(),
+  //         cell: ({ getValue }: { getValue: () => string }) => (
+  //           <img
+  //             src={getValue()}
+  //             alt=""
+  //             className="inline-flex items-center min-w-10 text-white justify-center h-10 w-10  font-medium tracking-wide  transition duration-200 rounded-full  shadow-md bg-indigo-200 hover:bg-indigo-700 focus:shadow-outline focus:outline-none"
+  //           />
+  //         ),
+  //       }
+  //     case 'bgColor':
+  //       return {
+  //         header: key.toUpperCase(),
+  //         accessorKey: key.toString(),
+  //         cell: ({ getValue }: { getValue: () => string }) => (
+  //           <div
+  //             className="px-2 py-1 text-white inline-block rounded-full border border-indigo-600"
+  //             style={{ backgroundColor: getValue() }}
+  //           >
+  //             {getValue()}
+  //           </div>
+  //         ),
+  //       }
+  //     case 'inStock':
+  //       return {
+  //         header: key.toUpperCase(),
+  //         accessorKey: key.toString(),
+  //         cell: ({ getValue }: { getValue: () => string }) => (
+  //           <div className="px-6 py-4 text-center">
+  //             {getValue() ? 'Yes' : 'No'}
+  //           </div>
+  //         ),
+  //       }
+  //     case 'price':
+  //       return {
+  //         header: key.toUpperCase(),
+  //         accessorKey: key.toString(),
+  //         cell: ({ getValue }: { getValue: () => string }) => (
+  //           <div className="px-6 py-4 text-center">$ {getValue()}</div>
+  //         ),
+  //       }
+
+  //     default:
+  //       return {
+  //         header: key.toUpperCase(),
+  //         accessorKey: key.toString(),
+  //         cell: ({ getValue }: { getValue: () => string }) => (
+  //           <div className="px-6 py-4 text-center capitalize">{getValue()}</div>
+  //         ),
+  //       }
+  //   }
+  // }
 
   //   useEffect(() => {
   //     if (data.length > 0) {
@@ -120,6 +154,7 @@ const AllProducts = () => {
   //       setColumns(newColumns)
   //     }
   //   }, [data])
+
   const table = useReactTable({
     data,
     columns,
@@ -132,6 +167,7 @@ const AllProducts = () => {
     onSortingChange: setSorting,
   })
 
+  const { pageSize, pageIndex } = table.getState().pagination
   return (
     <div className="sm:rounded-lg max-w-[90%] mx-auto lg:p-10 lg:pt-20 pt-8 cpa">
       <div className="overflow-x-auto">
@@ -178,142 +214,146 @@ const AllProducts = () => {
                       }
                     </TableCell>
                   ))}
+                  <TableCell
+                    scope="col"
+                    className="px-6 py-3 text-center"
+                    sx={{
+                      fontWeight: '700',
+                      textAlign: 'left',
+                      backgroundColor: '#ddd6fe',
+                    }}
+                  >
+                    Action
+                  </TableCell>
                 </TableRow>
               ))}
+              {isOpen && (
+                <AddTableData
+                  pathname={pathname}
+                  setIsOpen={setIsOpen}
+                  setIsOpenEdit={setIsOpenEdit}
+                />
+              )}
             </TableHead>
             <TableBody>
-              {table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  sx={{
-                    '&:nth-of-type(odd)': {
-                      backgroundColor: '#f5f3ff',
-                    },
-                    '&:nth-of-type(even)': {
-                      backgroundColor: '#eef2ff',
-                    },
-                    // '&:hover': {
-                    //   backgroundColor: '#ede9fe',
-                    // },
-                  }}
-                >
-                  <TableCell>{Number(row.id) + 1}</TableCell>
-                  {row.getVisibleCells().map((cell) => {
-                    if (cell.column.id != 'image') {
-                      return (
-                        <TableCell
-                          key={cell.id}
-                          className=" text-center"
-                          sx={{
-                            textAlign: 'center',
-                            '&:last-child td, &:last-child th': { border: 0 },
-                          }}
+              {table.getRowModel().rows.map((row, indexNumber) => {
+                if (isOpenEdit == indexNumber) {
+                  return (
+                    <>
+                      <AddTableData
+                        key={row.id}
+                        pathname={pathname}
+                        setIsOpen={setIsOpen}
+                        product={row.original}
+                        setIsOpenEdit={setIsOpenEdit}
+                      />
+                    </>
+                  )
+                }
+                return (
+                  <TableRow
+                    key={row.id}
+                    sx={{
+                      '&:nth-of-type(odd)': {
+                        backgroundColor: '#f5f3ff',
+                      },
+                      '&:nth-of-type(even)': {
+                        backgroundColor: '#eef2ff',
+                      },
+                      // '&:hover': {
+                      //   backgroundColor: '#ede9fe',
+                      // },
+                    }}
+                  >
+                    <TableCell>{Number(row.id) + 1}</TableCell>
+                    {row.getVisibleCells().map((cell) => {
+                      if (cell.column.id != 'image') {
+                        return (
+                          <TableCell
+                            key={cell.id}
+                            className=" text-center"
+                            sx={{
+                              textAlign: 'center',
+                              '&:last-child td, &:last-child th': { border: 0 },
+                            }}
+                          >
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext(),
+                            )}
+                          </TableCell>
+                        )
+                      } else {
+                        return (
+                          <TableCell
+                            key={cell.id}
+                            className=" text-center"
+                            sx={{
+                              textAlign: 'center',
+                              '&:last-child td, &:last-child th': { border: 0 },
+                            }}
+                          >
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext(),
+                            )}
+                          </TableCell>
+                        )
+                      }
+                    })}
+                    <TableCell className="px-6 py-4 text-center ">
+                      <div className="flex justify-evenly gap-5">
+                        <div
+                          // to={`/profile/${product.id}`}
+                          onClick={() => setIsOpenEdit(indexNumber)}
+                          className="font-medium text-blue-600  hover:underline"
                         >
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext(),
-                          )}
-                        </TableCell>
-                      )
-                    } else {
-                      return (
-                        <TableCell
-                          key={cell.id}
-                          className=" text-center"
-                          sx={{
-                            textAlign: 'center',
-                            '&:last-child td, &:last-child th': { border: 0 },
-                          }}
-                        >
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext(),
-                          )}
-                        </TableCell>
-                      )
-                    }
-                  })}
-                </TableRow>
-              ))}
+                          <FaRegEdit className="w-5 h-5 cursor-pointer" />
+                        </div>
+
+                        <RiDeleteBin5Line
+                          className="h-5 w-5 text-red-400 cursor-pointer"
+                          onClick={() => setOpenShowModal(indexNumber)}
+                        />
+                      </div>
+                    </TableCell>
+                    <Modal
+                      title={'Remove'}
+                      massage={`Are you sure Remove ${row?.original?.name} ?`}
+                      dangerAction={() => handleDelete(row?.original?.id)}
+                      dangerOption={'Remove'}
+                      showModal={openShowModal === indexNumber}
+                      cancelAction={() => setOpenShowModal(-1)}
+                    />
+                  </TableRow>
+                )
+              })}
             </TableBody>
           </Table>
         </TableContainer>
       </div>
-      {/* <nav
-        className="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4"
-        aria-label="Table navigation"
-      >
-        <span className="text-sm font-normal text-gray-500  mb-4 md:mb-0 block w-full md:inline md:w-auto">
-          Showing{' '}
-          <span className="font-semibold text-gray-900 ">
-            {(page - 1) * 10 + 1}-
-            {page * 10 > totalItems ? totalItems : page * 10}
-          </span>{' '}
-          of <span className="font-semibold text-gray-900 ">{totalPages}</span>
-        </span>
-        <ul className="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
-          <li>
-            <button
-              onClick={() => handlePageChange(1 < page ? page - 1 : page)}
-              className="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700  "
-            >
-              Previous
-            </button>
-          </li>
 
-          {Array.from({ length: totalPages }).map((_, index) => (
-            <div
-              key={index}
-              onClick={() => handlePageChange(index + 1)}
-              aria-current="page"
-              className={`flex items-center justify-center px-3 h-8 ${
-                index + 1 !== page
-                  ? 'leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 '
-                  : 'text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700'
-              } `}
-            >
-              {index + 1}
-            </div>
-          ))}
-
-          <li>
-            <button
-              onClick={() =>
-                handlePageChange(totalPages > page ? page + 1 : page)
-              }
-              className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 "
-            >
-              Next
-            </button>
-          </li>
-        </ul>
-      </nav> */}
-      <div>
-        <button onClick={() => table.setPageIndex(0)}>First page</button>
-        <button
-          disabled={!table.getCanPreviousPage()}
-          onClick={() => table.previousPage()}
-        >
-          Previous page
-        </button>
-        <button
-          disabled={!table.getCanNextPage()}
-          onClick={() => table.nextPage()}
-        >
-          Next page
-        </button>
-        <button onClick={() => table.setPageIndex(table.getPageCount() - 1)}>
-          Last page
-        </button>
-      </div>
-      {/* <TablePagination
+      <TablePagination
+        rowsPerPageOptions={[5, 10, 25, { label: 'All', value: data.length }]}
         component="div"
-        count={100}
-        page={table.getPageOptions()}
-        onPageChange={() => table.setPageIndex(table.getPageCount() - 1)}
-        rowsPerPage={table.getRowCount()}
-        onRowsPerPageChange={() => table.setPageIndex(table.getPageCount() - 1)}
-      /> */}
+        count={table.getFilteredRowModel().rows.length}
+        rowsPerPage={pageSize}
+        page={pageIndex}
+        slotProps={{
+          select: {
+            inputProps: { 'aria-label': 'rows per page' },
+            native: true,
+          },
+        }}
+        onPageChange={(_, page) => {
+          table.setPageIndex(page)
+        }}
+        onRowsPerPageChange={(e) => {
+          const size = e.target.value ? Number(e.target.value) : 10
+          table.setPageSize(size)
+        }}
+        ActionsComponent={TablePaginationActions}
+      />
     </div>
   )
 }

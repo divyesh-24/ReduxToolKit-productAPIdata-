@@ -5,7 +5,7 @@ import {
 } from '@reduxjs/toolkit'
 // import { RootState } from '../../app/Store'
 
-import { UserType, updateUserData } from './userApi'
+import { UserType, getAllUsers, updateUserData } from './userApi'
 
 // Define a type for the slice state
 
@@ -13,6 +13,7 @@ interface AuthState {
   status: 'loading' | 'succeeded' | 'failed'
   user: UserType
   error: SerializedError | string | null
+  users: UserType[]
 }
 
 // Define the initial state using that type
@@ -20,6 +21,7 @@ const initialState: AuthState = {
   status: 'loading',
   user: {} as UserType,
   error: null,
+  users: [],
 }
 
 // export const createUserAsync = createAsyncThunk(
@@ -30,13 +32,13 @@ const initialState: AuthState = {
 //   },
 // )
 
-// export const getAllUsersAsync = createAsyncThunk(
-//   'auth/getAllUsers',
-//   async () => {
-//     const response = await getAllUsers()
-//     if (response) return response.data
-//   },
-// )
+export const getAllUsersAsync = createAsyncThunk(
+  'auth/getAllUsers',
+  async () => {
+    const response = await getAllUsers()
+    if (response) return response.data
+  },
+)
 // export const checkUserAsync = createAsyncThunk('auth/checkUsers', async () => {
 //   const response = await checkUser()
 //   if (response) return response.data
@@ -85,13 +87,13 @@ export const userSlice = createSlice({
       //   state.users.push(action.payload)
       // })
 
-      // .addCase(getAllUsersAsync.pending, (state) => {
-      //   state.status = 'loading'
-      // })
-      // .addCase(getAllUsersAsync.fulfilled, (state, action) => {
-      //   state.status = 'succeeded'
-      //   state.users = action.payload
-      // })
+      .addCase(getAllUsersAsync.pending, (state) => {
+        state.status = 'loading'
+      })
+      .addCase(getAllUsersAsync.fulfilled, (state, action) => {
+        state.status = 'succeeded'
+        state.users = action.payload
+      })
       // .addCase(checkUserAsync.pending, (state) => {
       //   state.status = 'loading'
       // })

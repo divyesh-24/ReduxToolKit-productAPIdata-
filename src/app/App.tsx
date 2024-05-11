@@ -7,13 +7,12 @@ import CartList from '../features/cart/components/CartList'
 import Error from '../components/Error'
 import AuthForm from '../features/auth/components/AuthForm'
 import AddProductPage from '../pages/AddProductPage'
-// import AllProductsPage from '../pages/AllProductsPage'
 import UserProfilePage from '../pages/UserProfilePage'
-import AllUsersPage from '../pages/AllUsersPage'
 import DynamicForm from '../features/Feedback/components/DynamicForm'
 import FeedBackFormPage from '../pages/FeedBackFormPage'
 import AllFeedbackPage from '../pages/AllFeedbackPage'
-import AllProducts from '../features/product/components/AllProducts'
+import AllProductsPageMUI from '../pages/AllProductsPageMUI'
+import AllUsersPageMUI from '../pages/AllUsersPageMUI'
 
 const router = createBrowserRouter([
   {
@@ -42,7 +41,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/admin/products',
-        element: <AllProducts />,
+        element: <AllProductsPageMUI />,
       },
       {
         path: '/admin/feedbackForm',
@@ -50,7 +49,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/admin/users',
-        element: <AllUsersPage />,
+        element: <AllUsersPageMUI />,
       },
       {
         path: '/profile',

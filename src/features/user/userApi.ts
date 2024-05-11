@@ -1,5 +1,3 @@
-
-
 export type UserType = {
   id?: string
   name: string
@@ -31,11 +29,11 @@ export type UserType = {
 //   return { data }
 // }
 
-// export async function getAllUsers() {
-//   const response = await fetch(`http://localhost:3000/users`)
-//   const data = await response.json()
-//   return { data }
-// }
+export async function getAllUsers() {
+  const response = await fetch(`http://localhost:3000/users`)
+  const data = await response.json()
+  return { data }
+}
 // export async function checkUser() {
 //   const token = localStorage.getItem('JwtToken')
 

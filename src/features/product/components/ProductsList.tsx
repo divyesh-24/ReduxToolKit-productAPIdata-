@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks'
-import { getAllProductsAsync } from '../productSlice'
+import { getAllProductsWithPageAsync } from '../productSlice'
 import ProductCard from './ProductCard'
 
 const ProductsList: React.FC = () => {
@@ -14,7 +14,7 @@ const ProductsList: React.FC = () => {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    dispatch(getAllProductsAsync(page))
+    dispatch(getAllProductsWithPageAsync(page))
   }, [dispatch, page])
 
   return (
