@@ -17,7 +17,7 @@ import {
 import { Product } from '../features/product/productApi'
 import { UserType } from '../features/auth/authApi'
 import { CgClose } from 'react-icons/cg'
-import { TableCell, TableRow } from '@mui/material'
+import { Button, Fab, TableCell, TableRow } from '@mui/material'
 
 interface Column {
   name: string
@@ -467,19 +467,23 @@ const AddTableData: React.FC<Props> = ({
           ))}
       <TableCell scope="col" className="p-4">
         <div className="flex items-center justify-center gap-5">
-          <button
+          <Button
+            variant="contained"
+            color="success"
             className="hover:bg-green-300 drop-shadow-md px-3 py-2 rounded-lg text-gray-700 bg-green-500 hover:transition-transform hover:scale-110"
             onClick={handleSave}
           >
             SAVE
-          </button>
+          </Button>
           {UserData.id && (
-            <button
-              className="hover:bg-red-500 drop-shadow-md px-2 py-2 rounded-lg text-gray-700 bg-red-400 hover:transition-transform hover:scale-110"
+            <Fab
+              size="small"
+              color="error"
+              className="hover:bg-red-500 drop-shadow-sm px-2 py-2 rounded-lg text-gray-700 bg-red-400 hover:transition-transform hover:scale-110"
               onClick={() => setIsOpenEdit(-1)}
             >
               <CgClose className="w-5 h-5" />
-            </button>
+            </Fab>
           )}
         </div>
       </TableCell>

@@ -27,8 +27,8 @@ const initialState: FeedbackState = {
 
 export const getFeedbacksByUserAsync = createAsyncThunk(
   'feedback/getFeedbacksByUser',
-  async ({ id, page }: { id: string; page: number }) => {
-    const response = await getFeedbacksByUser(id, page)
+  async ({ id }: { id: string }) => {
+    const response = await getFeedbacksByUser(id)
     return response
   },
 )
@@ -76,8 +76,6 @@ export const feedbackSlice = createSlice({
       .addCase(getFeedbacksByUserAsync.fulfilled, (state, action) => {
         state.status = 'succeeded'
         state.feedbacks = action.payload.data
-        state.totalItems = action.payload?.totalItems
-        state.totalPages = action.payload?.totalPages
       })
       .addCase(getFeedbacksAsync.pending, (state) => {
         state.status = 'loading'

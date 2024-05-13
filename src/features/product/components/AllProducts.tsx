@@ -1,5 +1,6 @@
 import {
   Button,
+  IconButton,
   Paper,
   Table,
   TableBody,
@@ -8,6 +9,7 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  Typography,
 } from '@mui/material'
 import {
   AccessorKeyColumnDef,
@@ -30,6 +32,9 @@ import { UserType } from '../../auth/authApi'
 import { MdClose } from 'react-icons/md'
 import { FaRegEdit } from 'react-icons/fa'
 import { RiDeleteBin5Line } from 'react-icons/ri'
+import { PlusIcon } from '@heroicons/react/24/outline'
+import { CgClose } from 'react-icons/cg'
+import { FaArrowDownLong, FaArrowUpLong, FaSort } from 'react-icons/fa6'
 
 interface AllProductsProps {
   data: Product[] | UserType[]
@@ -176,217 +181,242 @@ const AllProducts: React.FC<AllProductsProps> = ({
 
   const { pageSize, pageIndex } = table.getState().pagination
   return (
-    <div className="sm:rounded-lg max-w-[90%] mx-auto lg:p-10 lg:pt-20 pt-8 cpa">
-      <div className="flex justify-between items-center w-full mb-2">
-        <div className="w-2/5 flex items-center">
-          <input
-            type="text"
-            className={`rounded-md px-2 py-1.5 w-full`}
-            placeholder="Search here"
-            value={filtering}
-            onChange={(e) => setFiltering(e.target.value)}
-          />
-          {filtering != '' && (
-            <button onClick={() => setFiltering('')}>
-              <MdClose className="w-8 h-8 bg-white rounded-md mx-4 px-1" />
-            </button>
-          )}
-        </div>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => setIsOpen(!isOpen)}
+    <div className="sm:rounded-lg max-w-[90%] mx-auto  lg:p-10 lg:pt-20 pt-8 ">
+      <div className="bg-white/15 px-4 shadow-md md:px-8 border border-black/10 lg:py-4 rounded-lg">
+        <Typography
+          variant="h4"
+          gutterBottom
+          sx={{ textAlign: 'center', paddingY: '14px' }}
         >
-          {!isOpen
-            ? `ADD ${pathname == '/admin/users' ? 'User' : 'Product'}`
-            : 'CLOSE'}
-        </Button>
-      </div>
-      <div className="overflow-x-auto">
-        <TableContainer component={Paper}>
-          <Table className=" text-center min-w-full" sx={{ minWidth: 650 }}>
-            <TableHead className="h-10" sx={{ textTransform: 'capitalize' }}>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
-                  <TableCell
-                    sx={{
-                      fontWeight: '700',
-                      textAlign: 'left',
-                      backgroundColor: '#ddd6fe',
-                    }}
-                  >
-                    No
-                  </TableCell>
-                  {headerGroup.headers.map((header) => (
+          {pathname == '/admin/users'
+            ? 'All Users Table'
+            : 'All Products Table'}
+        </Typography>
+        <div className="flex justify-between items-center w-full mb-2">
+          <div className="w-2/5 flex items-center">
+            <input
+              type="text"
+              className={`rounded-md px-2 py-1.5 w-full`}
+              placeholder="Search here"
+              value={filtering}
+              onChange={(e) => setFiltering(e.target.value)}
+            />
+
+            {filtering != '' && (
+              <button onClick={() => setFiltering('')}>
+                <MdClose className="w-8 h-8 bg-white rounded-md mx-4 px-1" />
+              </button>
+            )}
+          </div>
+          <Button
+            variant="contained"
+            color={isOpen ? 'error' : 'primary'}
+            onClick={() => setIsOpen(!isOpen)}
+            startIcon={!isOpen && <PlusIcon className="w-5 h-5" />}
+            endIcon={isOpen && <CgClose className="w-5 h-5" />}
+          >
+            {!isOpen
+              ? `ADD ${pathname == '/admin/users' ? 'User' : 'Product'}`
+              : 'CLOSE'}
+          </Button>
+        </div>
+        <div className="overflow-x-auto">
+          <TableContainer component={Paper}>
+            <Table className=" text-center min-w-full" sx={{ minWidth: 650 }}>
+              <TableHead className="h-10" sx={{ textTransform: 'capitalize' }}>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id}>
                     <TableCell
-                      colSpan={header.colSpan}
+                      sx={{
+                        fontWeight: '700',
+                        textAlign: 'left',
+                        backgroundColor: '#ddd6fe',
+                      }}
+                    >
+                      NO
+                    </TableCell>
+                    {headerGroup.headers.map((header) => (
+                      <TableCell
+                        colSpan={header.colSpan}
+                        sx={{
+                          fontWeight: '700',
+                          textAlign: 'center',
+                          backgroundColor: '#ddd6fe',
+                          textTransform: 'uppercase',
+                        }}
+                        key={header.id}
+                        className={
+                          header.column.getCanSort()
+                            ? 'cursor-pointer select-none'
+                            : ' font-bold text-center cap'
+                        }
+                        onClick={header.column.getToggleSortingHandler()}
+                      >
+                        <div className="flex justify-center items-center">
+                          <FaSort />{' '}
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(
+                                header.column.columnDef.header,
+                                header.getContext(),
+                              )}
+                          {
+                            {
+                              asc: <FaArrowUpLong />,
+                              desc: <FaArrowDownLong />,
+                            }[(header.column.getIsSorted() as string) ?? null]
+                          }
+                        </div>
+                      </TableCell>
+                    ))}
+                    <TableCell
+                      scope="col"
+                      className="px-6 py-3 text-center"
                       sx={{
                         fontWeight: '700',
                         textAlign: 'center',
                         backgroundColor: '#ddd6fe',
                       }}
-                      key={header.id}
-                      className={
-                        header.column.getCanSort()
-                          ? 'cursor-pointer select-none'
-                          : ' font-bold text-center'
-                      }
-                      onClick={header.column.getToggleSortingHandler()}
                     >
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
-                      {
-                        { asc: '⬆️', desc: '⬇️' }[
-                          (header.column.getIsSorted() as string) ?? null
-                        ]
-                      }
+                      Action
                     </TableCell>
-                  ))}
-                  <TableCell
-                    scope="col"
-                    className="px-6 py-3 text-center"
-                    sx={{
-                      fontWeight: '700',
-                      textAlign: 'left',
-                      backgroundColor: '#ddd6fe',
-                    }}
-                  >
-                    Action
-                  </TableCell>
-                </TableRow>
-              ))}
-              {isOpen && (
-                <AddTableData
-                  pathname={pathname}
-                  setIsOpen={setIsOpen}
-                  setIsOpenEdit={setIsOpenEdit}
-                />
-              )}
-            </TableHead>
-            <TableBody>
-              {table.getRowModel().rows.map((row, indexNumber) => {
-                if (isOpenEdit == indexNumber) {
-                  return (
-                    <>
-                      <AddTableData
-                        key={row.id}
-                        pathname={pathname}
-                        setIsOpen={setIsOpen}
-                        product={row.original}
-                        setIsOpenEdit={setIsOpenEdit}
-                        no={Number(row.id) + 1}
-                      />
-                    </>
-                  )
-                }
-                return (
-                  <TableRow
-                    key={row.id}
-                    sx={{
-                      '&:nth-of-type(odd)': {
-                        backgroundColor: '#f5f3ff',
-                      },
-                      '&:nth-of-type(even)': {
-                        backgroundColor: '#eef2ff',
-                      },
-                      // '&:hover': {
-                      //   backgroundColor: '#ede9fe',
-                      // },
-                    }}
-                  >
-                    <TableCell>{Number(row.id) + 1}</TableCell>
-                    {row.getVisibleCells().map((cell) => {
-                      if (cell.column.id != 'image') {
-                        return (
-                          <TableCell
-                            key={cell.id}
-                            className=" text-center"
-                            sx={{
-                              textAlign: 'center',
-                              '&:last-child td, &:last-child th': { border: 0 },
-                            }}
-                          >
-                            {flexRender(
-                              cell.column.columnDef.cell,
-                              cell.getContext(),
-                            )}
-                          </TableCell>
-                        )
-                      } else {
-                        return (
-                          <TableCell
-                            key={cell.id}
-                            className=" text-center"
-                            sx={{
-                              textAlign: 'center',
-                              '&:last-child td, &:last-child th': { border: 0 },
-                            }}
-                          >
-                            {flexRender(
-                              cell.column.columnDef.cell,
-                              cell.getContext(),
-                            )}
-                          </TableCell>
-                        )
-                      }
-                    })}
-                    <TableCell className="px-6 py-4 text-center ">
-                      <div className="flex justify-evenly gap-5">
-                        <div
-                          // to={`/profile/${product.id}`}
-                          onClick={() => setIsOpenEdit(indexNumber)}
-                          className="font-medium text-blue-600  hover:underline"
-                        >
-                          <FaRegEdit className="w-5 h-5 cursor-pointer" />
-                        </div>
-
-                        <RiDeleteBin5Line
-                          className="h-5 w-5 text-red-400 cursor-pointer"
-                          onClick={() => setOpenShowModal(indexNumber)}
-                        />
-                      </div>
-                    </TableCell>
-                    <Modal
-                      title={'Remove'}
-                      massage={`Are you sure Remove ${row?.original?.name} ?`}
-                      dangerAction={() => handleDelete(row?.original?.id)}
-                      dangerOption={'Remove'}
-                      showModal={openShowModal === indexNumber}
-                      cancelAction={() => setOpenShowModal(-1)}
-                    />
                   </TableRow>
-                )
-              })}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </div>
+                ))}
+                {isOpen && (
+                  <AddTableData
+                    pathname={pathname}
+                    setIsOpen={setIsOpen}
+                    setIsOpenEdit={setIsOpenEdit}
+                  />
+                )}
+              </TableHead>
+              <TableBody>
+                {table.getRowModel().rows.map((row, indexNumber) => {
+                  if (isOpenEdit == indexNumber) {
+                    return (
+                      <>
+                        <AddTableData
+                          key={row.id}
+                          pathname={pathname}
+                          setIsOpen={setIsOpen}
+                          product={row.original}
+                          setIsOpenEdit={setIsOpenEdit}
+                          no={Number(row.id) + 1}
+                        />
+                      </>
+                    )
+                  }
+                  return (
+                    <TableRow
+                      key={row.id}
+                      sx={{
+                        '&:nth-of-type(odd)': {
+                          backgroundColor: '#f5f3ff',
+                        },
+                        '&:nth-of-type(even)': {
+                          backgroundColor: '#eef2ff',
+                        },
+                        // '&:hover': {
+                        //   backgroundColor: '#ede9fe',
+                        // },
+                      }}
+                    >
+                      <TableCell>{Number(row.id) + 1}</TableCell>
+                      {row.getVisibleCells().map((cell) => {
+                        if (cell.column.id != 'image') {
+                          return (
+                            <TableCell
+                              key={cell.id}
+                              className=" text-center"
+                              sx={{
+                                textAlign: 'center',
+                                '&:last-child td, &:last-child th': {
+                                  border: 0,
+                                },
+                              }}
+                            >
+                              {flexRender(
+                                cell.column.columnDef.cell,
+                                cell.getContext(),
+                              )}
+                            </TableCell>
+                          )
+                        } else {
+                          return (
+                            <TableCell
+                              key={cell.id}
+                              className=" text-center"
+                              sx={{
+                                textAlign: 'center',
+                                '&:last-child td, &:last-child th': {
+                                  border: 0,
+                                },
+                              }}
+                            >
+                              {flexRender(
+                                cell.column.columnDef.cell,
+                                cell.getContext(),
+                              )}
+                            </TableCell>
+                          )
+                        }
+                      })}
+                      <TableCell className="px-6 py-4 text-center ">
+                        <div className="flex justify-evenly gap-3">
+                          <IconButton
+                            color="primary"
+                            // to={`/profile/${product.id}`}
+                            onClick={() => setIsOpenEdit(indexNumber)}
+                            className="font-medium text-blue-600  hover:underline"
+                          >
+                            <FaRegEdit className="w-5 h-5 cursor-pointer" />
+                          </IconButton>
+                          <IconButton
+                            color="error"
+                            onClick={() => setOpenShowModal(indexNumber)}
+                          >
+                            <RiDeleteBin5Line className="h-5 w-5  cursor-pointer" />
+                          </IconButton>
+                        </div>
+                      </TableCell>
+                      <Modal
+                        title={'Remove'}
+                        massage={`Are you sure Remove ${row?.original?.name} ?`}
+                        dangerAction={() => handleDelete(row?.original?.id)}
+                        dangerOption={'Remove'}
+                        showModal={openShowModal === indexNumber}
+                        cancelAction={() => setOpenShowModal(-1)}
+                      />
+                    </TableRow>
+                  )
+                })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
 
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 25, { label: 'All', value: data.length }]}
-        component="div"
-        count={table.getFilteredRowModel().rows.length}
-        rowsPerPage={pageSize}
-        page={pageIndex}
-        slotProps={{
-          select: {
-            inputProps: { 'aria-label': 'rows per page' },
-            native: true,
-          },
-        }}
-        onPageChange={(_, page) => {
-          table.setPageIndex(page)
-        }}
-        onRowsPerPageChange={(e) => {
-          const size = e.target.value ? Number(e.target.value) : 10
-          table.setPageSize(size)
-        }}
-        ActionsComponent={TablePaginationActions}
-      />
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25, { label: 'All', value: data.length }]}
+          component="div"
+          count={table.getFilteredRowModel().rows.length}
+          rowsPerPage={pageSize}
+          page={pageIndex}
+          slotProps={{
+            select: {
+              inputProps: { 'aria-label': 'rows per page' },
+              native: true,
+            },
+          }}
+          onPageChange={(_, page) => {
+            table.setPageIndex(page)
+          }}
+          onRowsPerPageChange={(e) => {
+            const size = e.target.value ? Number(e.target.value) : 10
+            table.setPageSize(size)
+          }}
+          ActionsComponent={TablePaginationActions}
+        />
+      </div>
     </div>
   )
 }

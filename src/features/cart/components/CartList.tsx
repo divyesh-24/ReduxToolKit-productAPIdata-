@@ -15,6 +15,7 @@ import Modal from '../../../components/Modal'
 import { CartProduct } from '../cartApi'
 import { Link } from 'react-router-dom'
 import { BsCartX } from 'react-icons/bs'
+import { Button, IconButton } from '@mui/material'
 
 const CartList: React.FC = () => {
   const cartProducts = useAppSelector((state) => state.carts.cartProducts)
@@ -76,13 +77,13 @@ const CartList: React.FC = () => {
           <p className="text-2xl font-bold tracking-tight text-gray-900 sm:text-4xl">
             ADD ITEM TO CARTS
           </p>
-
-          <Link
-            to="/"
-            className="mt-6 inline-block rounded bg-indigo-600 px-5 py-3 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring"
-          >
-            Go Back Home
-          </Link>
+          <div className="mt-6 inline-block rounded px-5 py-3 font-medium]">
+            <Link to="/">
+              <Button variant="contained" color="primary">
+                Go Back Home
+              </Button>
+            </Link>
+          </div>
         </div>
       </div>
     )
@@ -90,8 +91,8 @@ const CartList: React.FC = () => {
   return (
     <div>
       <section>
-        <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
-          <div className="mx-auto max-w-3xl">
+        <div className="mx-auto max-w-screen-xl bg-white/20 mt-10 shadow-md rounded-lg px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
+          <div className="mx-auto max-w-3xl ">
             <header className="text-center">
               <h1 className="text-xl font-bold   sm:text-3xl">Your Cart</h1>
             </header>
@@ -100,7 +101,7 @@ const CartList: React.FC = () => {
               <ul className="space-y-4">
                 {cartProducts?.map((cartItem, indexNumber) => (
                   <li
-                    className="flex items-center bg-white p-3 rounded-lg shadow-md gap-4"
+                    className="flex items-center bg-white/40 p-3 rounded-lg shadow-md gap-4"
                     key={indexNumber}
                   >
                     <img
@@ -149,7 +150,7 @@ const CartList: React.FC = () => {
                             Quantity
                           </label>
                           <select
-                            className="border border-black rounded-md relative"
+                            className="px-2 py-1 rounded-md relative"
                             onChange={(e) =>
                               handleQuantity(e, cartItem, indexNumber)
                             }
@@ -171,7 +172,8 @@ const CartList: React.FC = () => {
                       /> */}
                       </div>
 
-                      <button
+                      <IconButton
+                        color="error"
                         className="text-gray-600 transition hover:text-red-600"
                         onClick={() => setOpenShowModal(indexNumber)}
                       >
@@ -191,7 +193,7 @@ const CartList: React.FC = () => {
                             d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
                           />
                         </svg>
-                      </button>
+                      </IconButton>
                       <Modal
                         title={'Remove'}
                         massage={`Are you sure Remove ${cartItem.product?.name} from your cart?`}
@@ -232,7 +234,9 @@ const CartList: React.FC = () => {
                   </dl>
 
                   <div className="flex justify-end gap-5">
-                    <button
+                    <Button
+                      variant="contained"
+                      color="error"
                       onClick={() => {
                         if (user.id)
                           dispatch(deleteAllCartProductsAsync(cartProducts))
@@ -241,13 +245,15 @@ const CartList: React.FC = () => {
                       className="block rounded bg-red-700 px-5 py-3 text-sm text-white transition hover:bg-red-400"
                     >
                       Clear Cart
-                    </button>
-                    <a
-                      href="#"
+                    </Button>
+                    <Button
+                      // href="#"
+                      variant="contained"
+                      color="primary"
                       className="block rounded bg-indigo-700 px-5 py-3 text-sm text-white transition hover:bg-indigo-400"
                     >
                       Checkout
-                    </a>
+                    </Button>
                   </div>
                 </div>
               </div>

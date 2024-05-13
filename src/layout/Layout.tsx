@@ -7,6 +7,7 @@ import {
   getCartProductsByUserAsync,
   syncToCartProductAsync,
 } from '../features/cart/cartSlice'
+import { Fab } from '@mui/material'
 
 // }
 const Layout = () => {
@@ -35,16 +36,22 @@ const Layout = () => {
 
   return (
     <div className="h-full w-full">
-      <div className=" mx-auto h-screen ">
-        <Header />
+      <div className=" mx-auto h-screen  ">
+        <div className="bg-gradient-to-br from-indigo-400 to-indigo-100 relative ">
+          <div className=" sticky top-0 left-0 z-10 backdrop-blur-lg">
+            <Header />
+          </div>
 
-        <div className=" min-h-[calc(100vh-6rem)] bg-gradient-to-br from-indigo-400 to-indigo-100">
-          <Outlet />
+          <div className=" min-h-[calc(100vh-6rem)] ">
+            <Outlet />
+          </div>
         </div>
         <footer className="bg-gradient-to-tr from-indigo-400 to-indigo-100">
           <div className="relative mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8 lg:pt-24">
             <div className="absolute end-4 top-4 sm:end-6 sm:top-6 lg:end-8 lg:top-8">
-              <a
+              <Fab
+                size="medium"
+                color="primary"
                 className="inline-block rounded-full bg-indigo-600 p-2 text-white shadow transition hover:bg-indigo-500 sm:p-3 lg:p-4"
                 href="#"
               >
@@ -62,7 +69,7 @@ const Layout = () => {
                     clipRule="evenodd"
                   />
                 </svg>
-              </a>
+              </Fab>
             </div>
 
             <div className="lg:flex lg:items-end lg:justify-between">

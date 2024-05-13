@@ -20,7 +20,7 @@ const ProductsList: React.FC = () => {
   return (
     <div className="">
       <div className="min-h-screen  overflow-y-auto bg-gradient-to-br from-indigo-400 to-indigo-100 flex justify-center items-center py-10 sm:py-20">
-        <div className="md:px-4  mx-6 md:grid md:grid-cols-2 lg:grid-cols-3 flex flex-col gap-5 md:gap-10 space-y-4 md:space-y-0">
+        <div className="md:px-4  mx-6 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 flex flex-col gap-5 md:gap-10 space-y-4 md:space-y-0">
           {products?.length > 0 ? (
             products?.map((e, i) => (
               <ProductCard product={e} key={i} indexNumber={i} />

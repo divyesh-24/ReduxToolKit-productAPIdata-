@@ -20,9 +20,12 @@ import {
   ColumnDef,
   getSortedRowModel,
   SortingState,
+  getPaginationRowModel,
   // createColumnHelper,
 } from '@tanstack/react-table'
-import { Paper } from '@mui/material'
+import { Paper, TablePagination, Typography } from '@mui/material'
+import TablePaginationActions from '../features/product/components/actions'
+import { FaArrowDownLong, FaArrowUpLong, FaSort } from 'react-icons/fa6'
 
 // const columnHelper = createColumnHelper<DynamicFormProps>()
 
@@ -53,9 +56,6 @@ const AllFeedbackPage = () => {
   const dispatch = useAppDispatch()
   const feedbacks = useAppSelector((s) => s.feedBack.feedbacks)
   const user = useAppSelector((s) => s.auth.user)
-  const totalItems = useAppSelector((s) => s.feedBack.totalItems)
-  const totalPages = useAppSelector((s) => s.feedBack.totalPages)
-  const [page, setPage] = useState(1)
   const data = React.useMemo(() => [...feedbacks], [feedbacks])
 
   const [columns, setColumns] = useState<ColumnDef<Feedback, unknown>[]>([])
@@ -95,8 +95,8 @@ const AllFeedbackPage = () => {
   //     })
   // }
   useEffect(() => {
-    dispatch(getFeedbacksByUserAsync({ id: user.id as string, page }))
-  }, [dispatch, user.id, page])
+    dispatch(getFeedbacksByUserAsync({ id: user.id as string }))
+  }, [dispatch, user.id])
 
   // columns: React.useMemo(() => columns, [columns]),
   const table = useReactTable({
@@ -104,152 +104,137 @@ const AllFeedbackPage = () => {
     columns,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+
     state: {
       sorting,
     },
     onSortingChange: setSorting,
   })
 
-  const handlePageChange = (newPage: number) => {
-    setPage(newPage)
-  }
-  // console.log(table.getState().sorting)
+  const { pageSize, pageIndex } = table.getState().pagination
+
   return (
-    <div className="sm:rounded-lg max-w-[90%] mx-auto lg:p-10 lg:pt-20 pt-8 cpa">
-      <div className="overflow-x-auto">
-        <TableContainer component={Paper}>
-          <Table className=" text-center min-w-full" sx={{ minWidth: 650 }}>
-            <TableHead className="h-10" sx={{ textTransform: 'capitalize' }}>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
-                  <TableCell
-                    sx={{
-                      fontWeight: '700',
-                      textAlign: 'left',
-                      backgroundColor: '#ddd6fe',
-                    }}
-                  >
-                    No
-                  </TableCell>
-                  {headerGroup.headers.map((header) => (
+    <div className="sm:rounded-lg max-w-[90%] mx-auto lg:p-10 lg:pt-20 pt-8 ">
+      <div className="bg-white/15 px-4 shadow-md md:px-8 border border-black/10 lg:py-4 rounded-lg">
+        <Typography
+          variant="h4"
+          gutterBottom
+          sx={{ textAlign: 'center', paddingY: '14px' }}
+        >
+          {'All Feedbacks Table'}
+        </Typography>
+        <div className="overflow-x-auto">
+          <TableContainer component={Paper}>
+            <Table className=" text-center min-w-full" sx={{ minWidth: 650 }}>
+              <TableHead className="h-10" sx={{ textTransform: 'capitalize' }}>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id}>
                     <TableCell
-                      colSpan={header.colSpan}
                       sx={{
                         fontWeight: '700',
-                        textAlign: 'center',
+                        textAlign: 'left',
                         backgroundColor: '#ddd6fe',
                       }}
-                      key={header.id}
-                      className={
-                        header.column.getCanSort()
-                          ? 'cursor-pointer select-none'
-                          : ' font-bold text-center'
-                      }
-                      onClick={header.column.getToggleSortingHandler()}
                     >
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
-                      {
-                        { asc: '⬆️', desc: '⬇️' }[
-                          (header.column.getIsSorted() as string) ?? null
-                        ]
-                      }
+                      NO
                     </TableCell>
-                  ))}
-                </TableRow>
-              ))}
-            </TableHead>
-            <TableBody>
-              {table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  sx={{
-                    '&:nth-of-type(odd)': {
-                      backgroundColor: '#f5f3ff',
-                    },
-                    '&:nth-of-type(even)': {
-                      backgroundColor: '#eef2ff',
-                    },
-                    // '&:hover': {
-                    //   backgroundColor: '#ede9fe',
-                    // },
-                  }}
-                >
-                  <TableCell>{Number(row.id) + 1}</TableCell>
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell
-                      key={cell.id}
-                      className=" text-center"
-                      sx={{
-                        textAlign: 'center',
-                        '&:last-child td, &:last-child th': { border: 0 },
-                      }}
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+                    {headerGroup.headers.map((header) => (
+                      <TableCell
+                        colSpan={header.colSpan}
+                        sx={{
+                          fontWeight: '700',
+                          textAlign: 'center',
+                          backgroundColor: '#ddd6fe',
+                        }}
+                        key={header.id}
+                        className={
+                          header.column.getCanSort()
+                            ? 'cursor-pointer select-none'
+                            : ' font-bold text-center'
+                        }
+                        onClick={header.column.getToggleSortingHandler()}
+                      >
+                        <div className="flex justify-center items-center ">
+                          <FaSort />{' '}
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(
+                                header.column.columnDef.header,
+                                header.getContext(),
+                              )}
+                          {
+                            {
+                              asc: <FaArrowUpLong />,
+                              desc: <FaArrowDownLong />,
+                            }[(header.column.getIsSorted() as string) ?? null]
+                          }
+                        </div>
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))}
+              </TableHead>
+              <TableBody>
+                {table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    sx={{
+                      '&:nth-of-type(odd)': {
+                        backgroundColor: '#f5f3ff',
+                      },
+                      '&:nth-of-type(even)': {
+                        backgroundColor: '#eef2ff',
+                      },
+                      // '&:hover': {
+                      //   backgroundColor: '#ede9fe',
+                      // },
+                    }}
+                  >
+                    <TableCell>{Number(row.id) + 1}</TableCell>
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell
+                        key={cell.id}
+                        className=" text-center"
+                        sx={{
+                          textAlign: 'center',
+                          '&:last-child td, &:last-child th': { border: 0 },
+                        }}
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext(),
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25, { label: 'All', value: data.length }]}
+          component="div"
+          count={table.getFilteredRowModel().rows.length}
+          rowsPerPage={pageSize}
+          page={pageIndex}
+          slotProps={{
+            select: {
+              inputProps: { 'aria-label': 'rows per page' },
+              native: true,
+            },
+          }}
+          onPageChange={(_, page) => {
+            table.setPageIndex(page)
+          }}
+          onRowsPerPageChange={(e) => {
+            const size = e.target.value ? Number(e.target.value) : 5
+            table.setPageSize(size)
+          }}
+          ActionsComponent={TablePaginationActions}
+        />
       </div>
-      <nav
-        className="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4"
-        aria-label="Table navigation"
-      >
-        <span className="text-sm font-normal text-gray-500  mb-4 md:mb-0 block w-full md:inline md:w-auto">
-          Showing{' '}
-          <span className="font-semibold text-gray-900 ">
-            {(page - 1) * 10 + 1}-
-            {page * 10 > totalItems ? totalItems : page * 10}
-          </span>{' '}
-          of <span className="font-semibold text-gray-900 ">{totalPages}</span>
-        </span>
-        <ul className="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
-          <li>
-            <button
-              onClick={() => handlePageChange(1 < page ? page - 1 : page)}
-              className="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700  "
-            >
-              Previous
-            </button>
-          </li>
-
-          {Array.from({ length: totalPages }).map((_, index) => (
-            <div
-              key={index}
-              onClick={() => handlePageChange(index + 1)}
-              aria-current="page"
-              className={`flex items-center justify-center px-3 h-8 ${
-                index + 1 !== page
-                  ? 'leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 '
-                  : 'text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700'
-              } `}
-            >
-              {index + 1}
-            </div>
-          ))}
-
-          <li>
-            <button
-              onClick={() =>
-                handlePageChange(totalPages > page ? page + 1 : page)
-              }
-              className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 "
-            >
-              Next
-            </button>
-          </li>
-        </ul>
-      </nav>
     </div>
   )
 }

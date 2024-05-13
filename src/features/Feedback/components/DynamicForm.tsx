@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../../app/hooks'
 import { getFeedbackFormAsync } from '../../Feedback form/feedBackFormSlice'
 import { Navigate } from 'react-router-dom'
 import { createFeedbackAsync } from '../feedbackSlice'
+import { Button } from '@mui/material'
 
 export interface DynamicFormProps {
   [key: string]: string
@@ -44,7 +45,7 @@ const DynamicForm: React.FC = () => {
     <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
       <form
         onSubmit={handleSubmit}
-        className="mx-auto mb-0 mt-8 max-w-md space-y-4 bg-white  rounded-lg p-4 shadow-lg sm:p-6 lg:p-8"
+        className="mx-auto mb-0 mt-8 max-w-md space-y-4 bg-white/30  rounded-lg p-4 shadow-lg sm:p-6 lg:p-8"
       >
         <div className="mx-auto max-w-lg text-center">
           <h1 className="text-2xl font-bold sm:text-3xl">FeedBack</h1>
@@ -86,12 +87,15 @@ const DynamicForm: React.FC = () => {
             )}
           </div>
         ))}
-        <button
+        <Button
+          variant="contained"
+          color="primary"
+          sx={{ paddingY: '12px' }}
           className="inline-block w-full  rounded-lg bg-indigo-700 hover:bg-indigo-400 px-5 py-3 text-sm font-medium text-white uppercase"
           type="submit"
         >
           Submit
-        </button>
+        </Button>
       </form>
     </div>
   )

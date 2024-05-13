@@ -6,6 +6,7 @@ import {
   getFeedbackFormAsync,
   updateAllFeedbackFormFieldAsync,
 } from '../feedBackFormSlice'
+import { Button, Typography } from '@mui/material'
 
 export interface Field {
   id?: string
@@ -117,18 +118,23 @@ const FormBuilder: React.FC = () => {
 
   return (
     <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
-      <div className="mx-auto mb-0 mt-8 w-4/5 space-y-4 bg-white  rounded-lg p-4 shadow-lg sm:p-6 lg:p-8">
+      <div className="mx-auto mb-0 mt-8 w-4/5 space-y-4 bg-white/30  rounded-lg p-4 shadow-lg sm:p-6 lg:p-8">
         <div className="mx-auto max-w-lg text-center">
-          <h1 className="text-2xl font-bold sm:text-3xl">
+          <h1 className="text-2xl font-bold sm:text-3xl"></h1>
+          <Typography
+            variant="h4"
+            gutterBottom
+            sx={{ textAlign: 'center', paddingY: '5px' }}
+          >
             Feedback Form Fields
-          </h1>
+          </Typography>
         </div>
         {fields.map((field, fieldIndex) => (
           <div
             key={fieldIndex}
             className=" px-4 py-2 rounded-lg bg-indigo-500/30"
           >
-            <div className="flex flex-col md:flex-row justify-between">
+            <div className="flex flex-col md:flex-row justify-between items-center">
               <div className="flex flex-col md:flex-row gap-3 justify-stretch items-center p-2  md:w-4/5">
                 <input
                   type="text"
@@ -157,7 +163,7 @@ const FormBuilder: React.FC = () => {
                 </select>
                 <div className="md:hidden ">
                   {field.type === 'select' && (
-                    <div className="py-1 m-1 px-6 mx-auto">
+                    <div className="py-1 m-1 px-6 mx-auto ">
                       {field.options.map((option, optionIndex) => (
                         <div
                           key={optionIndex}
@@ -172,7 +178,10 @@ const FormBuilder: React.FC = () => {
                               handleOptionChange(fieldIndex, optionIndex, e)
                             }
                           />
-                          <button
+                          <Button
+                            variant="contained"
+                            color="error"
+                            sx={{ borderRadius: '8px', paddingY: '8px' }}
                             className="inline-block  w-full md:w-1/5  rounded-lg bg-red-700 hover:bg-red-400 py-2 md:px-5 md:py-3 text-sm font-medium text-white uppercase"
                             type="button"
                             onClick={() =>
@@ -180,16 +189,19 @@ const FormBuilder: React.FC = () => {
                             }
                           >
                             Remove Option
-                          </button>
+                          </Button>
                         </div>
                       ))}
-                      <button
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        sx={{ borderRadius: '8px', paddingY: '8px' }}
                         className="inline-block w-full md:w-fit mt-4 rounded-lg bg-indigo-700 hover:bg-indigo-400 py-2 md:px-5 md:py-3 px-3 text-sm font-medium text-white uppercase"
                         type="button"
                         onClick={() => addOption(fieldIndex)}
                       >
                         Add Option
-                      </button>
+                      </Button>
                     </div>
                   )}
                 </div>
@@ -203,13 +215,16 @@ const FormBuilder: React.FC = () => {
                 />
               </div>
 
-              <button
+              <Button
+                variant="contained"
+                color="error"
+                sx={{ borderRadius: '8px', paddingY: '8px' }}
                 className="inline-block md:w-1/6 w-full h-full rounded-lg bg-red-700 hover:bg-red-400 px-3 py-2 md:py-4 my-4 text-sm font-medium text-white uppercase"
                 type="button"
                 onClick={() => removeField(fieldIndex)}
               >
                 Remove field
-              </button>
+              </Button>
             </div>
             <div className="hidden md:block">
               {field.type === 'select' && (
@@ -228,43 +243,55 @@ const FormBuilder: React.FC = () => {
                           handleOptionChange(fieldIndex, optionIndex, e)
                         }
                       />
-                      <button
+                      <Button
+                        sx={{ borderRadius: '8px', paddingY: '12px' }}
+                        variant="contained"
+                        color="error"
                         className="inline-block  w-full md:w-1/5  rounded-lg bg-red-700 hover:bg-red-400 py-2 md:px-5 md:py-3 text-sm font-medium text-white uppercase"
                         type="button"
                         onClick={() => removeOption(fieldIndex, optionIndex)}
                       >
                         Remove Option
-                      </button>
+                      </Button>
                     </div>
                   ))}
-                  <button
+                  <Button
+                    color="primary"
+                    sx={{ borderRadius: '8px', paddingY: '12px' }}
+                    variant="contained"
                     className="inline-block w-full md:w-fit mt-4 rounded-lg bg-indigo-700 hover:bg-indigo-400 py-2 md:px-5 md:py-3 text-sm font-medium text-white uppercase"
                     type="button"
                     onClick={() => addOption(fieldIndex)}
                   >
                     Add Option
-                  </button>
+                  </Button>
                 </div>
               )}
             </div>
           </div>
         ))}
         <div className="flex flex-col md:flex-row gap-2 md:gap-5">
-          <button
+          <Button
+            color="primary"
+            sx={{ borderRadius: '8px', paddingY: '12px' }}
+            variant="contained"
             className="inline-block w-full  rounded-lg bg-green-600 hover:bg-green-400 px-5 py-3 text-sm font-medium text-white uppercase"
             type="button"
             onClick={addField}
           >
             Add Field
-          </button>
-          <button
+          </Button>
+          <Button
+            color="success"
+            sx={{ borderRadius: '8px', paddingY: '12px' }}
+            variant="contained"
             disabled={JSON.stringify(formData) === JSON.stringify(fields)}
             className="inline-block w-full disabled:bg-gray-300 rounded-lg bg-indigo-700 hover:bg-indigo-400 px-5 py-3 text-sm font-medium text-white uppercase"
             type="button"
             onClick={generateJSON}
           >
             Generate JSON
-          </button>
+          </Button>
         </div>
       </div>
     </div>

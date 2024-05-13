@@ -9,6 +9,7 @@ import uploadImage from '../../../components/uploadImage'
 import { Navigate } from 'react-router-dom'
 import { IoMdMail } from 'react-icons/io'
 import { FaMobileRetro } from 'react-icons/fa6'
+import { Button } from '@mui/material'
 
 interface ProfileProps {}
 
@@ -252,18 +253,23 @@ const UserProfile: React.FC<ProfileProps> = () => {
               </div>
             </div>
             <div className="flex gap-3 justify-between mt-8">
-              <button
+              <Button
+                variant="contained"
+                sx={{ paddingY: '12px', paddingX: '20px' }}
+                color="inherit"
                 onClick={() => setEdit(false)}
                 className="block w-1/2 rounded-lg bg-indigo-100 px-5 py-3 text-sm font-medium "
               >
                 Cancel
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="contained"
                 type="submit"
+                sx={{ paddingY: '12px', paddingX: '20px' }}
                 className="block w-1/2 rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white"
               >
                 SAVE
-              </button>
+              </Button>
             </div>
           </form>
         </div>

@@ -13,13 +13,11 @@ export async function createFeedback(feedback: DynamicFormProps) {
   return { data }
 }
 
-export async function getFeedbacksByUser(id: string, page: number) {
-  const response = await fetch(
-    `http://localhost:3000/feedbacks?userId=${id}&_page=${page}&_per_page=10`,
-  )
+export async function getFeedbacksByUser(id: string) {
+  const response = await fetch(`http://localhost:3000/feedbacks?userId=${id}`)
   const data = await response.json()
 
-  return { data: data.data, totalItems: data.items, totalPages: data.pages }
+  return { data }
 }
 export async function getFeedbacks(page = 1) {
   const response = await fetch(

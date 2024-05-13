@@ -118,7 +118,7 @@ const AuthForm: React.FC = () => {
 
           <form
             onSubmit={handleSubmit}
-            className="mb-0 mt-6 space-y-4 bg-white rounded-lg p-4 shadow-lg sm:p-6 lg:p-8"
+            className="mb-0 mt-6 space-y-4 bg-white/30 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8"
           >
             <Typography
               variant="h5"
