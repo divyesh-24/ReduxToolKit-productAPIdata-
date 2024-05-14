@@ -35,14 +35,14 @@ const Layout = () => {
   }, [dispatch, user.id])
 
   return (
-    <div className="h-full w-full">
-      <div className=" mx-auto h-screen  ">
+    <div className="h-full w-full overflow-y-auto no-scrollbar">
+      <div className=" mx-auto h-screen ">
         <div className="bg-gradient-to-br from-indigo-400 to-indigo-100 relative ">
-          <div className=" sticky top-0 left-0 z-10 backdrop-blur-lg">
+          <div className=" sticky top-0 left-0 z-10 backdrop-blur-lg  bg-white/20 shadow-md">
             <Header />
           </div>
 
-          <div className=" min-h-[calc(100vh-6rem)] ">
+          <div className=" min-h-[calc(100vh-6rem)] bg-gradient-to-br from-indigo-400 to-indigo-100">
             <Outlet />
           </div>
         </div>
