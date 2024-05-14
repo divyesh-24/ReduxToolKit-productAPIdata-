@@ -19,10 +19,8 @@ export async function getFeedbacksByUser(id: string) {
 
   return { data }
 }
-export async function getFeedbacks(page = 1) {
-  const response = await fetch(
-    `http://localhost:3000/feedbacks?_page=${page}&_per_page=10`,
-  )
+export async function getFeedbacks() {
+  const response = await fetch(`http://localhost:3000/feedbacks`)
   const data = await response.json()
   return { data }
 }

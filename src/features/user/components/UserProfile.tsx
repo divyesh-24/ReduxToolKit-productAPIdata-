@@ -9,7 +9,7 @@ import uploadImage from '../../../components/uploadImage'
 import { Navigate } from 'react-router-dom'
 import { IoMdMail } from 'react-icons/io'
 import { FaMobileRetro } from 'react-icons/fa6'
-import { Button } from '@mui/material'
+import { Button, IconButton } from '@mui/material'
 
 interface ProfileProps {}
 
@@ -49,10 +49,14 @@ const UserProfile: React.FC<ProfileProps> = () => {
             className={`bg-opacity-50 relative p-8 rounded-lg shadow-md w-96 h-80 mx-4 xl:w-1/3 xl:h-fit`}
             style={{ backgroundColor: userData.coverColor }}
           >
-            <FaRegEdit
-              className="w-5 h-5 absolute top-2 right-2 cursor-pointer"
-              onClick={() => setEdit(!edit)}
-            />
+            <IconButton
+              sx={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }}
+            >
+              <FaRegEdit
+                // className="w-5 h-5 absolute top-2 right-2 cursor-pointer"
+                onClick={() => setEdit(!edit)}
+              />
+            </IconButton>
             <img
               // src={`data:image/png;base64,${userData.profile}`}
               src={userData.profile}
@@ -88,7 +92,7 @@ const UserProfile: React.FC<ProfileProps> = () => {
         <div className="w-full min-h-screen flex items-center justify-center">
           <form
             onSubmit={handleSubmit}
-            className=" w-full m-6 pt-10 md:w-1/2  lg:w-1/3 space-y-4 bg-white rounded-lg p-4 shadow-lg sm:p-6 lg:p-8"
+            className=" w-full m-6 pt-10 md:w-1/2  lg:w-1/3 space-y-4 bg-white/30 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8"
           >
             <h1 className="w-full text-center text-2xl sm:text-3xl font-bold">
               Edit Profile

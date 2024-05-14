@@ -14,6 +14,7 @@ export interface Feedback extends DynamicFormProps {}
 interface FeedbackState {
   status: 'loading' | 'succeeded' | 'failed'
   feedbacks: Feedback[]
+  feedbacksAdmin: Feedback[]
   totalPages: number
   totalItems: number
 }
@@ -21,6 +22,7 @@ interface FeedbackState {
 const initialState: FeedbackState = {
   status: 'loading',
   feedbacks: [],
+  feedbacksAdmin: [],
   totalPages: 0,
   totalItems: 0,
 }
@@ -82,7 +84,7 @@ export const feedbackSlice = createSlice({
       })
       .addCase(getFeedbacksAsync.fulfilled, (state, action) => {
         state.status = 'succeeded'
-        state.feedbacks = action.payload
+        state.feedbacksAdmin = action.payload
       })
       .addCase(createFeedbackAsync.pending, (state) => {
         state.status = 'loading'

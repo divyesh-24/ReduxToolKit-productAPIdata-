@@ -19,8 +19,19 @@ import {
   MenuItem,
 } from '@mui/material'
 import { BiLogOut } from 'react-icons/bi'
-import { CgProfile } from 'react-icons/cg'
+import { CgProfile, CgUserList } from 'react-icons/cg'
 import { IoMdMenu } from 'react-icons/io'
+import {
+  MdOutlineFeaturedPlayList,
+  MdOutlineFeed,
+  MdOutlineMapsUgc,
+} from 'react-icons/md'
+
+interface MenuButtonProps {
+  menuId: string
+  menuItems: { title: string; icon: JSX.Element; path: string }[]
+  menuName: string
+}
 
 const Header = () => {
   const navigate = useNavigate()
@@ -85,25 +96,55 @@ const Header = () => {
             </Link>
             <ul className=" items-center hidden space-x-8 lg:flex">
               <li>
-                <Link
-                  to="/"
-                  className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-indigo-400"
+                <Button
+                  color="inherit"
+                  sx={{
+                    fontFamily: 'inherit',
+                    fontWeight: '500',
+                    letterSpacing: 'widest',
+                    color: '#374151', // Hex value for gray-700 in Tailwind CSS
+                    transition: 'color 200ms',
+                    '&:hover': {
+                      color: '#818cf8', // Hex value for indigo-400 in Tailwind CSS
+                    },
+                  }}
                 >
-                  Home
-                </Link>
+                  <Link
+                    to="/"
+                    className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-indigo-400"
+                  >
+                    Home
+                  </Link>
+                </Button>
               </li>
 
               {Object.keys(user).includes('id') && (
                 <li>
-                  <Link
+                  {/* <Link
                     to="/feedback"
                     className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-indigo-400"
                   >
                     Feedback
-                  </Link>
+                  </Link> */}
+                  <MenuButton
+                    menuName="Feedback"
+                    menuId="menu2"
+                    menuItems={[
+                      {
+                        title: 'Add FeedBack',
+                        icon: <MdOutlineMapsUgc className="h-5 w-5 mr-2" />,
+                        path: '/feedback',
+                      },
+                      {
+                        title: 'My FeedBacks',
+                        icon: <MdOutlineFeed className="h-5 w-5 mr-2" />,
+                        path: '/feedbackDetails',
+                      },
+                    ]}
+                  />
                 </li>
               )}
-              {Object.keys(user).includes('id') && (
+              {/* {Object.keys(user).includes('id') && (
                 <li>
                   <Link
                     to="/feedbackDetails"
@@ -112,18 +153,55 @@ const Header = () => {
                     Feedback Details
                   </Link>
                 </li>
-              )}
+              )} */}
               {user.isAdmin && (
                 <>
+                  <MenuButton
+                    menuName="Admin"
+                    menuId="menu2"
+                    menuItems={[
+                      {
+                        title: 'All Products',
+                        icon: (
+                          <MdOutlineFeaturedPlayList className="h-5 w-5 mr-2" />
+                        ),
+                        path: '/admin/products',
+                      },
+                      {
+                        title: 'All Users',
+                        icon: <CgUserList className="h-5 w-5 mr-2" />,
+                        path: '/admin/users',
+                      },
+                      {
+                        title: 'All FeedBacks',
+                        icon: <MdOutlineFeed className="h-5 w-5 mr-2" />,
+                        path: '/admin/feedbacks',
+                      },
+                    ]}
+                  />
                   <li>
-                    <Link
-                      to="/admin/feedbackForm"
-                      className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-indigo-400"
+                    <Button
+                      color="inherit"
+                      sx={{
+                        fontFamily: 'inherit',
+                        fontWeight: '500',
+                        letterSpacing: 'widest',
+                        color: '#374151', // Hex value for gray-700 in Tailwind CSS
+                        transition: 'color 200ms',
+                        '&:hover': {
+                          color: '#818cf8', // Hex value for indigo-400 in Tailwind CSS
+                        },
+                      }}
                     >
-                      Edit FeedBack
-                    </Link>
+                      <Link
+                        to="/admin/feedbackForm"
+                        className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-indigo-400"
+                      >
+                        Edit FeedBack
+                      </Link>
+                    </Button>
                   </li>
-                  <li>
+                  {/* <li>
                     <Link
                       to="/admin/products"
                       className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-indigo-400"
@@ -138,7 +216,7 @@ const Header = () => {
                     >
                       All Users
                     </Link>
-                  </li>
+                  </li> */}
                   {/* <li>
                     <Link
                       to="/new"
@@ -319,15 +397,15 @@ const Header = () => {
                   <IoMdMenu className="h-8 w-8" />
                 </IconButton>
               </div>
-
+              {/* bg-gradient-to-bl from-indigo-300 to-indigo-200 */}
               {isMenuOpen && (
-                <div className="absolute top-0 left-0 w-full z-30">
+                <div className="absolute top-0 left-0 w-full z-30 ">
                   <div className="p-5 bg-gradient-to-bl from-indigo-300 to-indigo-200 text-black border border-black/20 rounded-lg shadow-sm">
                     <div className="flex items-center justify-between mb-4">
                       <div>
                         <Link to="/" className="inline-flex items-center">
                           <svg
-                            className="w-8 text-indigo-400"
+                            className="w-8 text-indigo-500"
                             viewBox="0 0 24 24"
                             strokeLinejoin="round"
                             strokeWidth="2"
@@ -354,7 +432,7 @@ const Header = () => {
                           onClick={() => setIsMenuOpen(false)}
                         >
                           <svg
-                            className="w-5 text-gray-600"
+                            className="w-5 text-gray-700"
                             viewBox="0 0 24 24"
                           >
                             <path
@@ -365,65 +443,163 @@ const Header = () => {
                         </IconButton>
                       </div>
                     </div>
+
                     <nav>
                       <ul className="space-y-4">
+                        <hr />
                         <li>
-                          <Link
-                            to="/"
-                            aria-label="Our product"
-                            title="Our product"
-                            className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-indigo-400"
-                            onClick={() => setIsMenuOpen(false)}
+                          <Button
+                            variant="outlined"
+                            sx={{
+                              minWidth: '100%',
+                              '@media (min-width: 600px)': {
+                                minWidth: '50%', // 1/2 width on medium screens and above
+                              },
+                            }}
                           >
-                            Home
-                          </Link>
-                        </li>
-                        {Object.keys(user).includes('id') && (
-                          <li>
                             <Link
-                              to="/feedback"
+                              to="/"
                               aria-label="Our product"
                               title="Our product"
                               className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-indigo-400"
                               onClick={() => setIsMenuOpen(false)}
                             >
-                              FeedBack
+                              Home
                             </Link>
+                          </Button>
+                        </li>
+                        {Object.keys(user).includes('id') && (
+                          <>
+                            <li>
+                              <Button
+                                variant="outlined"
+                                sx={{
+                                  minWidth: '100%',
+                                  '@media (min-width: 600px)': {
+                                    minWidth: '50%', // 1/2 width on medium screens and above
+                                  },
+                                }}
+                              >
+                                <Link
+                                  to="/feedback"
+                                  aria-label="Our product"
+                                  title="Our product"
+                                  className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-indigo-400"
+                                  onClick={() => setIsMenuOpen(false)}
+                                >
+                                  FeedBack
+                                </Link>
+                              </Button>
+                            </li>
+                            <li>
+                              <Button
+                                variant="outlined"
+                                sx={{
+                                  minWidth: '100%',
+                                  '@media (min-width: 600px)': {
+                                    minWidth: '50%', // 1/2 width on medium screens and above
+                                  },
+                                }}
+                              >
+                                <Link
+                                  to="/feedbackDetails"
+                                  aria-label="Our product"
+                                  title="Our product"
+                                  className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-indigo-400"
+                                  onClick={() => setIsMenuOpen(false)}
+                                >
+                                  My FeedBacks
+                                </Link>
+                              </Button>
+                            </li>
+                          </>
+                        )}
+                        <hr />
+                        {user.isAdmin && (
+                          <li>
+                            <Button
+                              variant="outlined"
+                              sx={{
+                                minWidth: '100%',
+                                '@media (min-width: 600px)': {
+                                  minWidth: '50%', // 1/2 width on medium screens and above
+                                },
+                              }}
+                            >
+                              <Link
+                                to="/admin/feedbackForm"
+                                className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-indigo-400"
+                              >
+                                Edit FeedBack
+                              </Link>
+                            </Button>
+                          </li>
+                        )}
+                        <hr />
+                        {user.isAdmin && (
+                          <li>
+                            <Button
+                              variant="outlined"
+                              sx={{
+                                minWidth: '100%',
+                                '@media (min-width: 600px)': {
+                                  minWidth: '50%', // 1/2 width on medium screens and above
+                                },
+                              }}
+                            >
+                              <Link
+                                to="admin/products"
+                                className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-indigo-400"
+                                onClick={() => setIsMenuOpen(false)}
+                              >
+                                All Products
+                              </Link>
+                            </Button>
                           </li>
                         )}
                         {user.isAdmin && (
                           <li>
-                            <Link
-                              to="/admin/feedbackForm"
-                              className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-indigo-400"
+                            <Button
+                              variant="outlined"
+                              sx={{
+                                minWidth: '100%',
+                                '@media (min-width: 600px)': {
+                                  minWidth: '50%', // 1/2 width on medium screens and above
+                                },
+                              }}
                             >
-                              Edit FeedBack
-                            </Link>
+                              <Link
+                                to="admin/users"
+                                className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-indigo-400"
+                                onClick={() => setIsMenuOpen(false)}
+                              >
+                                All Users
+                              </Link>
+                            </Button>
                           </li>
                         )}
                         {user.isAdmin && (
                           <li>
-                            <Link
-                              to="admin/products"
-                              className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-indigo-400"
-                              onClick={() => setIsMenuOpen(false)}
+                            <Button
+                              variant="outlined"
+                              sx={{
+                                minWidth: '100%',
+                                '@media (min-width: 600px)': {
+                                  minWidth: '50%', // 1/2 width on medium screens and above
+                                },
+                              }}
                             >
-                              All Products
-                            </Link>
+                              <Link
+                                to="admin/feedbacks"
+                                className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-indigo-400"
+                                onClick={() => setIsMenuOpen(false)}
+                              >
+                                All Feedbacks
+                              </Link>
+                            </Button>
                           </li>
                         )}
-                        {user.isAdmin && (
-                          <li>
-                            <Link
-                              to="admin/users"
-                              className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-indigo-400"
-                              onClick={() => setIsMenuOpen(false)}
-                            >
-                              All Users
-                            </Link>
-                          </li>
-                        )}
-
+                        <hr />
                         {Object.keys(user)?.length == 0 ? (
                           <>
                             <li>
@@ -501,6 +677,58 @@ const Header = () => {
           </div>
         </div>
       </header>
+    </>
+  )
+}
+
+const MenuButton: React.FC<MenuButtonProps> = ({
+  menuName,
+  menuId,
+  menuItems,
+}) => {
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+
+  const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleMenuClose = () => {
+    setAnchorEl(null)
+  }
+
+  return (
+    <>
+      <Button
+        color="inherit"
+        sx={{
+          fontFamily: 'inherit',
+          fontWeight: '500',
+          letterSpacing: 'widest',
+          color: '#374151', // Hex value for gray-700 in Tailwind CSS
+          transition: 'color 200ms',
+          '&:hover': {
+            color: '#818cf8', // Hex value for indigo-400 in Tailwind CSS
+          },
+        }}
+        aria-label={menuId}
+        onClick={handleMenuOpen}
+      >
+        {menuName}
+      </Button>
+      <Menu
+        id={menuId}
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleMenuClose}
+      >
+        {menuItems.map((item, index) => (
+          <Link to={item.path} key={index}>
+            <MenuItem onClick={handleMenuClose}>
+              {item.icon} {item.title}
+            </MenuItem>
+          </Link>
+        ))}
+      </Menu>
     </>
   )
 }

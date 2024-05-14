@@ -10,10 +10,11 @@ import AddProductPage from '../pages/AddProductPage'
 import UserProfilePage from '../pages/UserProfilePage'
 import DynamicForm from '../features/Feedback/components/DynamicForm'
 import FeedBackFormPage from '../pages/FeedBackFormPage'
-import AllFeedbackPage from '../pages/AllFeedbackPage'
+import { AllFeedbackPage } from '../pages/AllFeedbackPage'
 import AllProductsPageMUI from '../pages/AllProductsPageMUI'
 import AllUsersPageMUI from '../pages/AllUsersPageMUI'
 import { ThemeProvider, createTheme } from '@mui/material'
+import ProtectedAllFeedbackAdminPage from '../pages/AllFeedbackAdminPage'
 
 const router = createBrowserRouter([
   {
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
       {
         path: '/admin/users',
         element: <AllUsersPageMUI />,
+      },
+      {
+        path: '/admin/feedbacks',
+        element: <ProtectedAllFeedbackAdminPage />,
       },
       {
         path: '/profile',

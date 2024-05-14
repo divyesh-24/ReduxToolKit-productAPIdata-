@@ -18,8 +18,13 @@
   "lint-staged": {
     "*.{js,jsx,json,css,md}": [
       "prettier --write",
-      "eslint --fix",
-      "git add"
+      "eslint --fix"
+    ],
+    "*.ts": [
+      "eslint --fix"
+    ],
+    "*.tsx": [
+      "eslint --fix"
     ]
   },
   "dependencies": {

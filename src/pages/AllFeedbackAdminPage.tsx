@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../app/hooks'
-import {
-  Feedback,
-  getFeedbacksByUserAsync,
-} from '../features/Feedback/feedbackSlice'
+import { Feedback, getFeedbacksAsync } from '../features/Feedback/feedbackSlice'
 import withProtectedRoute from '../HOC/withProtectedRoute'
 // import { DynamicFormProps } from '../features/Feedback/components/DynamicForm'
 import Table from '@mui/material/Table'
@@ -52,21 +49,28 @@ import { FaArrowDownLong, FaArrowUpLong, FaSort } from 'react-icons/fa6'
 
 // const columns: any = []
 
-export const AllFeedbackPage = () => {
+const AllFeedbackAdminPage = () => {
   const dispatch = useAppDispatch()
-  const feedbacks = useAppSelector((s) => s.feedBack.feedbacks)
-  const user = useAppSelector((s) => s.auth.user)
+  const feedbacks = useAppSelector((s) => s.feedBack.feedbacksAdmin)
   const data = React.useMemo(() => [...feedbacks], [feedbacks])
 
   const [columns, setColumns] = useState<ColumnDef<Feedback, unknown>[]>([])
   const [sorting, setSorting] = useState<SortingState>([])
   useEffect(() => {
     if (data.length > 0) {
-      const newColumns = Object.keys(data[data.length - 1]).map((key) => ({
-        header: key.toUpperCase(),
-        accessorKey: key.toString(),
-      }))
-      setColumns(newColumns.filter((field) => field.accessorKey != 'userId'))
+      const newColumns = Object.keys(data[data.length - 1]).map((key) => {
+        // if (key == 'userId') {
+        //   return {
+        //     header: key.toUpperCase(),
+        //     accessorKey: key.toString(),
+        //   }
+        // }
+        return {
+          header: key.toUpperCase(),
+          accessorKey: key.toString(),
+        }
+      })
+      setColumns(newColumns)
     }
   }, [data])
 
@@ -95,8 +99,8 @@ export const AllFeedbackPage = () => {
   //     })
   // }
   useEffect(() => {
-    dispatch(getFeedbacksByUserAsync({ id: user.id as string }))
-  }, [dispatch, user.id])
+    dispatch(getFeedbacksAsync())
+  }, [dispatch])
 
   // columns: React.useMemo(() => columns, [columns]),
   const table = useReactTable({
@@ -122,7 +126,7 @@ export const AllFeedbackPage = () => {
           gutterBottom
           sx={{ textAlign: 'center', paddingY: '14px' }}
         >
-          {'My Feedbacks Table'}
+          {'All Feedbacks Table'}
         </Typography>
         <div className="overflow-x-auto">
           <TableContainer component={Paper}>
@@ -192,21 +196,45 @@ export const AllFeedbackPage = () => {
                     }}
                   >
                     <TableCell>{Number(row.id) + 1}</TableCell>
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell
-                        key={cell.id}
-                        className=" text-center"
-                        sx={{
-                          textAlign: 'center',
-                          '&:last-child td, &:last-child th': { border: 0 },
-                        }}
-                      >
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext(),
-                        )}
-                      </TableCell>
-                    ))}
+                    {row.getVisibleCells().map((cell) => {
+                      if (cell.column.id == 'userId') {
+                        return (
+                          <TableCell
+                            key={cell.id}
+                            className=" text-center"
+                            sx={{
+                              textAlign: 'center',
+                              '&:last-child td, &:last-child th': {
+                                border: 0,
+                              },
+                            }}
+                          >
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext(),
+                            )}
+                          </TableCell>
+                        )
+                      } else {
+                        return (
+                          <TableCell
+                            key={cell.id}
+                            className=" text-center"
+                            sx={{
+                              textAlign: 'center',
+                              '&:last-child td, &:last-child th': {
+                                border: 0,
+                              },
+                            }}
+                          >
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext(),
+                            )}
+                          </TableCell>
+                        )
+                      }
+                    })}
                   </TableRow>
                 ))}
               </TableBody>
@@ -239,6 +267,6 @@ export const AllFeedbackPage = () => {
   )
 }
 
-const ProtectedAllFeedbackPage = withProtectedRoute(AllFeedbackPage)
+const ProtectedAllFeedbackAdminPage = withProtectedRoute(AllFeedbackAdminPage)
 
-export default ProtectedAllFeedbackPage
+export default ProtectedAllFeedbackAdminPage

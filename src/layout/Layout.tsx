@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom'
 import Header from './Header'
 import { useAppDispatch, useAppSelector } from '../app/hooks'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { checkUserAsync } from '../features/auth/authSlice'
 import {
   getCartProductsByUserAsync,
@@ -21,10 +21,16 @@ const Layout = () => {
   }, [isUserCheck, dispatch])
 
   //cart data sync with user cart with login
+  const cartRef = useRef(cart)
+
+  useEffect(() => {
+    cartRef.current = cart
+  }, [cart])
+
   useEffect(() => {
     if (user.id) {
       const cartDetail = {
-        cart,
+        cart: cartRef.current,
         userId: user.id,
       }
       dispatch(getCartProductsByUserAsync(user.id))
@@ -33,16 +39,15 @@ const Layout = () => {
       }
     }
   }, [dispatch, user.id])
-
   return (
     <div className="h-full w-full">
-      <div className=" mx-auto h-screen  ">
+      <div className=" mx-auto h-screen  overflow-y-auto no-scrollbar">
         <div className="bg-gradient-to-br from-indigo-400 to-indigo-100 relative ">
-          <div className=" sticky top-0 left-0 z-10 backdrop-blur-lg">
+          <div className=" sticky top-0 left-0 z-10 backdrop-blur-lg  bg-white/20 shadow-md">
             <Header />
           </div>
 
-          <div className=" min-h-[calc(100vh-6rem)] ">
+          <div className=" min-h-[calc(100vh-6rem)] bg-gradient-to-br from-indigo-400 to-indigo-100">
             <Outlet />
           </div>
         </div>
@@ -54,6 +59,7 @@ const Layout = () => {
                 color="primary"
                 className="inline-block rounded-full bg-indigo-600 p-2 text-white shadow transition hover:bg-indigo-500 sm:p-3 lg:p-4"
                 href="#"
+                sx={{ zIndex: '0' }}
               >
                 <span className="sr-only">Back to top</span>
 
