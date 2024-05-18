@@ -7,7 +7,8 @@ import {
   getCartProductsByUserAsync,
   syncToCartProductAsync,
 } from '../features/cart/cartSlice'
-import { Fab } from '@mui/material'
+// import { Fab } from '@mui/material'
+import ScrollTo from '../hooks/ScrollTo'
 
 // }
 const Layout = () => {
@@ -39,49 +40,52 @@ const Layout = () => {
       }
     }
   }, [dispatch, user.id])
+
   return (
-    <div className="h-full w-full">
-      <div className=" mx-auto h-screen  overflow-y-auto no-scrollbar">
-        <div className="bg-gradient-to-br from-indigo-400 to-indigo-100 relative ">
-          <div className=" sticky top-0 left-0 z-10 backdrop-blur-lg  bg-white/20 shadow-md">
-            <Header />
-          </div>
-
-          <div className=" min-h-[calc(100vh-6rem)] bg-gradient-to-br from-indigo-400 to-indigo-100">
-            <Outlet />
-          </div>
-        </div>
-        <footer className="bg-gradient-to-tr from-indigo-400 to-indigo-100">
-          <div className="relative mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8 lg:pt-24">
-            <div className="absolute end-4 top-4 sm:end-6 sm:top-6 lg:end-8 lg:top-8">
-              <Fab
-                size="medium"
-                color="primary"
-                className="inline-block rounded-full bg-indigo-600 p-2 text-white shadow transition hover:bg-indigo-500 sm:p-3 lg:p-4"
-                href="#"
-                sx={{ zIndex: '0' }}
-              >
-                <span className="sr-only">Back to top</span>
-
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </Fab>
+    <>
+      <ScrollTo />
+      <div className="h-full w-full">
+        <div className=" mx-auto h-screen  overflow-y-auto no-scrollbar">
+          <div className="bg-gradient-to-br from-indigo-400 to-indigo-100 relative ">
+            <div className=" sticky top-0 left-0 z-10 backdrop-blur-lg  bg-white/20 shadow-md">
+              <Header />
             </div>
 
-            <div className="lg:flex lg:items-end lg:justify-between">
-              <div>
-                <div className="flex justify-center text-indigo-600 lg:justify-start">
-                  {/* <svg
+            <div className=" min-h-[calc(100vh-6rem)] bg-gradient-to-br from-indigo-400 to-indigo-100">
+              <Outlet />
+            </div>
+          </div>
+          <footer className="bg-gradient-to-tr from-indigo-400 to-indigo-100">
+            <div className="relative mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8 lg:pt-24">
+              <div className="absolute end-4 top-4 sm:end-6 sm:top-6 lg:end-8 lg:top-8">
+                {/* <Fab
+                  size="medium"
+                  color="primary"
+                  className="inline-block rounded-full bg-indigo-600 p-2 text-white shadow transition hover:bg-indigo-500 sm:p-3 lg:p-4"
+                  href="#"
+                  sx={{ zIndex: '0' }}
+                >
+                  <span className="sr-only">Back to top</span>
+
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </Fab> */}
+              </div>
+
+              <div className="lg:flex lg:items-end lg:justify-between">
+                <div>
+                  <div className="flex justify-center text-indigo-600 lg:justify-start">
+                    {/* <svg
                     className="h-8"
                     viewBox="0 0 118 24"
                     fill="none"
@@ -128,15 +132,17 @@ const Layout = () => {
                       fill="currentColor"
                     />
                   </svg> */}
+                  </div>
+
+                  <p className="mx-auto mt-6 max-w-md text-center leading-relaxed text-black lg:text-left">
+                    Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                    Incidunt consequuntur amet culpa cum itaque neque.
+                  </p>
                 </div>
-
-                <p className="mx-auto mt-6 max-w-md text-center leading-relaxed text-black lg:text-left">
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                  Incidunt consequuntur amet culpa cum itaque neque.
-                </p>
-              </div>
-
-              <ul className="mt-12 flex flex-wrap justify-center gap-6 md:gap-8 lg:mt-0 lg:justify-end lg:gap-12">
+                <div className="mt-12 flex flex-wrap justify-center gap-6 md:gap-8 lg:mt-0 lg:justify-end lg:gap-12">
+                  Develop with ❤️ by Divyesh Nandanwar
+                </div>
+                {/* <ul className="mt-12 flex flex-wrap justify-center gap-6 md:gap-8 lg:mt-0 lg:justify-end lg:gap-12">
                 <li>
                   <a
                     className="text-gray-700 transition hover:text-gray-700/75"
@@ -176,16 +182,17 @@ const Layout = () => {
                     Blog{' '}
                   </a>
                 </li>
-              </ul>
-            </div>
+              </ul> */}
+              </div>
 
-            <p className="mt-12 text-center text-sm text-gray-500 lg:text-right">
-              Copyright &copy; 2024. All rights reserved.
-            </p>
-          </div>
-        </footer>
+              <p className="mt-12 text-center text-sm text-gray-500 lg:text-right">
+                Copyright &copy; 2024. All rights reserved.
+              </p>
+            </div>
+          </footer>
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 
